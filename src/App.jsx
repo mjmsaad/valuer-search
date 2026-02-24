@@ -222,6 +222,7 @@ export default function App() {
 
   // Auto-load default CSV on startup
   useEffect(() => {
+  console.log("Fetching CSV from:", DEFAULT_CSV);
   fetch(DEFAULT_CSV)
     .then(res => {
       if (!res.ok) throw new Error("not found");
