@@ -222,22 +222,23 @@ export default function App() {
 
   // Auto-load default CSV on startup
   useEffect(() => {
-    fetch(DEFAULT_CSV)
-      .then(res => {
-        if (!res.ok) throw new Error("not found");
-        return res.text();
-      })
-      .then(text => {
-        const rows = parseValuerCSV(text);
-        setData(rows);
-        setDataSource("default");
-        setLoadingDefault(false);
-      })
-      .catch(() => {
-        setDefaultFailed(true);
-        setLoadingDefault(false);
-      });
-  }, []);
+  fetch(DEFAULT_CSV)
+    .then(res => {
+      if (!res.ok) throw new Error("not found");
+      return res.text();
+    })
+    .then(text => {
+      const rows = parseValuerCSV(text);
+      setData(rows);
+      setDataSource("default");
+      setLoadingDefault(false);
+    })
+    .catch(err => {
+      console.log("CSV load error:", err);
+      setDefaultFailed(true);
+      setLoadingDefault(false);
+    });
+}, []);
 
   const handleQ = v => {
     setQ(v);
