@@ -172,7 +172,7 @@ function parseValuerCSV(text) {
 
 /* ── Helpers ── */
 const PAGE = 50;
-const DEFAULT_CSV = "/valuer-search/data/valuer.csv"; // put your CSV in public/data/valuer.csv
+const DEFAULT_CSV = "/valuer-search/public/data/valuer.csv"; // put your CSV in public/data/valuer.csv
 
 function fmt(n) {
   if (n === null) return null;
