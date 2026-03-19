@@ -1,0 +1,56 @@
+# Changelog — Wickman's Valuer Search
+
+All changes to the Valuer Search app are documented here.
+
+---
+
+## [1.0.0] — 19 March 2026
+
+### Search & Data
+- **NEW** Keyword search across all fields — query splits into individual words, all must match. Typing `grange 1998` finds Penfolds Grange Shiraz 1998 even though the words appear separately in the record
+- **NEW** Auction source filter dropdown — filter results to a specific house (Langtons, MW Wines, etc.)
+- **NEW** Keyword highlights in results — matching words highlighted in gold in the results table
+- **NEW** Vintage as first column — moved to first position with gold badge styling for faster scanning
+- **NEW** Pagination — 50 rows per page with smart ellipsis display for large page counts
+- **IMPROVED** Server-side sorting across all pages — sorting by Vintage, Wine, Reserve, Low, High, Ave, Last Sale now sorts all 110,000 rows via Supabase, not just the 50 visible on screen. Page resets to 1 when sort changes
+- **IMPROVED** Wine column — full name visible — long names like Cabernet Sauvignon wrap to a second line instead of truncating. Column width increased to 420px
+- **FIXED** Table header alignment — sticky header was floating over the first two data rows due to an incorrect top offset. Fixed to sit correctly at the top of the scroll container
+
+### Security & Authentication
+- **NEW** Supabase database backend — all 110,000 wine entries moved from a CSV file into a private Supabase database. Raw data cannot be downloaded; only search results are returned via the API
+- **NEW** Login screen with email/password authentication via Supabase Auth — only users created in Supabase can access the app
+- **NEW** Session persistence — login session stored in browser localStorage so users stay logged in across visits
+- **NEW** Authenticated API calls — all database queries use the user's Bearer token. Database policy only allows authenticated users to read data
+
+### Design & Branding
+- **NEW** Wickman's brand redesign — cream/white backgrounds, Cormorant Garamond serif headings, wine-red accents, gold vintage year badges
+- **NEW** Wickman's SVG logo on login screen — official logo shown centered above the sign-in card
+- **NEW** Wickman's SVG logo in app header — logo in the top-left sticky header bar
+- **NEW** Dark mode toggle — button in the header switches between light and dark themes. Preference saved and persists between sessions
+- **IMPROVED** Logo adapts to dark mode — logo text inverts to white in dark mode. The red corkscrew box and white corkscrew icon remain unchanged in both modes
+- **NEW** Auction source chips — colour-coded labels: green for Langtons, gold for MW Wines, grey for others
+- **NEW** Price colour coding — high prices in green, average prices in wine-red, null values shown as a dash
+- **NEW** Active keyword tags displayed as pill badges below the search bar
+- **NEW** Logged-in user email and Sign Out button in the header
+
+### Hosting & Deployment
+- **NEW** Hosted on GitHub Pages — free, always-on, no server required
+- **NEW** Automated deployment via GitHub Actions — pushing to main triggers an automatic build and deploy
+- **NEW** push.sh deploy script — simplified one-command deployment from the project folder
+- **NEW** Local development server — run npm run dev to preview changes at localhost:5173 before deploying
+
+---
+
+## Summary
+
+| Type | Count |
+|------|-------|
+| New features | 19 |
+| Improvements | 3 |
+| Bug fixes | 2 |
+| **Total** | **24** |
+
+---
+
+*Valuer Search is an internal tool for the Wickman's Fine Wine & Whisky Auctions team.*
+*Data is stored securely in Supabase and is not publicly accessible.*
