@@ -5,7 +5,49 @@ const SUPABASE_KEY = "sb_publishable_c1mn9Pe5ltsToILat1bpiw_ITVFdn-d";
 const TABLE = "wines";
 const PAGE = 50;
 
-async function fetchWines(keywords, auctionHouse, offset = 0) {
+/* ── Supabase Auth ── */
+async function signIn(email, password) {
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.msg || "Login failed");
+  return data;
+}
+
+async function signOut(token) {
+  await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+async function getSession() {
+  const raw = localStorage.getItem("sb_session");
+  if (!raw) return null;
+  try {
+    const session = JSON.parse(raw);
+    // Check if token is expired
+    if (session.expires_at && Date.now() / 1000 > session.expires_at) {
+      localStorage.removeItem("sb_session");
+      return null;
+    }
+    return session;
+  } catch {
+    return null;
+  }
+}
+
+/* ── Supabase Data ── */
+async function fetchWines(token, keywords, auctionHouse, offset = 0) {
   let url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=vintage,name,qty,size,reserve,low,high,ave,last_auction,auction_house&limit=${PAGE}&offset=${offset}&order=name.asc`;
 
   if (auctionHouse && auctionHouse !== "__all__") {
@@ -21,28 +63,30 @@ async function fetchWines(keywords, auctionHouse, offset = 0) {
   const res = await fetch(url, {
     headers: {
       apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
       Prefer: "count=exact",
     },
   });
 
+  if (res.status === 401) throw new Error("SESSION_EXPIRED");
   if (!res.ok) throw new Error("Failed to fetch from database");
   const count = parseInt(res.headers.get("content-range")?.split("/")[1] || "0");
   const data = await res.json();
   return { data, count };
 }
 
-async function fetchHouses() {
+async function fetchHouses(token) {
   const url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=auction_house&limit=1000`;
   const res = await fetch(url, {
-    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
   });
   if (!res.ok) return [];
   const data = await res.json();
   return [...new Set(data.map(r => r.auction_house).filter(Boolean))].sort();
 }
 
+/* ── Helpers ── */
 function cleanPrice(v) {
   if (!v || v === "#DIV/0!" || v === "#VALUE!") return null;
   const n = parseFloat(String(v).replace(/[$,\s]/g, ""));
@@ -76,6 +120,7 @@ function Price({ v, cls }) {
   return <span className={"price " + (cls || "")}>{fmt(n)}</span>;
 }
 
+/* ── Styles ── */
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@400;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -87,18 +132,48 @@ const css = `
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh}
 .app{min-height:100vh;display:flex;flex-direction:column;
   background:radial-gradient(ellipse 70% 40% at 50% 0%,rgba(201,168,76,0.07),transparent),var(--bg)}
+
+/* Login */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 70% 40% at 50% 0%,rgba(201,168,76,0.07),transparent),var(--bg)}
+.login-box{background:var(--surface);border:1px solid var(--border);padding:40px;width:380px;max-width:90vw;position:relative;overflow:hidden}
+.login-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.login-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;font-size:20px;color:#1a1400;border-radius:2px}
+.login-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold2)}
+.login-sub{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:2px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.field-label{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.field input{background:var(--bg);border:1px solid var(--border);color:var(--text);
+  padding:11px 13px;font-family:'DM Mono',monospace;font-size:13px;width:100%;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--gold)}
+.field input::placeholder{color:var(--muted)}
+.login-btn{width:100%;padding:12px;background:var(--gold);color:#1a1400;border:none;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;cursor:pointer;transition:all .15s;margin-top:8px}
+.login-btn:hover:not(:disabled){background:var(--gold2)}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-err{background:rgba(224,112,112,.08);border:1px solid rgba(224,112,112,.3);
+  padding:10px 13px;font-size:11px;color:var(--red);margin-bottom:16px}
+
+/* Header */
 .header{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .brand{display:flex;align-items:center;gap:14px}
 .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));
   display:flex;align-items:center;justify-content:center;font-size:18px;color:#1a1400;border-radius:2px}
 .brand-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold2)}
 .brand-sub{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:12px}
 .hbadge{font-size:10px;padding:4px 10px;border:1px solid;border-radius:2px;letter-spacing:.08em;font-weight:500}
-.hbadge-empty{color:var(--muted);border-color:var(--dim)}
 .hbadge-loaded{color:var(--gold);border-color:var(--gold)}
 .hbadge-loading{color:var(--gold2);border-color:var(--gold2);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes spin{to{transform:rotate(360deg)}}
+.user-email{font-size:10px;color:var(--muted)}
+.signout-btn{padding:5px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);
+  font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s;letter-spacing:.05em}
+.signout-btn:hover{color:var(--red);border-color:var(--red)}
+
+/* Main */
 .main{padding:24px 32px;flex:1;display:flex;flex-direction:column;gap:20px;max-width:1400px;width:100%;margin:0 auto}
 .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
 .search-wrap{flex:1;min-width:220px;position:relative}
@@ -153,16 +228,84 @@ mark{background:rgba(201,168,76,.3);color:var(--gold2);border-radius:1px;padding
 .ei{font-size:36px;opacity:.2}
 .et{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);opacity:.3}
 .es{font-size:11px;color:var(--muted);opacity:.6}
-.err{background:rgba(224,112,112,.07);border:1px solid rgba(224,112,112,.3);
-  padding:12px 16px;font-size:12px;color:var(--red);display:flex;gap:8px;align-items:center}
 .loading-state{text-align:center;padding:40px;color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center;gap:8px}
 .spinner{width:16px;height:16px;border:2px solid var(--dim);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
 `;
 
+/* ── Login Screen ── */
+function LoginScreen({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async () => {
+    if (!email || !password) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const session = await signIn(email, password);
+      localStorage.setItem("sb_session", JSON.stringify(session));
+      onLogin(session);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <style>{css}</style>
+      <div className="login-wrap">
+        <div className="login-box">
+          <div className="login-brand">
+            <div className="login-icon">🍷</div>
+            <div>
+              <div className="login-title">Valuer Search</div>
+              <div className="login-sub">Wine Auction Database</div>
+            </div>
+          </div>
+          {error && <div className="login-err">{error}</div>}
+          <div className="field">
+            <div className="field-label">Email</div>
+            <input
+              type="text"
+              placeholder="you@example.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleSubmit()}
+            />
+          </div>
+          <div className="field">
+            <div className="field-label">Password</div>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleSubmit()}
+            />
+          </div>
+          <button className="login-btn" onClick={handleSubmit} disabled={loading || !email || !password}>
+            {loading ? "Signing in…" : "Sign In →"}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ── Main App ── */
 export default function App() {
+  const [session, setSession] = useState(null);
+  const [checkingSession, setCheckingSession] = useState(true);
+
   const [rows, setRows] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [houses, setHouses] = useState([]);
 
@@ -177,30 +320,54 @@ export default function App() {
 
   const keywords = useMemo(() => dq.trim().split(/\s+/).filter(Boolean), [dq]);
 
+  // Check for existing session on load
   useEffect(() => {
-    fetchHouses().then(setHouses);
+    getSession().then(s => {
+      setSession(s);
+      setCheckingSession(false);
+    });
   }, []);
 
+  // Load auction houses when session is ready
   useEffect(() => {
+    if (!session) return;
+    fetchHouses(session.access_token).then(setHouses);
+  }, [session]);
+
+  // Fetch wines when search changes
+  useEffect(() => {
+    if (!session) return;
     setLoading(true);
     setError(null);
     const offset = (page - 1) * PAGE;
-    fetchWines(keywords, house, offset)
+    fetchWines(session.access_token, keywords, house, offset)
       .then(({ data, count }) => {
         setRows(data);
         setTotalCount(count);
         setLoading(false);
       })
       .catch(err => {
-        setError(err.message);
+        if (err.message === "SESSION_EXPIRED") {
+          localStorage.removeItem("sb_session");
+          setSession(null);
+        } else {
+          setError(err.message);
+        }
         setLoading(false);
       });
-  }, [dq, house, page]);
+  }, [session, dq, house, page]);
 
   const handleQ = v => {
     setQ(v);
     clearTimeout(debRef.current);
     debRef.current = setTimeout(() => { setDq(v); setPage(1); }, 400);
+  };
+
+  const handleSignOut = async () => {
+    if (session) await signOut(session.access_token);
+    localStorage.removeItem("sb_session");
+    setSession(null);
+    setRows([]);
   };
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE));
@@ -238,9 +405,20 @@ export default function App() {
     );
   }
 
-  const status = loading ? "hbadge-loading" : error ? "hbadge-empty" : "hbadge-loaded";
-  const statusText = loading ? "LOADING…" : error ? "ERROR" : `${totalCount.toLocaleString()} RESULTS`;
+  // Still checking session
+  if (checkingSession) return (
+    <>
+      <style>{css}</style>
+      <div className="login-wrap">
+        <div className="spinner" style={{ width: 24, height: 24, borderWidth: 3 }} />
+      </div>
+    </>
+  );
 
+  // Not logged in
+  if (!session) return <LoginScreen onLogin={s => setSession(s)} />;
+
+  // Logged in
   return (
     <>
       <style>{css}</style>
@@ -253,15 +431,17 @@ export default function App() {
               <div className="brand-sub">Wine Auction Database</div>
             </div>
           </div>
-          <div className={"hbadge " + status}>{statusText}</div>
+          <div className="header-right">
+            <div className={"hbadge " + (loading ? "hbadge-loading" : "hbadge-loaded")}>
+              {loading ? "LOADING…" : `${totalCount.toLocaleString()} RESULTS`}
+            </div>
+            <span className="user-email">{session.user?.email}</span>
+            <button className="signout-btn" onClick={handleSignOut}>Sign Out</button>
+          </div>
         </header>
 
         <main className="main">
-          {error && (
-            <div className="err">
-              <span>⚠</span><span>{error}</span>
-            </div>
-          )}
+          {error && <div style={{ color: "var(--red)", fontSize: 12, padding: "10px 0" }}>⚠ {error}</div>}
 
           <div className="controls">
             <div className="search-wrap">
@@ -287,9 +467,7 @@ export default function App() {
 
           <div className="meta">
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <div className="count">
-                <strong>{totalCount.toLocaleString()}</strong> wines
-              </div>
+              <div className="count"><strong>{totalCount.toLocaleString()}</strong> wines</div>
               {keywords.length > 0 && (
                 <div className="tags">
                   {keywords.map(k => <span key={k} className="kwtag">"{k}"</span>)}
