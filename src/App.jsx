@@ -565,6 +565,30 @@ td:last-child { border-right: none; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--cream); }
 
+.copy-th { width: 0; padding: 0 !important; overflow: hidden; }
+.copy-cell { width: 0; padding: 0 !important; overflow: hidden; }
+.copy-btn { display: none; }
+tr.row-copied td { background: var(--green-pale) !important; transition: background 0.15s; }
+tr.row-copied .copy-btn { opacity: 1; }
+.copy-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: var(--green);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 10px 22px;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s;
+  z-index: 999;
+}
+.copy-toast.hiding { opacity: 0; }
 .wine-col { max-width: 420px; min-width: 260px; font-weight: 400; white-space: normal; word-break: break-word; }
 .vintage-badge {
   display: inline-block;
@@ -838,6 +862,30 @@ export default function App() {
   // Sorting is server-side via Supabase — rows arrive pre-sorted
   const sortedRows = rows;
 
+  const [copiedRow, setCopiedRow] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastHiding, setToastHiding] = useState(false);
+
+  const copyRow = (r, idx) => {
+    const fmt = v => { const n = cleanPrice(v); return n != null ? `$${n.toFixed(2)}` : ""; };
+    const text = [
+      r.vintage || "",
+      r.name    || "",
+      r.qty     || "",
+      r.size    || "",
+      r.reserve ? fmt(r.reserve) : "",
+      r.low     ? fmt(r.low)     : "",
+      r.high    ? fmt(r.high)    : "",
+    ].join("\t");
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedRow(idx);
+      setShowToast(true);
+      setToastHiding(false);
+      setTimeout(() => setToastHiding(true), 1400);
+      setTimeout(() => { setCopiedRow(null); setShowToast(false); setToastHiding(false); }, 1800);
+    });
+  };
+
   const toggleSort = col => {
     setPage(1);
     if (sortCol === col) setSortDir(d => d === "asc" ? "desc" : "asc");
@@ -955,6 +1003,7 @@ export default function App() {
                 <table>
                   <thead>
                     <tr>
+                      <th className="copy-th"></th>
                       <Th col="vintage" label="Vintage" />
                       <Th col="name" label="Wine" />
                       <Th col="qty" label="Qty" />
@@ -969,7 +1018,12 @@ export default function App() {
                   </thead>
                   <tbody>
                     {sortedRows.map((r, i) => (
-                      <tr key={i}>
+                      <tr key={i} onClick={() => copyRow(r, i)} style={{cursor:"pointer"}} className={copiedRow === i ? "row-copied" : ""}>
+                        <td className="copy-cell">
+                          <button className={`copy-btn${copiedRow === i ? " copied" : ""}`} onClick={() => copyRow(r, i)} title="Copy row">
+                            {copiedRow === i ? "✓" : "⎘"}
+                          </button>
+                        </td>
                         <td><span className="vintage-badge"><Hl text={r.vintage} keywords={keywords} /></span></td>
                         <td className="wine-col" title={r.name}><Hl text={r.name} keywords={keywords} /></td>
                         <td><span className="qty-text">{r.qty}</span></td>
@@ -989,6 +1043,11 @@ export default function App() {
           </div>
         </main>
       </div>
+      {showToast && (
+        <div className={`copy-toast${toastHiding ? " hiding" : ""}`}>
+          ✓ Copied to clipboard
+        </div>
+      )}
     </>
   );
 }

@@ -4,6 +4,14 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.1.0] — 20 March 2026
+
+### Search & Data
+- **NEW** Click-to-copy row — click anywhere on a result row to copy the first 7 fields (Vintage, Wine, Qty, Size, Reserve, Low, High) to the clipboard as tab-separated values. Pasting into Excel or Google Sheets places each field into its own cell
+- **NEW** Copy confirmation — clicking a row flashes the entire row green and shows a "✓ Copied to clipboard" toast at the bottom of the screen for 1.8 seconds
+
+---
+
 ## [1.0.0] — 19 March 2026
 
 ### Search & Data
