@@ -614,23 +614,25 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
 .trend-pane-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
 .trend-period-btn { font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; text-transform: none; padding: 1px 5px; border-radius: 2px; cursor: pointer; background: none; border: none; font-family: 'Inter', sans-serif; }
 .trend-period-btn.active { background: var(--wine-pale); color: var(--wine); }
-.trend-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
+.trend-item { display: grid; grid-template-columns: 14px 1fr auto; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
 .trend-item:hover .trend-term { color: var(--wine); }
-.trend-rank { width: 14px; font-size: 10px; font-weight: 700; color: var(--border-dark); text-align: right; flex-shrink: 0; }
+.trend-rank { font-size: 10px; font-weight: 700; color: var(--border-dark); text-align: right; }
 .trend-rank.top { color: var(--gold); }
-.trend-bar-wrap { width: 80px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+.trend-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.trend-bar-wrap { width: 60px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .trend-bar { height: 100%; border-radius: 2px; background: var(--border-dark); }
 .trend-bar.top { background: var(--gold); }
 .trend-bar.mid { background: var(--text-muted); }
-.trend-term { font-size: 11px; color: var(--text); flex: 1; }
-.trend-count { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.trend-term { font-size: 11px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trend-count { font-size: 10px; color: var(--text-muted); white-space: nowrap; min-width: 52px; text-align: right; }
 .trend-count strong { color: var(--text-mid); }
-.trend-user-item { display: flex; align-items: center; gap: 7px; padding: 4px 0; }
+.trend-user-item { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 7px; padding: 4px 0; }
 .trend-user-avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--wine-pale); border: 1px solid rgba(123,29,29,0.15); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--wine); flex-shrink: 0; }
-.trend-user-name { font-size: 10px; color: var(--text-mid); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trend-user-name { font-size: 10px; color: var(--text-mid); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trend-user-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 .trend-user-bar-wrap { width: 40px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .trend-user-bar { height: 100%; border-radius: 2px; background: var(--wine); opacity: 0.4; }
-.trend-user-count { font-size: 10px; color: var(--text-muted); min-width: 20px; text-align: right; }
+.trend-user-count { font-size: 10px; color: var(--text-muted); min-width: 24px; text-align: right; }
 .trend-empty { font-size: 11px; color: var(--border-dark); font-style: italic; padding: 8px 0; }
 .panel-tab {
   position: fixed; right: 0; top: 180px;
