@@ -4,6 +4,14 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.3.0] — 23 March 2026
+
+### Search & Data
+- **NEW** Realtime online user count — a live green dot and user count in the header shows how many people have the app open at that moment. Updates instantly for all users via Supabase Realtime Presence — no page refresh needed
+- **NEW** Counts active browser sessions — if two team members have the app open simultaneously the count shows 2, updating in real time as people open or close the app
+
+---
+
 ## [1.2.0] — 23 March 2026
 
 ### Search & Data

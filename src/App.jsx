@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
 
 const SUPABASE_URL = "https://wpfwwgmicxcegooxkxtk.supabase.co";
 const SUPABASE_KEY = "sb_publishable_c1mn9Pe5ltsToILat1bpiw_ITVFdn-d";
@@ -879,20 +879,45 @@ export default function App() {
 
   useEffect(() => {
     if (!session) return;
-    const channel = supabase.channel('online-users', {
-      config: { presence: { key: session.user.id } }
-    });
-    channel
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState();
-        setOnlineCount(Object.keys(state).length);
-      })
-      .subscribe(async status => {
-        if (status === 'SUBSCRIBED') {
-          await channel.track({ user_id: session.user.id, email: session.user.email });
+    const userId = session.user.id;
+    const headers = {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates'
+    };
+
+    // Upsert this user as online with a heartbeat timestamp
+    const heartbeat = async () => {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/online_users`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ id: userId, last_seen: new Date().toISOString() })
+        });
+        // Fetch count of users seen in last 2 minutes
+        const cutoff = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/online_users?last_seen=gte.${cutoff}&select=id`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${session.access_token}` } }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setOnlineCount(data.length);
         }
-      });
-    return () => { supabase.removeChannel(channel); };
+      } catch (e) { /* silent */ }
+    };
+
+    heartbeat();
+    const interval = setInterval(heartbeat, 30000);
+    return () => {
+      clearInterval(interval);
+      // Mark offline on leave
+      fetch(`${SUPABASE_URL}/rest/v1/online_users?id=eq.${userId}`, {
+        method: 'DELETE',
+        headers
+      }).catch(() => {});
+    };
   }, [session]);
 
   useEffect(() => {
@@ -1211,4 +1236,4 @@ export default function App() {
   );
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = null; // placeholder — presence uses native fetch below
