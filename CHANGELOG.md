@@ -14,6 +14,7 @@ All changes to the Valuer Search app are documented here.
 - **NEW** Panel collapsed by default — the trending section takes up no space until opened, keeping the results view clean
 - **FIXED** Trending panel not visible — panel was being rendered outside the main content area. Moved to correct position between search bar and results table
 - **FIXED** Trending data not loading — fetch response was not being validated as an array, causing silent failures. Added error checking and Accept header to the API call
+- **IMPROVED** Trending layout — bar and count now pinned together on the right with the search term filling remaining space on the left. Fixes misalignment at different screen widths
 
 ---
 
