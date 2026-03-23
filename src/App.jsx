@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://wpfwwgmicxcegooxkxtk.supabase.co";
 const SUPABASE_KEY = "sb_publishable_c1mn9Pe5ltsToILat1bpiw_ITVFdn-d";
@@ -683,6 +684,16 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
   .main { padding: 16px; }
   .header-sub, .header-sep, .header-user { display: none; }
 }
+.online-count {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text-muted);
+  margin-left: 10px; padding-left: 10px;
+  border-left: 1px solid var(--border);
+}
+.online-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); flex-shrink: 0;
+}
 .panel-tab {
   position: fixed; right: 0; top: 180px;
   width: 34px; background: var(--text); border-radius: 4px 0 0 4px;
@@ -845,6 +856,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
   const [listItems, setListItems] = useState([]);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [onlineCount, setOnlineCount] = useState(1);
   const [checking, setChecking] = useState(true);
   const [rows, setRows] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -864,6 +876,24 @@ export default function App() {
   useEffect(() => {
     getSession().then(s => { setSession(s); setChecking(false); });
   }, []);
+
+  useEffect(() => {
+    if (!session) return;
+    const channel = supabase.channel('online-users', {
+      config: { presence: { key: session.user.id } }
+    });
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        setOnlineCount(Object.keys(state).length);
+      })
+      .subscribe(async status => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ user_id: session.user.id, email: session.user.email });
+        }
+      });
+    return () => { supabase.removeChannel(channel); };
+  }, [session]);
 
   useEffect(() => {
     localStorage.setItem('darkMode', darkMode);
@@ -1003,6 +1033,12 @@ export default function App() {
           <div className="header-right">
             <div className="header-count">
               <strong>{totalCount.toLocaleString()}</strong> {loading ? "loading…" : "wines"}
+              {onlineCount > 0 && (
+                <span className="online-count">
+                  <span className="online-dot" />
+                  {onlineCount} online
+                </span>
+              )}
             </div>
             <div className="header-user">{session.user?.email}</div>
             <button className="dark-toggle" onClick={() => setDarkMode(d => !d)} title={darkMode ? "Light mode" : "Dark mode"}>
@@ -1174,3 +1210,5 @@ export default function App() {
     </>
   );
 }
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);

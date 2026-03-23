@@ -4,6 +4,17 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.2.0] — 23 March 2026
+
+### Search & Data
+- **NEW** Collapsible "My list" panel — a slide-out panel fixed to the right edge of the screen. Click the ◀ tab to open and close it
+- **NEW** Add rows to list across multiple searches — click + on any row to add it to the panel. The list persists as you search different terms so you can build up a set of comparable sales from multiple queries
+- **NEW** Copy entire list to clipboard — the "Copy N rows" button in the panel copies all added rows as tab-separated values. Pasting into Excel or Google Sheets places each row on its own line with each field in its own cell
+- **NEW** List badge on closed tab — the row count is always visible on the tab even when the panel is closed, so you always know how many rows you have queued
+- **NEW** Clear entire list — single button in the panel footer to wipe the list and start fresh
+
+---
+
 ## [1.1.0] — 20 March 2026
 
 ### Search & Data
