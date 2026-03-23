@@ -707,10 +707,16 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
 .trend-toggle-arrow { font-size: 9px; color: var(--text-muted); transition: transform 0.25s; }
 .trend-toggle-arrow.open { transform: rotate(180deg); }
 .trend-strip { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: var(--white); border-bottom: 1px solid var(--border); }
-.trend-strip.open { max-height: 240px; }
-.trend-strip-inner { display: flex; gap: 0; padding: 14px 20px; }
-.trend-col { flex: 1; }
-.trend-col + .trend-col { border-left: 1px solid var(--border); padding-left: 20px; margin-left: 20px; max-width: 240px; }
+.trend-strip.open { max-height: 300px; }
+.trend-strip-inner { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; padding: 14px 20px; }
+.trend-col { padding: 0 16px; border-right: 1px solid var(--border); }
+.trend-col:first-child { padding-left: 0; }
+.trend-col:last-child { border-right: none; }
+.trend-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+.trend-stat-tile { background: var(--cream); border-radius: 3px; padding: 8px 10px; }
+.trend-stat-label { font-size: 9px; color: var(--text-muted); margin-bottom: 3px; }
+.trend-stat-val { font-size: 15px; font-family: 'Cormorant Garamond', Georgia, serif; color: var(--text); font-weight: 600; }
+.trend-stat-sub { font-size: 9px; color: var(--text-muted); margin-top: 1px; }
 .trend-pane-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
 .trend-period-btn { font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; text-transform: none; padding: 1px 5px; border-radius: 2px; cursor: pointer; background: none; border: none; font-family: 'Inter', sans-serif; }
 .trend-period-btn.active { background: var(--wine-pale); color: var(--wine); }
@@ -903,6 +909,11 @@ export default function App() {
   const [trendingData, setTrendingData] = useState([]);
   const [trendingUsers, setTrendingUsers] = useState([]);
   const [trendingTotal, setTrendingTotal] = useState(0);
+  const [trendingToday, setTrendingToday] = useState(0);
+  const [trendingDailyAvg, setTrendingDailyAvg] = useState(0);
+  const [trendingTopVintage, setTrendingTopVintage] = useState(null);
+  const [trendingTopSource, setTrendingTopSource] = useState(null);
+  const [trendingTopDay, setTrendingTopDay] = useState(null);
   const [trendingPeriod, setTrendingPeriod] = useState('30d');
   const [checking, setChecking] = useState(true);
   const [rows, setRows] = useState([]);
@@ -1109,6 +1120,29 @@ export default function App() {
       const uSorted = Object.entries(uCounts).sort((a,b) => b[1]-a[1]);
       setTrendingUsers(uSorted);
       setTrendingTotal(rows.length);
+      // today count
+      const todayStart = new Date(); todayStart.setHours(0,0,0,0);
+      setTrendingToday(rows.filter(r => new Date(r.searched_at) >= todayStart).length);
+      // daily average
+      const daysInPeriod = Math.max(1, days === 3650 ? 365 : days);
+      setTrendingDailyAvg(+(rows.length / daysInPeriod).toFixed(1));
+      // top vintage — extract 4-digit years from queries
+      const vCounts = {};
+      rows.forEach(r => { const m = r.query.match(/\b(19|20)\d{2}\b/); if (m) vCounts[m[0]] = (vCounts[m[0]]||0)+1; });
+      const topV = Object.entries(vCounts).sort((a,b)=>b[1]-a[1])[0];
+      setTrendingTopVintage(topV || null);
+      // top source — from query text matching known houses
+      const houses = ['langtons','mw wines','bonhams','shapiro','sothebys','christies'];
+      const hCounts = {};
+      rows.forEach(r => { houses.forEach(h => { if (r.query.includes(h)) hCounts[h] = (hCounts[h]||0)+1; }); });
+      const topH = Object.entries(hCounts).sort((a,b)=>b[1]-a[1])[0];
+      setTrendingTopSource(topH || null);
+      // most active day of week
+      const dayCounts = [0,0,0,0,0,0,0];
+      rows.forEach(r => { dayCounts[new Date(r.searched_at).getDay()]++; });
+      const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const topDayIdx = dayCounts.indexOf(Math.max(...dayCounts));
+      setTrendingTopDay(dayCounts[topDayIdx] > 0 ? { name: dayNames[topDayIdx], count: dayCounts[topDayIdx] } : null);
     } catch(e) { console.error('trending fetch failed', e); }
   };
 

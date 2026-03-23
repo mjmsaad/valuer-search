@@ -4,6 +4,26 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.6.0] — 23 March 2026
+
+### Trending Searches
+- **IMPROVED** Trending panel redesigned — three equal columns now fill the panel cleanly: most searched terms, team member breakdown, and a new insights column
+- **NEW** Searches today — live count of how many searches have been run today across all users
+- **NEW** Daily average — average searches per day for the selected time period
+- **NEW** Top vintage searched — the most frequently searched vintage year extracted from queries
+- **NEW** Most used source filter — which auction house filter is applied most often
+- **NEW** Most active day — which day of the week sees the highest search activity
+- **IMPROVED** Bar alignment — bars now scale fluidly within their column rather than using fixed pixel widths, eliminating the gap between text and bars at different screen sizes
+
+---
+
+## [1.5.0] — 23 March 2026
+
+### My List
+- **FIXED** My list resets on page refresh — list items are now saved to browser localStorage and restored automatically on every page load. Items persist across refreshes and return visits until manually cleared
+
+---
+
 ## [1.4.0] — 23 March 2026
 
 ### Search & Data
