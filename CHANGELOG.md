@@ -4,6 +4,19 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.4.0] — 23 March 2026
+
+### Search & Data
+- **NEW** Collapsible trending searches panel — a slim toggle bar between the search bar and results. Click to expand and see the top searched terms across the whole team
+- **NEW** Most searched terms — ranked list with bar chart showing the top 7 queries. Filter by 7 days, 30 days or all time. Click any term to instantly run that search
+- **NEW** Searches by team member — breakdown of how many searches each logged-in user has run, with a total count for the selected period
+- **NEW** Automatic search logging — every search is silently logged to a Supabase `search_logs` table with the user ID, query and timestamp. No action needed from users — data accumulates automatically as the app is used
+- **NEW** Panel collapsed by default — the trending section takes up no space until opened, keeping the results view clean
+- **FIXED** Trending panel not visible — panel was being rendered outside the main content area. Moved to correct position between search bar and results table
+- **FIXED** Trending data not loading — fetch response was not being validated as an array, causing silent failures. Added error checking and Accept header to the API call
+
+---
+
 ## [1.3.0] — 23 March 2026
 
 ### Search & Data

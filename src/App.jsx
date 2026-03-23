@@ -694,6 +694,44 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--green); flex-shrink: 0;
 }
+.trend-toggle-bar {
+  background: var(--cream); border-bottom: 1px solid var(--border);
+  padding: 6px 20px; display: flex; align-items: center;
+  justify-content: space-between; cursor: pointer; user-select: none;
+}
+.trend-toggle-bar:hover { background: var(--border); }
+.trend-toggle-left { display: flex; align-items: center; gap: 8px; }
+.trend-toggle-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+.trend-toggle-badge { background: var(--wine-pale); border: 1px solid rgba(123,29,29,0.15); color: var(--wine); font-size: 9px; font-weight: 700; padding: 1px 7px; border-radius: 20px; }
+.trend-toggle-hint { font-size: 10px; color: var(--border-dark); font-style: italic; }
+.trend-toggle-arrow { font-size: 9px; color: var(--text-muted); transition: transform 0.25s; }
+.trend-toggle-arrow.open { transform: rotate(180deg); }
+.trend-strip { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: var(--white); border-bottom: 1px solid var(--border); }
+.trend-strip.open { max-height: 240px; }
+.trend-strip-inner { display: flex; gap: 0; padding: 14px 20px; }
+.trend-col { flex: 1; }
+.trend-col + .trend-col { border-left: 1px solid var(--border); padding-left: 20px; margin-left: 20px; max-width: 240px; }
+.trend-pane-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+.trend-period-btn { font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; text-transform: none; padding: 1px 5px; border-radius: 2px; cursor: pointer; background: none; border: none; font-family: 'Inter', sans-serif; }
+.trend-period-btn.active { background: var(--wine-pale); color: var(--wine); }
+.trend-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
+.trend-item:hover .trend-term { color: var(--wine); }
+.trend-rank { width: 14px; font-size: 10px; font-weight: 700; color: var(--border-dark); text-align: right; flex-shrink: 0; }
+.trend-rank.top { color: var(--gold); }
+.trend-bar-wrap { width: 80px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+.trend-bar { height: 100%; border-radius: 2px; background: var(--border-dark); }
+.trend-bar.top { background: var(--gold); }
+.trend-bar.mid { background: var(--text-muted); }
+.trend-term { font-size: 11px; color: var(--text); flex: 1; }
+.trend-count { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.trend-count strong { color: var(--text-mid); }
+.trend-user-item { display: flex; align-items: center; gap: 7px; padding: 4px 0; }
+.trend-user-avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--wine-pale); border: 1px solid rgba(123,29,29,0.15); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--wine); flex-shrink: 0; }
+.trend-user-name { font-size: 10px; color: var(--text-mid); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trend-user-bar-wrap { width: 40px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.trend-user-bar { height: 100%; border-radius: 2px; background: var(--wine); opacity: 0.4; }
+.trend-user-count { font-size: 10px; color: var(--text-muted); min-width: 20px; text-align: right; }
+.trend-empty { font-size: 11px; color: var(--border-dark); font-style: italic; padding: 8px 0; }
 .panel-tab {
   position: fixed; right: 0; top: 180px;
   width: 34px; background: var(--text); border-radius: 4px 0 0 4px;
@@ -857,6 +895,11 @@ export default function App() {
   const [listItems, setListItems] = useState([]);
   const [panelOpen, setPanelOpen] = useState(false);
   const [onlineCount, setOnlineCount] = useState(1);
+  const [trendingOpen, setTrendingOpen] = useState(false);
+  const [trendingData, setTrendingData] = useState([]);
+  const [trendingUsers, setTrendingUsers] = useState([]);
+  const [trendingTotal, setTrendingTotal] = useState(0);
+  const [trendingPeriod, setTrendingPeriod] = useState('30d');
   const [checking, setChecking] = useState(true);
   const [rows, setRows] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -938,6 +981,7 @@ export default function App() {
     if (!session) return;
     setLoading(true); setError(null);
     const offset = (page - 1) * PAGE;
+    if (page === 1 && keywords.length > 0) logSearch(dq.trim());
     fetchWines(session.access_token, keywords, house, offset, sortCol, sortDir)
       .then(({ data, count }) => { setRows(data); setTotalCount(count); setLoading(false); })
       .catch(err => {
@@ -990,6 +1034,10 @@ export default function App() {
 
   const isInList = row => listItems.some(r => r._key === row.vintage + row.name + row.last_auction);
 
+  useEffect(() => {
+    if (trendingOpen) fetchTrending(trendingPeriod);
+  }, [trendingOpen, trendingPeriod]);
+
   const toggleListItem = row => {
     const key = row.vintage + row.name + row.last_auction;
     if (isInList(row)) {
@@ -1013,6 +1061,47 @@ export default function App() {
       setTimeout(() => setToastHiding(true), 1400);
       setTimeout(() => { setShowToast(false); setToastHiding(false); }, 1800);
     });
+  };
+
+  const logSearch = async query => {
+    if (!query || !session) return;
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/search_logs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${session.access_token}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ user_id: session.user.id, query: query.trim().toLowerCase() })
+      });
+    } catch(e) { /* silent fail — don't break search if logging fails */ }
+  };
+
+  const fetchTrending = async period => {
+    if (!session) return;
+    const days = period === '7d' ? 7 : period === '30d' ? 30 : 3650;
+    const since = new Date(Date.now() - days * 86400000).toISOString();
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/search_logs?select=query,user_id,searched_at&searched_at=gte.${since}&limit=5000`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${session.access_token}`, 'Accept': 'application/json' } }
+      );
+      const rows = await res.json();
+      if (!Array.isArray(rows)) { console.error('search_logs fetch error:', rows); return; }
+      // aggregate by query
+      const counts = {};
+      rows.forEach(r => { counts[r.query] = (counts[r.query] || 0) + 1; });
+      const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,7);
+      setTrendingData(sorted);
+      // aggregate by user
+      const uCounts = {};
+      rows.forEach(r => { uCounts[r.user_id] = (uCounts[r.user_id] || 0) + 1; });
+      const uSorted = Object.entries(uCounts).sort((a,b) => b[1]-a[1]);
+      setTrendingUsers(uSorted);
+      setTrendingTotal(rows.length);
+    } catch(e) { console.error('trending fetch failed', e); }
   };
 
   const toggleSort = col => {
@@ -1095,6 +1184,79 @@ export default function App() {
                 Clear
               </button>
             )}
+          </div>
+
+          {/* ── trending toggle bar ── */}
+          <div className="trend-toggle-bar" onClick={() => setTrendingOpen(o => !o)}>
+          <div className="trend-toggle-left">
+          <span className="trend-toggle-label">Trending searches</span>
+          <span className="trend-toggle-badge">
+          {trendingData.length > 0 ? `Top ${trendingData.length} · ${trendingPeriod}` : 'This month'}
+          </span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <span className="trend-toggle-hint">{trendingOpen ? 'Click to collapse' : 'Click to expand'}</span>
+          <span className={`trend-toggle-arrow${trendingOpen ? ' open' : ''}`}>▼</span>
+          </div>
+          </div>
+          {/* ── trending panel ── */}
+          <div className={`trend-strip${trendingOpen ? ' open' : ''}`}>
+          <div className="trend-strip-inner">
+          <div className="trend-col">
+          <div className="trend-pane-label">
+          Most searched
+          <div style={{display:'flex',gap:2}}>
+          {['7d','30d','all'].map(p => (
+          <button key={p} className={`trend-period-btn${trendingPeriod===p?' active':''}`}
+          onClick={e => { e.stopPropagation(); setTrendingPeriod(p); }}>
+          {p}
+          </button>
+          ))}
+          </div>
+          </div>
+          {trendingData.length === 0
+          ? <div className="trend-empty">No searches logged yet — data appears as the team uses the app.</div>
+          : trendingData.map(([term, count], i) => {
+          const max = trendingData[0][1];
+          const pct = Math.round(count/max*100);
+          const cls = i < 2 ? ' top' : i < 4 ? ' mid' : '';
+          return (
+          <div key={term} className="trend-item" onClick={() => { setDq(term); setPage(1); }}>
+          <span className={`trend-rank${i<3?' top':''}`}>{i+1}</span>
+          <span className="trend-term">{term}</span>
+          <div className="trend-bar-wrap"><div className={`trend-bar${cls}`} style={{width:`${pct}%`}} /></div>
+          <span className="trend-count"><strong>{count}</strong> searches</span>
+          </div>
+          );
+          })
+          }
+          </div>
+          <div className="trend-col">
+          <div className="trend-pane-label">By team member</div>
+          {trendingUsers.length === 0
+          ? <div className="trend-empty">No data yet.</div>
+          : trendingUsers.map(([uid, count], i) => {
+          const maxU = trendingUsers[0][1];
+          const initials = uid.slice(0,2).toUpperCase();
+          const email = uid === session?.user?.id ? session.user.email : uid.slice(0,8)+'…';
+          return (
+          <div key={uid} className="trend-user-item">
+          <div className="trend-user-avatar">{initials}</div>
+          <span className="trend-user-name">{email}</span>
+          <div className="trend-user-bar-wrap"><div className="trend-user-bar" style={{width:`${Math.round(count/maxU*100)}%`}} /></div>
+          <span className="trend-user-count">{count}</span>
+          </div>
+          );
+          })
+          }
+          {trendingTotal > 0 && (
+          <div style={{marginTop:12,paddingTop:10,borderTop:'1px solid var(--border)',display:'flex',alignItems:'baseline',gap:6}}>
+          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:'var(--text)'}}>{trendingTotal}</span>
+          <span style={{fontSize:10,color:'var(--text-muted)'}}>total searches · {trendingPeriod}</span>
+          </div>
+          )}
+          </div>
+          </div>
           </div>
 
           <div className="meta">
@@ -1184,7 +1346,7 @@ export default function App() {
           </div>
         </main>
       </div>
-      {/* ── slide panel tab ── */}
+            {/* ── slide panel tab ── */}
       <div className={`panel-tab${panelOpen ? ' open' : ''}`} onClick={() => setPanelOpen(o => !o)}>
         <span className="panel-tab-arrow">{panelOpen ? '▶' : '◀'}</span>
         <span className="panel-tab-label">My list</span>
