@@ -894,7 +894,9 @@ function WickmanLogo({ dark, style }) {
 export default function App() {
   const [session, setSession] = useState(null);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
-  const [listItems, setListItems] = useState([]);
+  const [listItems, setListItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('wickman_list') || '[]'); } catch { return []; }
+  });
   const [panelOpen, setPanelOpen] = useState(false);
   const [onlineCount, setOnlineCount] = useState(1);
   const [trendingOpen, setTrendingOpen] = useState(false);
@@ -973,6 +975,10 @@ export default function App() {
       document.documentElement.removeAttribute('data-theme');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    localStorage.setItem('wickman_list', JSON.stringify(listItems));
+  }, [listItems]);
 
   useEffect(() => {
     if (!session) return;
