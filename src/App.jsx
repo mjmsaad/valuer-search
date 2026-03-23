@@ -683,6 +683,51 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
   .main { padding: 16px; }
   .header-sub, .header-sep, .header-user { display: none; }
 }
+.panel-tab {
+  position: fixed; right: 0; top: 180px;
+  width: 34px; background: var(--text); border-radius: 4px 0 0 4px;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center;
+  padding: 12px 0; gap: 6px; z-index: 100; transition: right 0.28s ease; user-select: none;
+}
+.panel-tab.open { right: 280px; }
+.panel-tab-label {
+  writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold);
+}
+.panel-tab-badge {
+  background: var(--wine); color: white; border-radius: 10px;
+  font-size: 9px; font-weight: 700; padding: 2px 5px; min-width: 16px; text-align: center;
+}
+.panel-tab-arrow { color: var(--text-muted); font-size: 10px; transition: transform 0.28s ease; }
+.panel-tab.open .panel-tab-arrow { transform: rotate(180deg); }
+.slide-panel {
+  position: fixed; right: -280px; top: 52px; bottom: 0; width: 280px;
+  background: var(--white); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 99; transition: right 0.28s ease;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.06);
+}
+.slide-panel.open { right: 0; }
+.slide-panel-header { padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--cream); }
+.slide-panel-title { font-size: 11px; font-weight: 700; color: var(--text); letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.slide-panel-sub { font-size: 10px; color: var(--text-muted); font-style: italic; margin-top: 3px; }
+.slide-panel-items { flex: 1; overflow-y: auto; }
+.slide-panel-item { padding: 9px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; }
+.slide-panel-item:hover { background: var(--cream); }
+.slide-panel-item-info { flex: 1; min-width: 0; }
+.slide-panel-item-name { font-size: 11px; color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slide-panel-item-meta { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.slide-panel-item-price { font-size: 11px; color: var(--green); font-weight: 500; white-space: nowrap; }
+.slide-panel-remove { width: 16px; height: 16px; background: none; border: none; cursor: pointer; color: var(--border-dark); font-size: 15px; line-height: 1; flex-shrink: 0; padding: 0; }
+.slide-panel-remove:hover { color: var(--wine); }
+.slide-panel-footer { padding: 12px; border-top: 2px solid var(--border); background: var(--cream); }
+.slide-panel-copy { width: 100%; background: var(--text); color: var(--gold); border: none; padding: 9px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border-radius: 2px; font-family: 'Inter', sans-serif; }
+.slide-panel-copy:hover { opacity: 0.9; }
+.slide-panel-copy:disabled { opacity: 0.4; cursor: default; }
+.slide-panel-clear { display: block; text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 8px; cursor: pointer; text-decoration: underline; background: none; border: none; width: 100%; font-family: 'Inter', sans-serif; }
+.slide-panel-clear:hover { color: var(--wine); }
+.list-add-btn { width: 22px; height: 22px; border: 1px solid var(--border); background: none; border-radius: 3px; cursor: pointer; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center; padding: 0; transition: all 0.12s; }
+.list-add-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+.list-add-btn.in-list { border-color: var(--green); background: var(--green-pale); color: var(--green); }
 `;
 
 /* ── Login ── */
@@ -798,6 +843,8 @@ function WickmanLogo({ dark, style }) {
 export default function App() {
   const [session, setSession] = useState(null);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  const [listItems, setListItems] = useState([]);
+  const [panelOpen, setPanelOpen] = useState(false);
   const [checking, setChecking] = useState(true);
   const [rows, setRows] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -883,6 +930,33 @@ export default function App() {
       setToastHiding(false);
       setTimeout(() => setToastHiding(true), 1400);
       setTimeout(() => { setCopiedRow(null); setShowToast(false); setToastHiding(false); }, 1800);
+    });
+  };
+
+  const isInList = row => listItems.some(r => r._key === row.vintage + row.name + row.last_auction);
+
+  const toggleListItem = row => {
+    const key = row.vintage + row.name + row.last_auction;
+    if (isInList(row)) {
+      setListItems(prev => prev.filter(r => r._key !== key));
+    } else {
+      setListItems(prev => [...prev, { ...row, _key: key }]);
+      setPanelOpen(true);
+    }
+  };
+
+  const removeListItem = key => setListItems(prev => prev.filter(r => r._key !== key));
+
+  const copyListToClipboard = () => {
+    const fmt = v => { const n = cleanPrice(v); return n != null ? `$${n.toFixed(2)}` : ''; };
+    const text = listItems.map(r => [
+      r.vintage || '', r.name || '', r.qty || '', r.size || '',
+      r.reserve ? fmt(r.reserve) : '', r.low ? fmt(r.low) : '', r.high ? fmt(r.high) : '',
+    ].join('\t')).join('\n');
+    navigator.clipboard.writeText(text).then(() => {
+      setShowToast(true); setToastHiding(false);
+      setTimeout(() => setToastHiding(true), 1400);
+      setTimeout(() => { setShowToast(false); setToastHiding(false); }, 1800);
     });
   };
 
@@ -1004,6 +1078,7 @@ export default function App() {
                   <thead>
                     <tr>
                       <th className="copy-th"></th>
+                      <th style={{width:30,padding:'0 8px'}}></th>
                       <Th col="vintage" label="Vintage" />
                       <Th col="name" label="Wine" />
                       <Th col="qty" label="Qty" />
@@ -1019,6 +1094,11 @@ export default function App() {
                   <tbody>
                     {sortedRows.map((r, i) => (
                       <tr key={i} onClick={() => copyRow(r, i)} style={{cursor:"pointer"}} className={copiedRow === i ? "row-copied" : ""}>
+                        <td style={{width:30,padding:'4px 8px',textAlign:'center'}} onClick={e => { e.stopPropagation(); toggleListItem(r); }}>
+                          <button className={`list-add-btn${isInList(r) ? ' in-list' : ''}`} title={isInList(r) ? 'Remove from list' : 'Add to list'}>
+                            {isInList(r) ? '✓' : '+'}
+                          </button>
+                        </td>
                         <td className="copy-cell">
                           <button className={`copy-btn${copiedRow === i ? " copied" : ""}`} onClick={() => copyRow(r, i)} title="Copy row">
                             {copiedRow === i ? "✓" : "⎘"}
@@ -1043,6 +1123,49 @@ export default function App() {
           </div>
         </main>
       </div>
+      {/* ── slide panel tab ── */}
+      <div className={`panel-tab${panelOpen ? ' open' : ''}`} onClick={() => setPanelOpen(o => !o)}>
+        <span className="panel-tab-arrow">{panelOpen ? '▶' : '◀'}</span>
+        <span className="panel-tab-label">My list</span>
+        {listItems.length > 0 && <span className="panel-tab-badge">{listItems.length}</span>}
+      </div>
+
+      {/* ── slide panel ── */}
+      <div className={`slide-panel${panelOpen ? ' open' : ''}`}>
+        <div className="slide-panel-header">
+          <div className="slide-panel-title">
+            My list
+            {listItems.length > 0 && <span style={{background:'var(--wine)',color:'white',borderRadius:20,fontSize:9,fontWeight:700,padding:'2px 7px'}}>{listItems.length}</span>}
+          </div>
+          <div className="slide-panel-sub">Persists across searches</div>
+        </div>
+        <div className="slide-panel-items">
+          {listItems.length === 0 ? (
+            <div style={{padding:32,textAlign:'center'}}>
+              <div style={{fontSize:11,color:'var(--border-dark)',lineHeight:1.6}}>No rows added yet.<br/>Click + on any row<br/>to add it here.</div>
+            </div>
+          ) : listItems.map(r => {
+            const n = cleanPrice(r.high);
+            return (
+              <div key={r._key} className="slide-panel-item">
+                <div className="slide-panel-item-info">
+                  <div className="slide-panel-item-name" title={r.name}>{r.name}</div>
+                  <div className="slide-panel-item-meta">{r.vintage}{r.last_auction ? ` · ${r.last_auction}` : ''}</div>
+                </div>
+                {n != null && <div className="slide-panel-item-price">${n.toFixed(0)}</div>}
+                <button className="slide-panel-remove" onClick={() => removeListItem(r._key)}>×</button>
+              </div>
+            );
+          })}
+        </div>
+        <div className="slide-panel-footer">
+          <button className="slide-panel-copy" disabled={listItems.length === 0} onClick={copyListToClipboard}>
+            Copy {listItems.length} row{listItems.length === 1 ? '' : 's'} to clipboard
+          </button>
+          <button className="slide-panel-clear" onClick={() => setListItems([])}>Clear entire list</button>
+        </div>
+      </div>
+
       {showToast && (
         <div className={`copy-toast${toastHiding ? " hiding" : ""}`}>
           ✓ Copied to clipboard
