@@ -4,6 +4,16 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.7.0] — 23 March 2026
+
+### Trending Searches
+- **IMPROVED** Search count now displays inside each bar — the count number sits on the right end of the bar itself, removing the separate count column for a cleaner layout
+- **IMPROVED** Bars increased in height to 18px to comfortably display the count number inside
+- **IMPROVED** Top 10 results shown — increased from 5 to 10 search terms in the trending panel
+- **FIXED** Team member initials now derived from email address first character rather than UUID, so names display correctly (e.g. M for michael@...)
+
+---
+
 ## [1.6.0] — 23 March 2026
 
 ### Trending Searches

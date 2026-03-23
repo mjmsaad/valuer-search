@@ -707,7 +707,7 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
 .trend-toggle-arrow { font-size: 9px; color: var(--text-muted); transition: transform 0.25s; }
 .trend-toggle-arrow.open { transform: rotate(180deg); }
 .trend-strip { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: var(--white); border-bottom: 1px solid var(--border); }
-.trend-strip.open { max-height: 300px; }
+.trend-strip.open { max-height: 400px; }
 .trend-strip-inner { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; padding: 14px 20px; }
 .trend-col { padding: 0 16px; border-right: 1px solid var(--border); }
 .trend-col:first-child { padding-left: 0; }
@@ -720,18 +720,17 @@ mark.hl { background: rgba(184,146,42,0.2); color: var(--gold); border-radius: 2
 .trend-pane-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
 .trend-period-btn { font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 0; text-transform: none; padding: 1px 5px; border-radius: 2px; cursor: pointer; background: none; border: none; font-family: 'Inter', sans-serif; }
 .trend-period-btn.active { background: var(--wine-pale); color: var(--wine); }
-.trend-item { display: grid; grid-template-columns: 14px 1fr auto; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
+.trend-item { display: grid; grid-template-columns: 14px 130px 1fr; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; }
 .trend-item:hover .trend-term { color: var(--wine); }
 .trend-rank { font-size: 10px; font-weight: 700; color: var(--border-dark); text-align: right; }
 .trend-rank.top { color: var(--gold); }
-.trend-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.trend-bar-wrap { width: 60px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-.trend-bar { height: 100%; border-radius: 2px; background: var(--border-dark); }
+.trend-bar-wrap { flex: 1; height: 18px; background: var(--border); border-radius: 3px; overflow: hidden; position: relative; }
+.trend-bar { height: 100%; border-radius: 3px; position: relative; display: flex; align-items: center; justify-content: center; transition: width 0.3s ease; }
 .trend-bar.top { background: var(--gold); }
 .trend-bar.mid { background: var(--text-muted); }
-.trend-term { font-size: 11px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.trend-count { font-size: 10px; color: var(--text-muted); white-space: nowrap; min-width: 52px; text-align: right; }
-.trend-count strong { color: var(--text-mid); }
+.trend-bar.low { background: var(--border-dark); }
+.trend-bar-label { position: absolute; right: 6px; font-size: 9px; font-weight: 700; color: white; white-space: nowrap; pointer-events: none; }
+.trend-term { font-size: 11px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 130px; flex-shrink: 0; }
 .trend-user-item { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 7px; padding: 4px 0; }
 .trend-user-avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--wine-pale); border: 1px solid rgba(123,29,29,0.15); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--wine); flex-shrink: 0; }
 .trend-user-name { font-size: 10px; color: var(--text-mid); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1244,62 +1243,104 @@ export default function App() {
           {/* ── trending panel ── */}
           <div className={`trend-strip${trendingOpen ? ' open' : ''}`}>
           <div className="trend-strip-inner">
-          <div className="trend-col">
-          <div className="trend-pane-label">
-          Most searched
-          <div style={{display:'flex',gap:2}}>
-          {['7d','30d','all'].map(p => (
-          <button key={p} className={`trend-period-btn${trendingPeriod===p?' active':''}`}
-          onClick={e => { e.stopPropagation(); setTrendingPeriod(p); }}>
-          {p}
-          </button>
-          ))}
+
+            {/* col 1 — top terms */}
+            <div className="trend-col">
+              <div className="trend-pane-label">
+                Most searched
+                <div style={{display:'flex',gap:2}}>
+                  {['7d','30d','all'].map(p => (
+                    <button key={p} className={`trend-period-btn${trendingPeriod===p?' active':''}`}
+                      onClick={e => { e.stopPropagation(); setTrendingPeriod(p); }}>
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {trendingData.length === 0
+                ? <div className="trend-empty">No searches logged yet — data appears as the team uses the app.</div>
+                : trendingData.slice(0,10).map(([term, count], i) => {
+                    const max = trendingData[0][1];
+                    const pct = Math.round(count/max*100);
+                    const cls = i < 2 ? ' top' : i < 4 ? ' mid' : '';
+                    return (
+                      <div key={term} className="trend-item" onClick={() => { setDq(term); setPage(1); }}>
+                        <span className={`trend-rank${i<3?' top':''}`}>{i+1}</span>
+                        <span className="trend-term">{term}</span>
+                        <div className="trend-bar-wrap">
+                          <div className={`trend-bar${cls}`} style={{width:`${pct}%`}}>
+                            <span className="trend-bar-label">{count}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+              }
+              {trendingTotal > 0 && (
+                <div style={{marginTop:10,paddingTop:8,borderTop:'1px solid var(--border)',display:'flex',alignItems:'baseline',gap:5}}>
+                  <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:20,color:'var(--text)'}}>{trendingTotal}</span>
+                  <span style={{fontSize:10,color:'var(--text-muted)'}}>searches · {trendingPeriod}</span>
+                </div>
+              )}
+            </div>
+
+            {/* col 2 — team + stats */}
+            <div className="trend-col">
+              <div className="trend-pane-label">By team member</div>
+              {trendingUsers.length === 0
+                ? <div className="trend-empty">No data yet.</div>
+                : trendingUsers.map(([uid, count]) => {
+                    const maxU = trendingUsers[0][1];
+                    const email = uid === session?.user?.id ? session.user.email : uid.slice(0,8)+'…';
+                    const initials = email.charAt(0).toUpperCase();
+                    return (
+                      <div key={uid} className="trend-user-item">
+                        <div className="trend-user-avatar">{initials}</div>
+                        <span className="trend-user-name">{email}</span>
+                        <div className="trend-user-right">
+                          <div className="trend-user-bar-wrap"><div className="trend-user-bar" style={{width:`${Math.round(count/maxU*100)}%`}} /></div>
+                          <span className="trend-user-count"><strong>{count}</strong></span>
+                        </div>
+                      </div>
+                    );
+                  })
+              }
+              <div className="trend-stat-grid">
+                <div className="trend-stat-tile">
+                  <div className="trend-stat-label">Today</div>
+                  <div className="trend-stat-val">{trendingToday}</div>
+                  <div className="trend-stat-sub">searches</div>
+                </div>
+                <div className="trend-stat-tile">
+                  <div className="trend-stat-label">Daily avg</div>
+                  <div className="trend-stat-val">{trendingDailyAvg}</div>
+                  <div className="trend-stat-sub">per day</div>
+                </div>
+              </div>
+            </div>
+
+            {/* col 3 — insights */}
+            <div className="trend-col">
+              <div className="trend-pane-label">Insights</div>
+              <div className="trend-stat-tile" style={{marginBottom:8}}>
+                <div className="trend-stat-label">Top vintage searched</div>
+                <div className="trend-stat-val">{trendingTopVintage ? trendingTopVintage[0] : '—'}</div>
+                <div className="trend-stat-sub">{trendingTopVintage ? `${trendingTopVintage[1]} searches` : 'no year queries yet'}</div>
+              </div>
+              <div className="trend-stat-tile" style={{marginBottom:8}}>
+                <div className="trend-stat-label">Most used source filter</div>
+                <div className="trend-stat-val" style={{fontSize:13,fontFamily:'Inter,sans-serif',fontWeight:600}}>{trendingTopSource ? trendingTopSource[0] : '—'}</div>
+                <div className="trend-stat-sub">{trendingTopSource ? `${trendingTopSource[1]} filtered searches` : 'no source filters used'}</div>
+              </div>
+              <div className="trend-stat-tile">
+                <div className="trend-stat-label">Most active day</div>
+                <div className="trend-stat-val" style={{fontSize:13,fontFamily:'Inter,sans-serif',fontWeight:600}}>{trendingTopDay ? trendingTopDay.name : '—'}</div>
+                <div className="trend-stat-sub">{trendingTopDay ? `avg ${trendingTopDay.count} searches` : 'not enough data'}</div>
+              </div>
+            </div>
+
           </div>
-          </div>
-          {trendingData.length === 0
-          ? <div className="trend-empty">No searches logged yet — data appears as the team uses the app.</div>
-          : trendingData.map(([term, count], i) => {
-          const max = trendingData[0][1];
-          const pct = Math.round(count/max*100);
-          const cls = i < 2 ? ' top' : i < 4 ? ' mid' : '';
-          return (
-          <div key={term} className="trend-item" onClick={() => { setDq(term); setPage(1); }}>
-          <span className={`trend-rank${i<3?' top':''}`}>{i+1}</span>
-          <span className="trend-term">{term}</span>
-          <div className="trend-bar-wrap"><div className={`trend-bar${cls}`} style={{width:`${pct}%`}} /></div>
-          <span className="trend-count"><strong>{count}</strong> searches</span>
-          </div>
-          );
-          })
-          }
-          </div>
-          <div className="trend-col">
-          <div className="trend-pane-label">By team member</div>
-          {trendingUsers.length === 0
-          ? <div className="trend-empty">No data yet.</div>
-          : trendingUsers.map(([uid, count], i) => {
-          const maxU = trendingUsers[0][1];
-          const initials = uid.slice(0,2).toUpperCase();
-          const email = uid === session?.user?.id ? session.user.email : uid.slice(0,8)+'…';
-          return (
-          <div key={uid} className="trend-user-item">
-          <div className="trend-user-avatar">{initials}</div>
-          <span className="trend-user-name">{email}</span>
-          <div className="trend-user-bar-wrap"><div className="trend-user-bar" style={{width:`${Math.round(count/maxU*100)}%`}} /></div>
-          <span className="trend-user-count">{count}</span>
-          </div>
-          );
-          })
-          }
-          {trendingTotal > 0 && (
-          <div style={{marginTop:12,paddingTop:10,borderTop:'1px solid var(--border)',display:'flex',alignItems:'baseline',gap:6}}>
-          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:'var(--text)'}}>{trendingTotal}</span>
-          <span style={{fontSize:10,color:'var(--text-muted)'}}>total searches · {trendingPeriod}</span>
-          </div>
-          )}
-          </div>
-          </div>
-          </div>
+        </div>
 
           <div className="meta">
             <div className="meta-left">
