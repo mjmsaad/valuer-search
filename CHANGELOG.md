@@ -4,6 +4,17 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.8.0] — 24 March 2026
+
+### Search & Data
+- **NEW** Wine detail page — click the ⓘ button on any row to open a full-screen overlay showing the wine's price history chart, headline stats (all-time high, average, low, last sale, trend vs previous sale) and a complete table of all recorded sales sorted newest first
+- **NEW** Price history chart — plots High, Ave and Low prices across all auction dates for that wine and vintage, with an interactive tooltip showing all three values per date
+- **NEW** ⓘ info button column — a dedicated column with a persistent ⓘ button on every row. Clicking it opens the detail overlay without affecting the click-to-copy behaviour on the rest of the row
+- **NEW** Column header icons — the copy column shows a clipboard SVG icon and the info column shows ⓘ in the header row so both columns are self-explanatory
+- **FIXED** Blank page on load — caused by accumulated JSX structural errors across many patch edits. App was fully rewritten from scratch to resolve, restoring all features cleanly
+
+---
+
 ## [1.7.0] — 23 March 2026
 
 ### Trending Searches
