@@ -1026,6 +1026,7 @@ export default function App() {
   const [trendingTopVintage, setTrendingTopVintage] = useState(null);
   const [trendingTopSource, setTrendingTopSource]   = useState(null);
   const [trendingTopDay, setTrendingTopDay]         = useState(null);
+  const [userProfiles, setUserProfiles]             = useState({});
   const [detailWine, setDetailWine]   = useState(null);
   const [detailRows, setDetailRows]   = useState([]);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -1056,6 +1057,22 @@ export default function App() {
   useEffect(() => {
     if (!session) return;
     fetchHouses(session.access_token).then(setHouses);
+    // upsert own email into profiles table
+    fetch(`${SUPABASE_URL}/rest/v1/user_profiles`, {
+      method: "POST",
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates" },
+      body: JSON.stringify({ user_id: session.user.id, email: session.user.email })
+    }).catch(() => {});
+    // fetch all profiles for trending display
+    fetch(`${SUPABASE_URL}/rest/v1/user_profiles?select=user_id,email`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` }
+    }).then(r => r.json()).then(rows => {
+      if (Array.isArray(rows)) {
+        const map = {};
+        rows.forEach(r => { map[r.user_id] = r.email; });
+        setUserProfiles(map);
+      }
+    }).catch(() => {});
   }, [session]);
 
   useEffect(() => {
@@ -1073,7 +1090,18 @@ export default function App() {
   }, [session, dq, house, page, sortCol, sortDir]);
 
   useEffect(() => {
-    if (trendingOpen && session) fetchTrending(trendingPeriod);
+    if (trendingOpen && session) {
+      fetchTrending(trendingPeriod);
+      fetch(`${SUPABASE_URL}/rest/v1/user_profiles?select=user_id,email`, {
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` }
+      }).then(r => r.json()).then(rows => {
+        if (Array.isArray(rows)) {
+          const map = {};
+          rows.forEach(r => { map[r.user_id] = r.email; });
+          setUserProfiles(map);
+        }
+      }).catch(() => {});
+    }
   }, [trendingOpen, trendingPeriod, session]);
 
   // ── Helpers ──────────────────────────────────────────────────
@@ -1344,7 +1372,7 @@ export default function App() {
                   ? <div className="trend-empty">No data yet.</div>
                   : trendingUsers.map(([uid, count]) => {
                       const maxU = trendingUsers[0][1];
-                      const email = uid === session?.user?.id ? session.user.email : uid.slice(0,8)+"…";
+                      const email = userProfiles[uid] || (uid === session?.user?.id ? session.user.email : uid.slice(0,8)+"…");
                       const initial = email.charAt(0).toUpperCase();
                       return (
                         <div key={uid} className="trend-user-item">

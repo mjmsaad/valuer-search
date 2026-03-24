@@ -4,6 +4,13 @@ All changes to the Valuer Search app are documented here.
 
 ---
 
+## [1.8.25] — 24 March 2026
+
+### Trending Searches
+- **FIXED** Team member emails showing as random UUID fragments in the trending panel — added a `user_profiles` table in Supabase that each user writes their email to on login. The trending panel now looks up emails from this table, showing full email addresses for all team members
+
+---
+
 ## [1.8.0] — 24 March 2026
 
 ### Search & Data
