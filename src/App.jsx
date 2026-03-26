@@ -197,11 +197,13 @@ function buildEmailHTML(name, auctions) {
   const rowsHTML = window._listItemsForExport ? (() => {
       const adjP = (v,m) => { const n = cleanPrice(v); return n ? `$${Math.round(n*(m||1))}` : "—"; };
       return window._listItemsForExport.map((r,i) => {
-        const m = r.sizeMultiplier || 1;
+        const baseMult = SIZE_MULTIPLIERS.find(s => s.value === (r.baseSize||"750ml"))?.mult || 1;
+        const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
+        const m = outMult / baseMult;
+        const effM = r.applyMultiplier ? m : 1;
         const bg = i%2===0?'#FAF8F4':'#ffffff';
         const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:10px;color:#B8922A;">(${r.size})</span>` : '';
         const qtyNote = r.qty > 1 ? ` <span style="font-size:10px;color:#8A8278;">×${r.qty}</span>` : '';
-        const effM = r.applyMultiplier ? m : 1;
         return `<tr>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.vintage||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.name||""}</td>
@@ -280,11 +282,13 @@ ${auctionHTML}
 function buildPDFHTML(name, auctions, listItems) {
   const ap = (v,m) => { const n = parseFloat(String(v||"").replace(/[$,]/g,"")); return (n && n>0) ? `$${Math.round(n*(m||1))}` : "—"; };
   const rowsHTML = listItems.map((r,i) => {
-    const m = r.sizeMultiplier || 1;
+    const baseMult = SIZE_MULTIPLIERS.find(s => s.value === (r.baseSize||"750ml"))?.mult || 1;
+    const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
+    const m = outMult / baseMult;
+    const effM = r.applyMultiplier ? m : 1;
     const bg = i%2===0?'background:#FAF8F4;':'';
     const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:9px;color:#B8922A;">(${r.size})</span>` : '';
     const qtyNote = r.qty > 1 ? ` <span style="font-size:9px;color:#8A8278;">×${r.qty}</span>` : '';
-    const effM = r.applyMultiplier ? m : 1;
     return `<tr>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.vintage||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.name||""}</td>
@@ -998,7 +1002,8 @@ export default function App() {
     if (isInList(row)) {
       setListItems(prev => prev.filter(r => r._key !== key));
     } else {
-      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: normaliseSize(row.size), sizeMultiplier: 1, applyMultiplier: false }]);
+      const dbSize = normaliseSize(row.size);
+      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: dbSize, baseSize: dbSize, sizeMultiplier: 1, applyMultiplier: false }]);
       // Pop panel open briefly then auto-close after 2 seconds
       setPanelOpen(true);
       if (panelAutoCloseRef.current) clearTimeout(panelAutoCloseRef.current);
@@ -1027,7 +1032,7 @@ export default function App() {
       if (!name) return null;
       const sizeMult = SIZE_MULTIPLIERS.find(s => s.value === size)?.mult || 1;
       const key = vintage + name + Date.now() + Math.random();
-      return { vintage, name, qty, size, sizeMultiplier: sizeMult, applyMultiplier: false, reserve, low, high, _key: key, isManual: true };
+      return { vintage, name, qty, size, baseSize: size, sizeMultiplier: sizeMult, applyMultiplier: false, reserve, low, high, _key: key, isManual: true };
     }).filter(Boolean);
     setListItems(prev => [...prev, ...newItems]);
     setPasteText('');
@@ -1346,7 +1351,9 @@ export default function App() {
               <div style={{fontSize:11,color:"var(--border-dark)",lineHeight:1.6}}>No rows added yet.<br/>Click + on any row to add it here.</div>
             </div>
           ) : listItems.map(r => {
-            const m = r.sizeMultiplier || 1;
+            const baseMult = SIZE_MULTIPLIERS.find(s => s.value === (r.baseSize||"750ml"))?.mult || 1;
+            const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
+            const m = outMult / baseMult;
             const effM = r.applyMultiplier ? m : 1;
             const adjHigh = cleanPrice(r.high) ? Math.round(cleanPrice(r.high) * effM) : null;
             const priceChanged = m !== 1;
@@ -1370,18 +1377,24 @@ export default function App() {
                     <div style={{width:24,textAlign:"center",fontSize:10,fontWeight:600,color:"var(--text)",background:"var(--white)",borderLeft:"1px solid var(--border)",borderRight:"1px solid var(--border)",height:20,lineHeight:"20px"}}>{r.qty||1}</div>
                     <button onClick={() => updateListItem(r._key,{qty:(r.qty||1)+1})} style={{width:20,height:20,background:"var(--cream)",border:"none",cursor:"pointer",fontSize:12,color:"var(--text-mid)"}}>+</button>
                   </div>
-                  <span style={{fontSize:9,fontWeight:600,color:"var(--text-muted)",letterSpacing:"0.06em"}}>SIZE</span>
-                  <select value={r.size||"750ml"} onChange={e => { const sm = SIZE_MULTIPLIERS.find(s => s.value === e.target.value); updateListItem(r._key,{size:e.target.value,sizeMultiplier:sm?.mult||1}); }} style={{height:20,border:"1px solid var(--border)",background:"var(--cream)",color:"var(--text)",fontFamily:"Inter,sans-serif",fontSize:10,padding:"0 3px",borderRadius:3,cursor:"pointer"}}>
-                    {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}{s.mult!==1?" (x"+s.mult+")":""}</option>)}
+                  <span style={{fontSize:9,fontWeight:600,color:"var(--text-muted)",letterSpacing:"0.06em"}}>FROM</span>
+                  <select value={r.baseSize||"750ml"} onChange={e => updateListItem(r._key,{baseSize:e.target.value})} style={{height:20,border:"1px solid var(--border)",background:"var(--cream)",color:"var(--text)",fontFamily:"Inter,sans-serif",fontSize:10,padding:"0 3px",borderRadius:3,cursor:"pointer"}}>
+                    {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                   </select>
-                  <label style={{display:"flex",alignItems:"center",gap:3,cursor:"pointer",marginLeft:2,flexShrink:0}} title="Apply size multiplier to prices">
+                  <span style={{fontSize:9,fontWeight:600,color:"var(--text-muted)",letterSpacing:"0.06em"}}>TO</span>
+                  <select value={r.size||"750ml"} onChange={e => { const sm = SIZE_MULTIPLIERS.find(s => s.value === e.target.value); updateListItem(r._key,{size:e.target.value,sizeMultiplier:sm?.mult||1}); }} style={{height:20,border:"1px solid var(--border)",background:"var(--cream)",color:"var(--text)",fontFamily:"Inter,sans-serif",fontSize:10,padding:"0 3px",borderRadius:3,cursor:"pointer"}}>
+                    {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </select>
+                  <label style={{display:"flex",alignItems:"center",gap:3,cursor:"pointer",marginLeft:2,flexShrink:0}} title="Apply price adjustment between sizes">
                     <input
                       type="checkbox"
                       checked={!!r.applyMultiplier}
                       onChange={e => updateListItem(r._key,{applyMultiplier:e.target.checked})}
                       style={{width:12,height:12,accentColor:"var(--wine)",cursor:"pointer",flexShrink:0}}
                     />
-                    <span style={{fontSize:9,color:priceChanged?"var(--wine)":"var(--text-muted)",fontWeight:priceChanged?700:400,letterSpacing:"0.04em",whiteSpace:"nowrap"}}>× adj</span>
+                    <span style={{fontSize:9,color:priceChanged?"var(--wine)":"var(--text-muted)",fontWeight:priceChanged?700:400,letterSpacing:"0.04em",whiteSpace:"nowrap"}}>
+                      {priceChanged ? (m > 1 ? "▲ adj" : m < 1 ? "▼ adj" : "× adj") : "× adj"}
+                    </span>
                   </label>
                   {priceChanged && <span style={{fontSize:9,color:"var(--text-muted)",fontStyle:"italic",marginLeft:2}}>{"base $"+(cleanPrice(r.high)||0).toFixed(0)}</span>}
                 </div>
