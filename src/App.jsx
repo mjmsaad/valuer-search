@@ -969,12 +969,35 @@ export default function App() {
 
   const isInList = row => listItems.some(r => r._key === row.vintage + row.name + row.last_auction);
   const panelAutoCloseRef = useRef(null);
+  const normaliseSize = raw => {
+    if (!raw) return "750ml";
+    const s = String(raw).toLowerCase().replace(/\s+/g, "");
+    if (s.includes("50ml") && !s.includes("1500") && !s.includes("750")) return "50ml";
+    if (s.includes("100ml") && !s.includes("1500") && !s.includes("3000")) return "100ml";
+    if (s.includes("200ml")) return "200ml";
+    if (s.includes("350ml")) return "350ml";
+    if (s.includes("375ml") || s.includes("37.5cl") || s.includes("halfbottle") || s.includes("half-bottle") || s.includes("half(375") || s.includes("0.375")) return "375ml";
+    if (s.includes("500ml")) return "500ml";
+    if (s.includes("700ml") || s.includes("70cl")) return "700ml";
+    if (s.includes("1750ml") || s.includes("1.75l") || s.includes("175cl")) return "1750ml";
+    if (s.includes("1500ml") || s.includes("1.5l") || s.includes("150cl") || s.includes("magnum") || s.includes("1.5litre")) return "1500ml";
+    if (s.includes("1000ml") || s.includes("1l)") || s.includes("1litre") || s.includes("100cl") || s === "1l") return "1000ml";
+    if (s.includes("3000ml") || s.includes("3l") || s.includes("doublemag") || s.includes("jeroboam") && s.includes("3")) return "3000ml";
+    if (s.includes("4500ml") || s.includes("4.5l") || s.includes("jeroboam")) return "4500ml";
+    if (s.includes("6000ml") || s.includes("6l") || s.includes("imperial") || s.includes("methuselah")) return "6000ml";
+    if (s.includes("9000ml") || s.includes("9l") || s.includes("salmanazar")) return "9000ml";
+    if (s.includes("12000ml") || s.includes("12l") || s.includes("balthazar")) return "12000ml";
+    if (s.includes("15000ml") || s.includes("15l") || s.includes("nebuchadnezzar")) return "15000ml";
+    if (s.includes("750ml") || s.includes("75cl") || s.includes("standard") || s.includes("0.75")) return "750ml";
+    return "750ml";
+  };
+
   const toggleListItem = row => {
     const key = row.vintage + row.name + row.last_auction;
     if (isInList(row)) {
       setListItems(prev => prev.filter(r => r._key !== key));
     } else {
-      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: row.size || "750ml", sizeMultiplier: 1 }]);
+      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: normaliseSize(row.size), sizeMultiplier: 1 }]);
       // Pop panel open briefly then auto-close after 2 seconds
       setPanelOpen(true);
       if (panelAutoCloseRef.current) clearTimeout(panelAutoCloseRef.current);
