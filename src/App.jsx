@@ -151,11 +151,11 @@ async function computeAuctions() {
     const nth = FRIDAY_OVERRIDES[key] || 2;
     const start = getNthFriday(y, m, nth);
     const end = addDays(start, 10);
-    if (start > today) {
-      const adelaideRaw = addDays(start, -9);
-      const melbourneRaw = addDays(start, -7);
-      const adelaide = prevWorkday(adelaideRaw, holidays);
-      const melbourne = prevWorkday(melbourneRaw, holidays);
+    const adelaideRaw = addDays(start, -9);
+    const melbourneRaw = addDays(start, -7);
+    const adelaide = prevWorkday(adelaideRaw, holidays);
+    const melbourne = prevWorkday(melbourneRaw, holidays);
+    if (adelaide > today) {
       const ord = n => { const s=["th","st","nd","rd"]; const v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); };
       const fmt = d => { const parts = d.toLocaleDateString("en-AU", { weekday:"long", day:"numeric", month:"long" }).split(" "); return `${parts[0]} ${ord(parseInt(parts[1]))} ${parts[2]}`; };
       auctions.push({
