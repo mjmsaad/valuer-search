@@ -721,7 +721,7 @@ export default function App() {
   const [copiedRow, setCopiedRow]   = useState(null);
   const [showToast, setShowToast]   = useState(false);
   const [toastHiding, setToastHiding] = useState(false);
-  const [onlineCount]               = useState(1);
+  const [onlineCount, setOnlineCount] = useState(1);
   const [listItems, setListItems]   = useState(() => {
     try { return JSON.parse(localStorage.getItem("wickman_list") || "[]"); } catch { return []; }
   });
@@ -770,6 +770,52 @@ export default function App() {
     }
   }, []);
 
+  // Supabase Realtime Presence — live online count
+  useEffect(() => {
+    if (!session) return;
+    const channelName = "valuer-search-presence";
+    let channel;
+    const connect = () => {
+      channel = new EventSource(
+        `${SUPABASE_URL}/realtime/v1/api/broadcast?apikey=${SUPABASE_KEY}`,
+      );
+    };
+    // Use polling fallback since Realtime requires WebSocket client library
+    // Track presence via a lightweight heartbeat in search_logs presence table
+    const heartbeatInterval = setInterval(async () => {
+      const since = new Date(Date.now() - 30000).toISOString(); // active in last 30s
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/search_logs?select=user_id&searched_at=gte.${since}`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
+        );
+        const rows = await res.json();
+        if (Array.isArray(rows)) {
+          const uniqueUsers = new Set(rows.map(r => r.user_id));
+          setOnlineCount(Math.max(1, uniqueUsers.size));
+        }
+      } catch(e) {}
+    }, 15000); // check every 15 seconds
+
+    // Initial check
+    (async () => {
+      const since = new Date(Date.now() - 30000).toISOString();
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/search_logs?select=user_id&searched_at=gte.${since}`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
+        );
+        const rows = await res.json();
+        if (Array.isArray(rows)) {
+          const uniqueUsers = new Set(rows.map(r => r.user_id));
+          setOnlineCount(Math.max(1, uniqueUsers.size));
+        }
+      } catch(e) {}
+    })();
+
+    return () => clearInterval(heartbeatInterval);
+  }, [session]);
+
   useEffect(() => { getSession().then(s => { setSession(s); setChecking(false); }); }, []);
 
   useEffect(() => {
@@ -801,14 +847,19 @@ export default function App() {
       .finally(() => setLoading(false));
   }, [session, dq, house, page, sortCol, sortDir]);
 
+  // Always fetch user_profiles on login so team member names are ready
+  useEffect(() => {
+    if (!session) return;
+    fetch(`${SUPABASE_URL}/rest/v1/user_profiles?select=user_id,email`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` }
+    }).then(r => r.json()).then(rows => {
+      if (Array.isArray(rows)) { const map = {}; rows.forEach(r => { map[r.user_id] = r.email; }); setUserProfiles(map); }
+    }).catch(() => {});
+  }, [session]);
+
   useEffect(() => {
     if (trendingOpen && session) {
       fetchTrending(trendingPeriod);
-      fetch(`${SUPABASE_URL}/rest/v1/user_profiles?select=user_id,email`, {
-        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` }
-      }).then(r => r.json()).then(rows => {
-        if (Array.isArray(rows)) { const map = {}; rows.forEach(r => { map[r.user_id] = r.email; }); setUserProfiles(map); }
-      }).catch(() => {});
     }
   }, [trendingOpen, trendingPeriod, session]);
 
@@ -875,10 +926,20 @@ export default function App() {
   };
 
   const isInList = row => listItems.some(r => r._key === row.vintage + row.name + row.last_auction);
+  const panelAutoCloseRef = useRef(null);
   const toggleListItem = row => {
     const key = row.vintage + row.name + row.last_auction;
-    if (isInList(row)) { setListItems(prev => prev.filter(r => r._key !== key)); }
-    else { setListItems(prev => [...prev, { ...row, _key: key }]); setPanelOpen(true); }
+    if (isInList(row)) {
+      setListItems(prev => prev.filter(r => r._key !== key));
+    } else {
+      setListItems(prev => [...prev, { ...row, _key: key }]);
+      // Pop panel open briefly then auto-close after 2 seconds
+      setPanelOpen(true);
+      if (panelAutoCloseRef.current) clearTimeout(panelAutoCloseRef.current);
+      panelAutoCloseRef.current = setTimeout(() => {
+        setPanelOpen(false);
+      }, 2000);
+    }
   };
   const removeListItem = key => setListItems(prev => prev.filter(r => r._key !== key));
 
