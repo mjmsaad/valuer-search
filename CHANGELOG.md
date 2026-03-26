@@ -4,6 +4,46 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.0.0] — 26 March 2026 · Valuation Table Columns & PDF Fix
+
+### New
+- **Qty column in valuation table** — both email and PDF now include a Qty column between Wine and Size, showing the quantity set in My List (defaults to 1)
+- **Size column in valuation table** — both email and PDF now include a Size column between Qty and Reserve, showing the selected bottle size for each row
+
+### Fixed
+- **PDF blank page** — the Generate PDF button was opening a window after an async call, causing the browser to block it as a popup. Fixed by opening the window synchronously on button click and passing it directly into the PDF handler
+
+---
+
+## [1.9.75] — 26 March 2026 · Qty, Size & Paste from Spreadsheet
+
+### New
+- **Qty stepper on each My List row** — every item in My List now has a −/+ stepper to set the quantity. Defaults to 1 on add. Carries through to clipboard copy, email and PDF
+- **Size selector on each My List row** — a dropdown on every row lets you select the bottle size. Applies a price multiplier to Reserve, Low and High automatically. Size and adjusted prices carry through to the email and PDF output
+- **Expanded bottle size list** — covers all major wine and spirits formats from 50ml miniatures through to 15,000ml Nebuchadnezzar, each with an appropriate price multiplier relative to 750ml
+- **Paste from spreadsheet** — a "Paste rows from spreadsheet" button in the My List footer expands a textarea. Copy rows from Excel or Google Sheets (Vintage, Wine, Qty, Size, Reserve, Low, High) and paste directly — rows are parsed and added to My List as manual entries
+- **All paste column tags highlighted** — all seven column labels (Vintage, Wine, Qty, Size, Reserve, Low, High) shown as gold tags in the paste area so the expected format is always visible
+
+### Improved
+- **Manual entries bypass price multiplier** — for rows added via paste or marked as manual, the size multiplier is not applied. Prices entered manually are assumed to already reflect the correct bottle size and are output as-is in the panel, email and PDF
+
+---
+
+## [1.9.5] — 26 March 2026 · My List & Presence Improvements
+
+### New
+- **My List auto-pop on add** — when a row is added to My List the panel slides open for 2 seconds then automatically closes, giving confirmation without blocking the results view. Manually opening the panel keeps it open as normal
+
+### Improved
+- **Auction cutoff uses Adelaide close date** — the upcoming auctions shown in email and PDF now refresh to the next auction once the Adelaide submission deadline passes, rather than waiting until the auction start date. Since Adelaide has the earliest deadline, this ensures the output is always actionable
+- **Online count via heartbeat ping** — each open browser tab now writes a silent `__presence__` ping to the database every 30 seconds. The online count polls for unique users active in the last 60 seconds every 15 seconds, giving an accurate live count regardless of search activity. Presence pings are filtered from trending search stats
+- **Team member emails always loaded on login** — the user_profiles lookup that maps user IDs to email addresses now runs immediately on login rather than waiting for the trending panel to open, so team member names are always available when the panel is first viewed
+
+### Fixed
+- **Online count stuck at 1** — the previous implementation was hardcoded. Now dynamically counts unique active users via the heartbeat system
+
+---
+
 ## [1.9.25] — 26 March 2026 · Date Formatting
 
 ### Fixed
@@ -187,6 +227,9 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.0.0 | 26 Mar 2026 | Qty/Size columns in valuation, PDF fix |
+| 1.9.75 | 26 Mar 2026 | Qty/Size adjusters, paste from spreadsheet |
+| 1.9.5 | 26 Mar 2026 | My List auto-pop, auction cutoff, presence fix |
 | 1.9.25 | 26 Mar 2026 | Date ordinal formatting |
 | 1.9.0 | 26 Mar 2026 | Email & PDF export |
 | 1.8.75 | 26 Mar 2026 | Email content & layout |
@@ -204,10 +247,10 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Change type | Count |
 |-------------|-------|
-| New features | 38 |
-| Improvements | 13 |
-| Bug fixes | 13 |
-| **Total** | **64** |
+| New features | 48 |
+| Improvements | 16 |
+| Bug fixes | 17 |
+| **Total** | **81** |
 
 ---
 
