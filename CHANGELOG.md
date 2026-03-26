@@ -176,5 +176,32 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## Summary
+
+| Version | Date | Highlight |
+|---------|------|-----------|
+| 1.9.0 | 26 Mar 2026 | Email & PDF export |
+| 1.8.75 | 26 Mar 2026 | Email content & layout |
+| 1.8.50 | 26 Mar 2026 | PDF layout & formatting |
+| 1.8.25 | 24 Mar 2026 | Team member email fix |
+| 1.8.0 | 24 Mar 2026 | Wine detail page |
+| 1.7.0 | 23 Mar 2026 | Trending bar improvements |
+| 1.6.0 | 23 Mar 2026 | Trending panel redesign |
+| 1.5.0 | 23 Mar 2026 | My list persistence |
+| 1.4.0 | 23 Mar 2026 | Trending searches |
+| 1.3.0 | 23 Mar 2026 | Realtime online count |
+| 1.2.0 | 23 Mar 2026 | My list panel |
+| 1.1.0 | 20 Mar 2026 | Click-to-copy |
+| 1.0.0 | 19 Mar 2026 | Initial build |
+
+| Change type | Count |
+|-------------|-------|
+| New features | 38 |
+| Improvements | 13 |
+| Bug fixes | 12 |
+| **Total** | **63** |
+
+---
+
 *Valuer Search is an internal tool for the Wickman's Fine Wine & Whisky Auctions team.*
 *Data is stored securely in Supabase and is not publicly accessible. Authentication is required.*
