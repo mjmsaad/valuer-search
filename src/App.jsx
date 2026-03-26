@@ -974,7 +974,7 @@ export default function App() {
     if (isInList(row)) {
       setListItems(prev => prev.filter(r => r._key !== key));
     } else {
-      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: "750ml", sizeMultiplier: 1 }]);
+      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: row.size || "750ml", sizeMultiplier: 1 }]);
       // Pop panel open briefly then auto-close after 2 seconds
       setPanelOpen(true);
       if (panelAutoCloseRef.current) clearTimeout(panelAutoCloseRef.current);
