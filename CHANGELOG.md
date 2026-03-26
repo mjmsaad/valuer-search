@@ -4,6 +4,18 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.0.25] — 26 March 2026 · Size Normalisation & Bidirectional Price Adjustment
+
+### New
+- **FROM / TO size selectors** — each My List row now has two size dropdowns: FROM (what size the database price is for) and TO (the size you want to output). The price multiplier is calculated as `TO ÷ FROM` so it scales correctly in both directions — e.g. a 1500ml DB price can be scaled down to a 700ml output price
+- **Multiplier opt-in checkbox** — a `× adj` checkbox per row controls whether the price adjustment is applied. Unticked by default on all rows so no prices are ever changed unless explicitly requested. Label shows ▲ adj when scaling up and ▼ adj when scaling down
+
+### Fixed
+- **Size normalisation** — DB size strings like "Magnum (1.5L)", "1.5L", "150cl" now correctly map to the 1500ml dropdown option. Previously the matching ran smallest-to-largest so "50ml" was found as a substring inside "1500ml", defaulting everything to 50ml. Check order now runs largest-to-smallest
+- **Duplicate variable declaration** — `effM` was declared twice inside the email and PDF row builders, blocking the Vite compile. Removed the redundant declarations
+
+---
+
 ## [2.0.0] — 26 March 2026 · Valuation Table Columns & PDF Fix
 
 ### New
@@ -227,6 +239,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.0.25 | 26 Mar 2026 | Bidirectional size price adjustment, normalisation fix |
 | 2.0.0 | 26 Mar 2026 | Qty/Size columns in valuation, PDF fix |
 | 1.9.75 | 26 Mar 2026 | Qty/Size adjusters, paste from spreadsheet |
 | 1.9.5 | 26 Mar 2026 | My List auto-pop, auction cutoff, presence fix |
@@ -247,10 +260,10 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Change type | Count |
 |-------------|-------|
-| New features | 48 |
+| New features | 50 |
 | Improvements | 16 |
-| Bug fixes | 17 |
-| **Total** | **81** |
+| Bug fixes | 19 |
+| **Total** | **83** |
 
 ---
 
