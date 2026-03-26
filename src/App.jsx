@@ -770,50 +770,48 @@ export default function App() {
     }
   }, []);
 
-  // Supabase Realtime Presence — live online count
+  // Presence heartbeat — write a ping every 30s, count unique users active in last 60s
   useEffect(() => {
     if (!session) return;
-    const channelName = "valuer-search-presence";
-    let channel;
-    const connect = () => {
-      channel = new EventSource(
-        `${SUPABASE_URL}/realtime/v1/api/broadcast?apikey=${SUPABASE_KEY}`,
-      );
+
+    const PING = "__presence__";
+    const WINDOW_MS = 60000; // 60 second window
+
+    const sendPing = async () => {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/search_logs`, {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal"
+          },
+          body: JSON.stringify({ user_id: session.user.id, query: PING })
+        });
+      } catch(e) {}
     };
-    // Use polling fallback since Realtime requires WebSocket client library
-    // Track presence via a lightweight heartbeat in search_logs presence table
-    const heartbeatInterval = setInterval(async () => {
-      const since = new Date(Date.now() - 30000).toISOString(); // active in last 30s
+
+    const countOnline = async () => {
       try {
+        const since = new Date(Date.now() - WINDOW_MS).toISOString();
         const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/search_logs?select=user_id&searched_at=gte.${since}`,
+          `${SUPABASE_URL}/rest/v1/search_logs?select=user_id&query=eq.${PING}&searched_at=gte.${since}`,
           { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
         );
         const rows = await res.json();
         if (Array.isArray(rows)) {
-          const uniqueUsers = new Set(rows.map(r => r.user_id));
-          setOnlineCount(Math.max(1, uniqueUsers.size));
+          setOnlineCount(new Set(rows.map(r => r.user_id)).size || 1);
         }
       } catch(e) {}
-    }, 15000); // check every 15 seconds
+    };
 
-    // Initial check
-    (async () => {
-      const since = new Date(Date.now() - 30000).toISOString();
-      try {
-        const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/search_logs?select=user_id&searched_at=gte.${since}`,
-          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
-        );
-        const rows = await res.json();
-        if (Array.isArray(rows)) {
-          const uniqueUsers = new Set(rows.map(r => r.user_id));
-          setOnlineCount(Math.max(1, uniqueUsers.size));
-        }
-      } catch(e) {}
-    })();
+    // Fire immediately then on interval
+    sendPing().then(countOnline);
+    const pingInterval  = setInterval(sendPing,    30000);
+    const countInterval = setInterval(countOnline, 15000);
 
-    return () => clearInterval(heartbeatInterval);
+    return () => { clearInterval(pingInterval); clearInterval(countInterval); };
   }, [session]);
 
   useEffect(() => { getSession().then(s => { setSession(s); setChecking(false); }); }, []);
@@ -899,7 +897,7 @@ export default function App() {
     const days = period === "7d" ? 7 : period === "30d" ? 30 : 3650;
     const since = new Date(Date.now() - days * 86400000).toISOString();
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/search_logs?select=query,user_id,searched_at&searched_at=gte.${since}&limit=5000`,
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/search_logs?select=query,user_id,searched_at&searched_at=gte.${since}&query=neq.__presence__&limit=5000`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}`, Accept: "application/json" } });
       const rows = await res.json();
       if (!Array.isArray(rows)) return;
