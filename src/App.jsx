@@ -201,7 +201,7 @@ function buildEmailHTML(name, auctions) {
         const bg = i%2===0?'#FAF8F4':'#ffffff';
         const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:10px;color:#B8922A;">(${r.size})</span>` : '';
         const qtyNote = r.qty > 1 ? ` <span style="font-size:10px;color:#8A8278;">×${r.qty}</span>` : '';
-        const effM = r.isManual ? 1 : m;
+        const effM = r.applyMultiplier ? m : 1;
         return `<tr>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.vintage||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.name||""}</td>
@@ -284,7 +284,7 @@ function buildPDFHTML(name, auctions, listItems) {
     const bg = i%2===0?'background:#FAF8F4;':'';
     const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:9px;color:#B8922A;">(${r.size})</span>` : '';
     const qtyNote = r.qty > 1 ? ` <span style="font-size:9px;color:#8A8278;">×${r.qty}</span>` : '';
-    const effM = r.isManual ? 1 : m;
+    const effM = r.applyMultiplier ? m : 1;
     return `<tr>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.vintage||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.name||""}</td>
@@ -971,24 +971,25 @@ export default function App() {
   const panelAutoCloseRef = useRef(null);
   const normaliseSize = raw => {
     if (!raw) return "750ml";
-    const s = String(raw).toLowerCase().replace(/\s+/g, "");
-    if (s.includes("50ml") && !s.includes("1500") && !s.includes("750")) return "50ml";
-    if (s.includes("100ml") && !s.includes("1500") && !s.includes("3000")) return "100ml";
-    if (s.includes("200ml")) return "200ml";
-    if (s.includes("350ml")) return "350ml";
-    if (s.includes("375ml") || s.includes("37.5cl") || s.includes("halfbottle") || s.includes("half-bottle") || s.includes("half(375") || s.includes("0.375")) return "375ml";
-    if (s.includes("500ml")) return "500ml";
-    if (s.includes("700ml") || s.includes("70cl")) return "700ml";
-    if (s.includes("1750ml") || s.includes("1.75l") || s.includes("175cl")) return "1750ml";
-    if (s.includes("1500ml") || s.includes("1.5l") || s.includes("150cl") || s.includes("magnum") || s.includes("1.5litre")) return "1500ml";
-    if (s.includes("1000ml") || s.includes("1l)") || s.includes("1litre") || s.includes("100cl") || s === "1l") return "1000ml";
-    if (s.includes("3000ml") || s.includes("3l") || s.includes("doublemag") || s.includes("jeroboam") && s.includes("3")) return "3000ml";
-    if (s.includes("4500ml") || s.includes("4.5l") || s.includes("jeroboam")) return "4500ml";
-    if (s.includes("6000ml") || s.includes("6l") || s.includes("imperial") || s.includes("methuselah")) return "6000ml";
-    if (s.includes("9000ml") || s.includes("9l") || s.includes("salmanazar")) return "9000ml";
-    if (s.includes("12000ml") || s.includes("12l") || s.includes("balthazar")) return "12000ml";
+    const s = String(raw).toLowerCase().replace(/[\s()]/g, "");
+    // Check largest first to avoid substring collisions (e.g. "50ml" inside "1500ml")
     if (s.includes("15000ml") || s.includes("15l") || s.includes("nebuchadnezzar")) return "15000ml";
-    if (s.includes("750ml") || s.includes("75cl") || s.includes("standard") || s.includes("0.75")) return "750ml";
+    if (s.includes("12000ml") || s.includes("12l") || s.includes("balthazar")) return "12000ml";
+    if (s.includes("9000ml") || s.includes("9l") || s.includes("salmanazar")) return "9000ml";
+    if (s.includes("6000ml") || s.includes("imperial") || s.includes("methuselah")) return "6000ml";
+    if (s.includes("4500ml") || s.includes("4.5l") || s.includes("jeroboam")) return "4500ml";
+    if (s.includes("3000ml") || s.includes("doublemag")) return "3000ml";
+    if (s.includes("1750ml") || s.includes("1.75l") || s.includes("175cl")) return "1750ml";
+    if (s.includes("1500ml") || s.includes("1.5l") || s.includes("150cl") || s.includes("magnum")) return "1500ml";
+    if (s.includes("1000ml") || s.includes("100cl") || s === "1l" || s.includes("1litre")) return "1000ml";
+    if (s.includes("750ml") || s.includes("75cl") || s.includes("standard")) return "750ml";
+    if (s.includes("700ml") || s.includes("70cl")) return "700ml";
+    if (s.includes("500ml") || s.includes("50cl")) return "500ml";
+    if (s.includes("375ml") || s.includes("37.5cl") || s.includes("half")) return "375ml";
+    if (s.includes("350ml") || s.includes("35cl")) return "350ml";
+    if (s.includes("200ml") || s.includes("20cl")) return "200ml";
+    if (s.includes("100ml") || s.includes("10cl")) return "100ml";
+    if (s.includes("50ml") || s.includes("5cl")) return "50ml";
     return "750ml";
   };
 
@@ -997,7 +998,7 @@ export default function App() {
     if (isInList(row)) {
       setListItems(prev => prev.filter(r => r._key !== key));
     } else {
-      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: normaliseSize(row.size), sizeMultiplier: 1 }]);
+      setListItems(prev => [...prev, { ...row, _key: key, qty: 1, size: normaliseSize(row.size), sizeMultiplier: 1, applyMultiplier: false }]);
       // Pop panel open briefly then auto-close after 2 seconds
       setPanelOpen(true);
       if (panelAutoCloseRef.current) clearTimeout(panelAutoCloseRef.current);
@@ -1026,7 +1027,7 @@ export default function App() {
       if (!name) return null;
       const sizeMult = SIZE_MULTIPLIERS.find(s => s.value === size)?.mult || 1;
       const key = vintage + name + Date.now() + Math.random();
-      return { vintage, name, qty, size, sizeMultiplier: sizeMult, reserve, low, high, _key: key, isManual: true };
+      return { vintage, name, qty, size, sizeMultiplier: sizeMult, applyMultiplier: false, reserve, low, high, _key: key, isManual: true };
     }).filter(Boolean);
     setListItems(prev => [...prev, ...newItems]);
     setPasteText('');
@@ -1346,7 +1347,7 @@ export default function App() {
             </div>
           ) : listItems.map(r => {
             const m = r.sizeMultiplier || 1;
-            const effM = r.isManual ? 1 : m;
+            const effM = r.applyMultiplier ? m : 1;
             const adjHigh = cleanPrice(r.high) ? Math.round(cleanPrice(r.high) * effM) : null;
             const priceChanged = m !== 1;
             return (
@@ -1373,7 +1374,16 @@ export default function App() {
                   <select value={r.size||"750ml"} onChange={e => { const sm = SIZE_MULTIPLIERS.find(s => s.value === e.target.value); updateListItem(r._key,{size:e.target.value,sizeMultiplier:sm?.mult||1}); }} style={{height:20,border:"1px solid var(--border)",background:"var(--cream)",color:"var(--text)",fontFamily:"Inter,sans-serif",fontSize:10,padding:"0 3px",borderRadius:3,cursor:"pointer"}}>
                     {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}{s.mult!==1?" (x"+s.mult+")":""}</option>)}
                   </select>
-                  {priceChanged && <span style={{fontSize:9,color:"var(--text-muted)",fontStyle:"italic"}}>{"base $"+(cleanPrice(r.high)||0).toFixed(0)}</span>}
+                  <label style={{display:"flex",alignItems:"center",gap:3,cursor:"pointer",marginLeft:2,flexShrink:0}} title="Apply size multiplier to prices">
+                    <input
+                      type="checkbox"
+                      checked={!!r.applyMultiplier}
+                      onChange={e => updateListItem(r._key,{applyMultiplier:e.target.checked})}
+                      style={{width:12,height:12,accentColor:"var(--wine)",cursor:"pointer",flexShrink:0}}
+                    />
+                    <span style={{fontSize:9,color:priceChanged?"var(--wine)":"var(--text-muted)",fontWeight:priceChanged?700:400,letterSpacing:"0.04em",whiteSpace:"nowrap"}}>× adj</span>
+                  </label>
+                  {priceChanged && <span style={{fontSize:9,color:"var(--text-muted)",fontStyle:"italic",marginLeft:2}}>{"base $"+(cleanPrice(r.high)||0).toFixed(0)}</span>}
                 </div>
               </div>
             );
