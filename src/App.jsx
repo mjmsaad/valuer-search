@@ -507,7 +507,7 @@ body{background:var(--cream);color:var(--text);font-family:'Inter',sans-serif;fo
 .dark-toggle:hover{border-color:var(--wine);color:var(--wine);}
 .signout{font-size:11px;color:var(--text-muted);background:none;border:1px solid var(--border);padding:5px 12px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.15s;border-radius:2px;}
 .signout:hover{border-color:var(--wine);color:var(--wine);}
-.main{padding:32px 40px;flex:1;max-width:1400px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
+.main{padding:32px 40px;flex:1;max-width:1400px;width:100%;margin:0 auto;transition:padding-right 0.28s ease;display:flex;flex-direction:column;gap:20px;}
 .search-section{background:var(--white);border:1px solid var(--border);padding:20px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow-sm);}
 .search-wrap{flex:1;min-width:240px;position:relative;}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:15px;pointer-events:none;}
@@ -607,18 +607,22 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .trend-user-count{font-size:10px;color:var(--text-muted);min-width:24px;text-align:right;}
 .trend-empty{font-size:11px;color:var(--border-dark);font-style:italic;padding:8px 0;}
 .panel-tab{position:fixed;right:0;top:180px;width:34px;background:var(--text);border-radius:4px 0 0 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:6px;z-index:100;transition:right 0.28s ease;user-select:none;}
-.panel-tab.open{right:280px;}
+.panel-tab.open{right:340px;}
 .panel-tab-label{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);}
 .panel-tab-badge{background:var(--wine);color:white;border-radius:10px;font-size:9px;font-weight:700;padding:2px 5px;min-width:16px;text-align:center;}
 .panel-tab-arrow{color:var(--text-muted);font-size:10px;transition:transform 0.28s ease;}
 .panel-tab.open .panel-tab-arrow{transform:rotate(180deg);}
-.slide-panel{position:fixed;right:-280px;top:52px;bottom:0;width:280px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:right 0.28s ease;box-shadow:-4px 0 16px rgba(0,0,0,0.06);}
+.slide-panel{position:fixed;right:-340px;top:52px;bottom:0;width:340px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:right 0.28s ease;box-shadow:-4px 0 16px rgba(0,0,0,0.06);}
 .slide-panel.open{right:0;}
-.slide-panel-header{padding:12px 14px;border-bottom:1px solid var(--border);background:var(--cream);}
-.slide-panel-title{font-size:11px;font-weight:700;color:var(--text);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.slide-panel-header{padding:13px 15px;border-bottom:1px solid var(--border);background:var(--white);}
+.slide-panel-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:var(--text);display:flex;align-items:baseline;justify-content:space-between;}
+.slide-panel-title-right{display:flex;align-items:center;gap:7px;}
+.slide-panel-bottles{font-size:10px;color:var(--text-muted);font-family:'Inter',sans-serif;}
 .slide-panel-sub{font-size:10px;color:var(--text-muted);font-style:italic;margin-top:3px;}
 .slide-panel-items{flex:1;overflow-y:auto;}
-.slide-panel-item{padding:9px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;}
+.slide-panel-item{border-bottom:1px solid var(--border);transition:background 0.1s;}
+.slide-panel-item:hover{background:var(--cream);}
+.slide-panel-item.item-open{border-left:2px solid var(--wine);}
 .slide-panel-item:hover{background:var(--cream);}
 .slide-panel-item-info{flex:1;min-width:0;}
 .slide-panel-item-name{font-size:11px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -626,6 +630,38 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .slide-panel-item-price{font-size:11px;color:var(--green);font-weight:500;white-space:nowrap;}
 .slide-panel-remove{width:16px;height:16px;background:none;border:none;cursor:pointer;color:var(--border-dark);font-size:15px;line-height:1;flex-shrink:0;padding:0;}
 .slide-panel-remove:hover{color:var(--wine);}
+.drag-grip{width:18px;padding:4px 0 0 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3.5px;cursor:grab;opacity:0.22;flex-shrink:0;}
+.drag-grip:hover{opacity:0.55;}
+.drag-grip:active{cursor:grabbing;}
+.drag-grip span{display:block;width:9px;height:1.5px;background:var(--text-mid);border-radius:2px;}
+.item-row{display:flex;align-items:flex-start;gap:6px;padding:10px 12px 10px 0;}
+.item-name-wrap{flex:1;min-width:0;padding-right:4px;}
+.item-name-line1{display:flex;align-items:baseline;gap:6px;min-width:0;}
+.item-wine-name{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35;}
+.item-vintage-badge{font-size:10px;font-weight:700;color:#8A6020;background:#FBF6EC;border:1px solid rgba(184,146,42,0.25);border-radius:3px;padding:1px 6px;white-space:nowrap;flex-shrink:0;letter-spacing:0.02em;}
+.item-meta-line{display:flex;align-items:center;gap:5px;margin-top:3px;}
+.item-auction{font-size:9px;color:var(--text-muted);}
+.item-qty-badge{font-size:9px;color:#5A5248;background:#F0EDE9;border:1px solid var(--border);border-radius:3px;padding:1px 5px;white-space:nowrap;}
+.item-qty-badge.adj{border-color:#C8A060;color:#8A6020;}
+.item-price-meta{font-size:11px;font-weight:600;color:var(--green);white-space:nowrap;margin-left:auto;}
+.item-price-meta.adj{color:var(--gold);}
+.item-edit-btn{background:none;border:1px solid var(--border);border-radius:3px;font-size:9px;font-weight:600;color:var(--text-muted);padding:3px 7px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;flex-shrink:0;margin-top:2px;}
+.item-edit-btn:hover,.item-edit-btn.open{border-color:var(--wine);color:var(--wine);background:rgba(123,29,29,0.03);}
+.item-remove-btn{background:none;border:none;cursor:pointer;color:var(--border-dark);font-size:15px;line-height:1;padding:0;flex-shrink:0;width:15px;margin-top:3px;}
+.item-remove-btn:hover{color:var(--wine);}
+.item-controls{background:var(--cream);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;flex-direction:column;gap:6px;}
+.ctrl-row{display:flex;align-items:center;gap:5px;}
+.ctrl-row select{flex:1;min-width:0;height:21px;border:1px solid var(--border);background:var(--white);color:var(--text);font-family:'Inter',sans-serif;font-size:10px;padding:0 4px;border-radius:3px;cursor:pointer;}
+.ctrl-label{font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;flex-shrink:0;}
+.ctrl-stepper{display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;overflow:hidden;height:21px;background:var(--white);}
+.ctrl-step-btn{width:21px;height:21px;background:var(--cream);border:none;cursor:pointer;font-size:12px;color:var(--text-mid);display:flex;align-items:center;justify-content:center;}
+.ctrl-step-btn:hover{background:var(--border);}
+.ctrl-step-val{width:23px;text-align:center;font-size:10px;font-weight:600;color:var(--text);border-left:1px solid var(--border);border-right:1px solid var(--border);height:21px;line-height:21px;}
+.ctrl-arrow{font-size:10px;color:var(--text-muted);flex-shrink:0;}
+.ctrl-adj{display:flex;align-items:center;gap:4px;cursor:pointer;margin-left:auto;}
+.ctrl-adj input{width:11px;height:11px;accent-color:var(--wine);cursor:pointer;}
+.ctrl-adj span{font-size:9px;font-weight:600;color:var(--text-muted);}
+.ctrl-adj.active span{color:var(--wine);}
 .slide-panel-footer{padding:12px;border-top:2px solid var(--border);background:var(--cream);}
 .slide-panel-copy{width:100%;background:var(--text);color:var(--gold);border:none;padding:9px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
 .slide-panel-copy:hover{opacity:0.9;}
@@ -1139,7 +1175,7 @@ export default function App() {
           </div>
         </header>
 
-        <main className="main">
+        <main className="main" style={{paddingRight:panelOpen?"360px":undefined}}>
           {error && <div className="err-banner"><span>⚠</span><span>{error}</span></div>}
 
           <div className="search-section">
@@ -1342,13 +1378,19 @@ export default function App() {
       {/* My List panel */}
       <div className={`slide-panel${panelOpen?" open":""}`}>
         <div className="slide-panel-header">
-          <div className="slide-panel-title">My list {listItems.length > 0 && <span style={{background:"var(--wine)",color:"white",borderRadius:20,fontSize:9,fontWeight:700,padding:"2px 7px"}}>{listItems.length}</span>}</div>
-          <div className="slide-panel-sub">Persists across searches</div>
+          <div className="slide-panel-title">
+            My List
+            <div className="slide-panel-title-right">
+              {listItems.length > 0 && <span className="slide-panel-bottles">{listItems.reduce((s,r)=>s+(r.qty||1),0)} bottles</span>}
+              {listItems.length > 0 && <span style={{background:"var(--wine)",color:"white",borderRadius:20,fontSize:9,fontWeight:700,padding:"2px 8px"}}>{listItems.length}</span>}
+            </div>
+          </div>
+          <div className="slide-panel-sub">Drag to reorder · scroll to see all</div>
         </div>
         <div className="slide-panel-items">
           {listItems.length === 0 ? (
-            <div style={{padding:32,textAlign:"center"}}>
-              <div style={{fontSize:11,color:"var(--border-dark)",lineHeight:1.6}}>No rows added yet.<br/>Click + on any row to add it here.</div>
+            <div style={{padding:36,textAlign:"center"}}>
+              <div style={{fontSize:11,color:"var(--border-dark)",lineHeight:1.7}}>No rows added yet.<br/>Click + on any search result to add it here.</div>
             </div>
           ) : listItems.map(r => {
             const baseMult = SIZE_MULTIPLIERS.find(s => s.value === (r.baseSize||"750ml"))?.mult || 1;
@@ -1356,52 +1398,79 @@ export default function App() {
             const m = outMult / baseMult;
             const effM = r.applyMultiplier ? m : 1;
             const adjHigh = cleanPrice(r.high) ? Math.round(cleanPrice(r.high) * effM) : null;
-            const priceChanged = m !== 1;
+            const priceChanged = r.applyMultiplier && m !== 1;
+            const qtyBadge = `x${r.qty||1} · ${r.size||"750ml"}${priceChanged ? (m>1?" ▲":" ▼") : ""}`;
             return (
-              <div key={r._key} className="slide-panel-item" style={{flexDirection:"column",alignItems:"stretch",gap:0}}>
-                <div style={{display:"flex",alignItems:"flex-start",gap:8}}>
-                  <div className="slide-panel-item-info">
-                    <div className="slide-panel-item-name" title={r.name}>
-                      {r.name}
-                      {r.isManual && <span style={{background:"var(--gold-pale)",border:"1px solid rgba(184,146,42,.2)",borderRadius:2,fontSize:8,fontWeight:700,color:"var(--gold)",padding:"1px 4px",marginLeft:5,letterSpacing:"0.04em"}}>MANUAL</span>}
+              <div key={r._key} className={`slide-panel-item${r._expanded?" item-open":""}`} draggable="true"
+                onDragStart={e => { e.dataTransfer.setData("text/plain", r._key); e.currentTarget.style.opacity="0.35"; }}
+                onDragEnd={e => { e.currentTarget.style.opacity=""; }}
+                onDragOver={e => { e.preventDefault(); e.currentTarget.style.borderTop="2px solid var(--wine)"; }}
+                onDragLeave={e => { e.currentTarget.style.borderTop=""; }}
+                onDrop={e => {
+                  e.preventDefault();
+                  e.currentTarget.style.borderTop="";
+                  const fromKey = e.dataTransfer.getData("text/plain");
+                  if (fromKey === r._key) return;
+                  setListItems(prev => {
+                    const arr = [...prev];
+                    const fi = arr.findIndex(x => x._key === fromKey);
+                    const ti = arr.findIndex(x => x._key === r._key);
+                    if (fi < 0 || ti < 0) return arr;
+                    const [moved] = arr.splice(fi, 1);
+                    arr.splice(ti, 0, moved);
+                    return arr;
+                  });
+                }}
+              >
+                <div className="item-row">
+                  <div className="drag-grip"><span/><span/><span/></div>
+                  <div className="item-name-wrap">
+                    <div className="item-name-line1">
+                      <div className="item-wine-name" title={r.name}>{r.name}{r.isManual && <span style={{background:"var(--gold-pale)",border:"1px solid rgba(184,146,42,.2)",borderRadius:2,fontSize:7,fontWeight:700,color:"var(--gold)",padding:"1px 3px",marginLeft:4,letterSpacing:"0.04em",verticalAlign:"middle"}}>MANUAL</span>}</div>
+                      {r.vintage && <span className="item-vintage-badge">{r.vintage}</span>}
                     </div>
-                    <div className="slide-panel-item-meta">{r.vintage}{r.last_auction ? ` · ${r.last_auction}` : ""}</div>
+                    <div className="item-meta-line">
+                      {r.last_auction && <span className="item-auction">{r.last_auction}</span>}
+                      <span className={`item-qty-badge${priceChanged?" adj":""}`}>{qtyBadge}</span>
+                      {adjHigh != null && <span className={`item-price-meta${priceChanged?" adj":""}`}>{"$"+adjHigh.toLocaleString()}</span>}
+                    </div>
                   </div>
-                  {adjHigh != null && <div className="slide-panel-item-price" style={{color:priceChanged?"var(--gold)":"var(--green)"}}>{"$"+adjHigh.toLocaleString()}</div>}
-                  <button className="slide-panel-remove" onClick={() => removeListItem(r._key)}>x</button>
+                  <button className={`item-edit-btn${r._expanded?" open":""}`}
+                    onClick={() => updateListItem(r._key,{_expanded:!r._expanded})}>
+                    {r._expanded ? "Done" : "Edit"}
+                  </button>
+                  <button className="item-remove-btn" onClick={() => removeListItem(r._key)}>x</button>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:5,marginTop:5,paddingTop:5,borderTop:"1px solid var(--border)",flexWrap:"wrap"}}>
-                  <span style={{fontSize:9,fontWeight:600,color:"var(--text-muted)",letterSpacing:"0.06em"}}>QTY</span>
-                  <div style={{display:"flex",alignItems:"center",border:"1px solid var(--border)",borderRadius:3,overflow:"hidden",height:20}}>
-                    <button onClick={() => updateListItem(r._key,{qty:Math.max(1,(r.qty||1)-1)})} style={{width:20,height:20,background:"var(--cream)",border:"none",cursor:"pointer",fontSize:12,color:"var(--text-mid)"}}>-</button>
-                    <div style={{width:24,textAlign:"center",fontSize:10,fontWeight:600,color:"var(--text)",background:"var(--white)",borderLeft:"1px solid var(--border)",borderRight:"1px solid var(--border)",height:20,lineHeight:"20px"}}>{r.qty||1}</div>
-                    <button onClick={() => updateListItem(r._key,{qty:(r.qty||1)+1})} style={{width:20,height:20,background:"var(--cream)",border:"none",cursor:"pointer",fontSize:12,color:"var(--text-mid)"}}>+</button>
+                {r._expanded && (
+                  <div className="item-controls">
+                    <div className="ctrl-row">
+                      <span className="ctrl-label">Qty</span>
+                      <div className="ctrl-stepper">
+                        <button className="ctrl-step-btn" onClick={() => updateListItem(r._key,{qty:Math.max(1,(r.qty||1)-1)})}>-</button>
+                        <div className="ctrl-step-val">{r.qty||1}</div>
+                        <button className="ctrl-step-btn" onClick={() => updateListItem(r._key,{qty:(r.qty||1)+1})}>+</button>
+                      </div>
+                      <label className={`ctrl-adj${r.applyMultiplier?" active":""}`}>
+                        <input type="checkbox" checked={!!r.applyMultiplier} onChange={e => updateListItem(r._key,{applyMultiplier:e.target.checked})} />
+                        <span>Apply price adjustment{priceChanged?(m>1?" ▲":" ▼"):""}</span>
+                      </label>
+                    </div>
+                    <div className="ctrl-row">
+                      <span className="ctrl-label" style={{width:28}}>From</span>
+                      <select value={r.baseSize||"750ml"} onChange={e => updateListItem(r._key,{baseSize:e.target.value})}>
+                        {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                      </select>
+                      <span className="ctrl-arrow">→</span>
+                      <span className="ctrl-label" style={{width:14}}>To</span>
+                      <select value={r.size||"750ml"} onChange={e => { const sm = SIZE_MULTIPLIERS.find(s => s.value===e.target.value); updateListItem(r._key,{size:e.target.value,sizeMultiplier:sm?.mult||1}); }}>
+                        {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                      </select>
+                    </div>
                   </div>
-                  <span style={{fontSize:9,fontWeight:600,color:"var(--text-muted)",letterSpacing:"0.06em"}}>FROM</span>
-                  <select value={r.baseSize||"750ml"} onChange={e => updateListItem(r._key,{baseSize:e.target.value})} style={{height:20,border:"1px solid var(--border)",background:"var(--cream)",color:"var(--text)",fontFamily:"Inter,sans-serif",fontSize:10,padding:"0 3px",borderRadius:3,cursor:"pointer"}}>
-                    {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                  </select>
-                  <span style={{fontSize:9,fontWeight:600,color:"var(--text-muted)",letterSpacing:"0.06em"}}>TO</span>
-                  <select value={r.size||"750ml"} onChange={e => { const sm = SIZE_MULTIPLIERS.find(s => s.value === e.target.value); updateListItem(r._key,{size:e.target.value,sizeMultiplier:sm?.mult||1}); }} style={{height:20,border:"1px solid var(--border)",background:"var(--cream)",color:"var(--text)",fontFamily:"Inter,sans-serif",fontSize:10,padding:"0 3px",borderRadius:3,cursor:"pointer"}}>
-                    {SIZE_MULTIPLIERS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                  </select>
-                  <label style={{display:"flex",alignItems:"center",gap:3,cursor:"pointer",marginLeft:2,flexShrink:0}} title="Apply price adjustment between sizes">
-                    <input
-                      type="checkbox"
-                      checked={!!r.applyMultiplier}
-                      onChange={e => updateListItem(r._key,{applyMultiplier:e.target.checked})}
-                      style={{width:12,height:12,accentColor:"var(--wine)",cursor:"pointer",flexShrink:0}}
-                    />
-                    <span style={{fontSize:9,color:priceChanged?"var(--wine)":"var(--text-muted)",fontWeight:priceChanged?700:400,letterSpacing:"0.04em",whiteSpace:"nowrap"}}>
-                      {priceChanged ? (m > 1 ? "▲ adj" : m < 1 ? "▼ adj" : "× adj") : "× adj"}
-                    </span>
-                  </label>
-                  {priceChanged && <span style={{fontSize:9,color:"var(--text-muted)",fontStyle:"italic",marginLeft:2}}>{"base $"+(cleanPrice(r.high)||0).toFixed(0)}</span>}
-                </div>
+                )}
               </div>
             );
           })}
-
 
         </div>
         <div className="slide-panel-footer">

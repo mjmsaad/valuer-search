@@ -4,6 +4,21 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.1.0] — 26 March 2026 · My List Panel Redesign
+
+### New
+- **Drag to reorder** — each row has a drag handle on the left. Drag any row to reposition it in the list. A burgundy drop-line shows where the item will land on release
+- **Collapsed rows by default** — rows show wine name and vintage badge on line 1, auction date · qty badge · price on line 2. Controls are hidden until needed, keeping the list clean and scannable
+- **Edit / Done toggle** — clicking Edit expands inline controls beneath that row. A burgundy left border marks the open row. Clicking Done collapses it
+- **Stacked From → To controls** — when expanded, Qty stepper and Apply adjustment checkbox sit on the top row; From and To size selectors sit perfectly aligned on the row below, connected by an arrow
+- **Vintage badge inline with name** — vintage year shown as a gold badge directly after the wine name on line 1, matching the main results table treatment
+- **Bottle count in header** — panel header now shows total bottle count (sum of all qty values) alongside the row count badge
+
+### Improved
+- **Panel widened to 340px** — extra 60px gives wine names significantly more room before truncating
+
+---
+
 ## [2.0.25] — 26 March 2026 · Size Normalisation & Bidirectional Price Adjustment
 
 ### New
@@ -239,6 +254,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.1.0 | 26 Mar 2026 | My List panel redesign — drag to reorder, collapsed rows |
 | 2.0.25 | 26 Mar 2026 | Bidirectional size price adjustment, normalisation fix |
 | 2.0.0 | 26 Mar 2026 | Qty/Size columns in valuation, PDF fix |
 | 1.9.75 | 26 Mar 2026 | Qty/Size adjusters, paste from spreadsheet |
@@ -260,10 +276,10 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Change type | Count |
 |-------------|-------|
-| New features | 50 |
-| Improvements | 16 |
+| New features | 56 |
+| Improvements | 17 |
 | Bug fixes | 19 |
-| **Total** | **83** |
+| **Total** | **90** |
 
 ---
 
