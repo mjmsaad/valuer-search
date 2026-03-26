@@ -4,6 +4,13 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [1.9.25] — 26 March 2026 · Date Formatting
+
+### Fixed
+- **Auction dates now show ordinal suffixes** — dates in both email and PDF now display as "Wednesday 1st April", "Friday 10th April" etc. rather than "Wednesday 1 April"
+
+---
+
 ## [1.9.0] — 26 March 2026 · Email & PDF Export
 
 ### New
@@ -180,6 +187,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 1.9.25 | 26 Mar 2026 | Date ordinal formatting |
 | 1.9.0 | 26 Mar 2026 | Email & PDF export |
 | 1.8.75 | 26 Mar 2026 | Email content & layout |
 | 1.8.50 | 26 Mar 2026 | PDF layout & formatting |
@@ -198,8 +206,8 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 |-------------|-------|
 | New features | 38 |
 | Improvements | 13 |
-| Bug fixes | 12 |
-| **Total** | **63** |
+| Bug fixes | 13 |
+| **Total** | **64** |
 
 ---
 

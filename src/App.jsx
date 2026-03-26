@@ -156,7 +156,8 @@ async function computeAuctions() {
       const melbourneRaw = addDays(start, -7);
       const adelaide = prevWorkday(adelaideRaw, holidays);
       const melbourne = prevWorkday(melbourneRaw, holidays);
-      const fmt = d => d.toLocaleDateString("en-AU", { weekday:"long", day:"numeric", month:"long" });
+      const ord = n => { const s=["th","st","nd","rd"]; const v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); };
+      const fmt = d => { const parts = d.toLocaleDateString("en-AU", { weekday:"long", day:"numeric", month:"long" }).split(" "); return `${parts[0]} ${ord(parseInt(parts[1]))} ${parts[2]}`; };
       auctions.push({
         label: start.toLocaleDateString("en-AU", { month:"long", year:"numeric" }),
         start: fmt(start), end: fmt(end),
