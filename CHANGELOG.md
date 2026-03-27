@@ -4,6 +4,13 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.2.2] — 28 March 2026 · Sami-Odi Identification Tool Link
+
+### New
+- **Sami-Odi Identification Tool link** — a header button links directly to the Sami-Odi Identification Tool (mjmsaad.github.io/Sami-Odi-Identification-Tool). Opens in a new tab. Sits to the left of the Calculator button in the header bar. Styled as a secondary grey button with a ↗ arrow to signal external navigation
+
+---
+
 ## [2.2.1] — 27 March 2026 · Valuation Table Fixes
 
 ### Improved
@@ -290,6 +297,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.2.2 | 28 Mar 2026 | Add Sami-Odi Identification Tool link to header |
 | 2.2.1 | 27 Mar 2026 | Valuation table — column rules, colour coding, Outlook reflow fix |
 | 2.2.0 | 27 Mar 2026 | Pricing calculator — header drawer, per-row calc, shared history |
 | 2.1.0 | 26 Mar 2026 | My List panel redesign — drag to reorder, collapsed rows |

@@ -682,6 +682,9 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .calc-hist-add{font-size:9px;background:none;border:1px solid var(--border);color:var(--text-muted);padding:2px 7px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;margin-left:4px;}
 .calc-hist-add:hover{border-color:var(--wine);color:var(--wine);}
 .calc-hist-empty{font-size:11px;color:var(--text-muted);font-style:italic;padding:14px 0;text-align:center;}
+.btn-ident-tool{font-size:10px;font-weight:600;color:#8A8278;background:none;border:1px solid #3A3630;padding:5px 12px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:5px;text-decoration:none;}
+.btn-ident-tool:hover{border-color:#5A5248;color:#B8B0A8;}
+.ident-arr{font-size:8px;opacity:0.5;}
 .btn-calc-header{background:none;border:1px solid #3A3630;color:#B8922A;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;}
 .btn-calc-header:hover,.btn-calc-header.open{background:rgba(184,146,42,0.1);border-color:#B8922A;}
 .btn-calc-header .calc-caret{font-size:8px;transition:transform 0.2s;}
@@ -1594,6 +1597,9 @@ function App() {
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
             <span className="header-user">{session.user?.email}</span>
+            <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer" className="btn-ident-tool">
+              Sami-Odi Identification Tool <span className="ident-arr">↗</span>
+            </a>
             <button className={`btn-calc-header${calcOpen?" open":""}`} onClick={() => setCalcOpen(o=>!o)}>
               ⊞ Calculator <span className="calc-caret">▼</span>
             </button>
