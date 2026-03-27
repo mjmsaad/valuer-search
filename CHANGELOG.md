@@ -21,6 +21,8 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 ### Fixed
 - Added `grant select, insert, delete on calculator_history to authenticated` — without this, RLS policies were irrelevant and all requests returned 403
 - Removed silent `catch(e) {}` from saveCalcHistory — errors now log to console with status and Supabase error detail
+- Valuation table header labels (Reserve, Low, High) now use non-breaking spaces before the parenthetical letters — `Reserve&nbsp;(R)` — preventing Outlook from wrapping them across two lines
+- Alternating row colours corrected — first data row is now white (`#ffffff`), alternating rows use warm grey (`#F5F2EE`), so they read as clearly distinct from the dark header row
 
 ---
 

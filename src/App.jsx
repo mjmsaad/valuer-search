@@ -201,14 +201,14 @@ function buildEmailHTML(name, auctions) {
         const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
         const m = outMult / baseMult;
         const effM = r.applyMultiplier ? m : 1;
-        const bg = i%2===0?'#FAF8F4':'#ffffff';
+        const bg = i%2===0?'#ffffff':'#F5F2EE';
         const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:10px;color:#B8922A;">(${r.size})</span>` : '';
         const qtyNote = r.qty > 1 ? ` <span style="font-size:10px;color:#8A8278;">×${r.qty}</span>` : '';
         return `<tr>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.vintage||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.name||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;text-align:center;">${r.qty||1}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.size||"750ml"}</td>
+      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;white-space:nowrap;">${r.size||"750ml"}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${adjP(r.reserve,effM)}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${adjP(r.low,effM)}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${adjP(r.high,effM)}</td>
@@ -229,13 +229,13 @@ function buildEmailHTML(name, auctions) {
 <h2 style="font-size:16px;font-weight:700;color:#7B1D1D;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid #E2DDD6;font-family:Arial,sans-serif;">Your Valuation</h2>
 <table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
   <thead><tr>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">Vintage</th>
+    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Vintage</th>
     <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">Wine</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:center;">Qty</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">Size</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">Reserve (R)</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">Low (L)</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">High (H)</th>
+    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:center;white-space:nowrap;">Qty</th>
+    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Size</th>
+    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Reserve&nbsp;(R)</th>
+    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Low&nbsp;(L)</th>
+    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">High&nbsp;(H)</th>
   </tr></thead>
   <tbody>${rowsHTML}</tbody>
 </table>
@@ -286,14 +286,14 @@ function buildPDFHTML(name, auctions, listItems) {
     const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
     const m = outMult / baseMult;
     const effM = r.applyMultiplier ? m : 1;
-    const bg = i%2===0?'background:#FAF8F4;':'';
+    const bg = i%2===0?'background:#ffffff;':'background:#F5F2EE;';
     const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:9px;color:#B8922A;">(${r.size})</span>` : '';
     const qtyNote = r.qty > 1 ? ` <span style="font-size:9px;color:#8A8278;">×${r.qty}</span>` : '';
     return `<tr>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.vintage||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.name||""}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg};text-align:center;">${r.qty||1}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.size||"750ml"}</td>
+      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg};white-space:nowrap;">${r.size||"750ml"}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${ap(r.reserve,effM)}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${ap(r.low,effM)}</td>
       <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${ap(r.high,effM)}</td>
@@ -336,7 +336,7 @@ function buildPDFHTML(name, auctions, listItems) {
   <p>Thank you for choosing Wickman\'s Fine Wine Auctions. We appreciate the opportunity to provide you with a valuation for your wine.</p>
   <p>Using the most up to date auction data and trends we suggest the following values.</p>
   <h2>Your Valuation</h2>
-  <table><thead><tr><th>Vintage</th><th>Wine</th><th style="text-align:center;">Qty</th><th>Size</th><th>Reserve (R)</th><th>Low (L)</th><th>High (H)</th></tr></thead>
+  <table><thead><tr><th style="white-space:nowrap;">Vintage</th><th>Wine</th><th style="text-align:center;white-space:nowrap;">Qty</th><th style="white-space:nowrap;">Size</th><th style="white-space:nowrap;">Reserve&nbsp;(R)</th><th style="white-space:nowrap;">Low</th><th style="white-space:nowrap;">High</th></tr></thead>
   <tbody>${rowsHTML}</tbody></table>
   <div class="note"><strong>NOTES:</strong><ol>
     <li>Lots marked as "<u><strong>Not Suitable for Auction</strong></u>" are due to conditional issues and concerns, or their values not meeting our minimum value requirements to be entered into auction.</li>
