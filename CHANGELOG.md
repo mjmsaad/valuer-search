@@ -4,6 +4,26 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.2.0] — 27 March 2026 · Pricing Calculator
+
+### New
+- **Header calculator drawer** — ⊞ Calculator button in the header opens a full-width drawer with both Retail and Auction methods side by side. Caret rotates to indicate open/closed state. Search results remain visible below
+- **Retail formula** — enter a retail price; Base = Retail × 75%, then Reserve = Base × 85%, Low = Base × 95%, High = Base × 120%
+- **Auction formula** — enter an average auction price; Reserve = Avg × 85%, Low = Avg × 95%, High = Avg × 120%
+- **Per-row Calc button in My List** — each row now has a Calc button alongside Edit and ×. Opens a compact inline calculator below that row with a gold left border. Supports both Retail and Auction tabs
+- **Copy R · L · H** — copies the three values tab-separated to clipboard, ready to paste into a spreadsheet. Available in both the header drawer and per-row calculator
+- **Apply to row** — in the per-row calculator, Apply pushes Reserve/Low/High values directly into the row and closes the calculator automatically
+- **Shared team history** — all calculations with a wine name are saved to Supabase (`calculator_history` table). The history table shows wine name, vintage, who ran the calculation, method, input price and R/L/H. Searchable by wine name. All team members see all entries
+- **History saves on Copy and Add to List** — any action that produces output saves to history if a wine name is present, not just Add to List
+- **+ List from history** — any past calculation in the history table can be added directly to My List with one click
+- **⎘ Copy from history** — copy R/L/H from any history row without re-entering the values
+
+### Fixed
+- Added `grant select, insert, delete on calculator_history to authenticated` — without this, RLS policies were irrelevant and all requests returned 403
+- Removed silent `catch(e) {}` from saveCalcHistory — errors now log to console with status and Supabase error detail
+
+---
+
 ## [2.1.0] — 26 March 2026 · My List Panel Redesign
 
 ### New
@@ -254,6 +274,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.2.0 | 27 Mar 2026 | Pricing calculator — header drawer, per-row calc, shared history |
 | 2.1.0 | 26 Mar 2026 | My List panel redesign — drag to reorder, collapsed rows |
 | 2.0.25 | 26 Mar 2026 | Bidirectional size price adjustment, normalisation fix |
 | 2.0.0 | 26 Mar 2026 | Qty/Size columns in valuation, PDF fix |
