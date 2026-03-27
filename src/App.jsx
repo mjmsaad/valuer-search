@@ -880,7 +880,7 @@ function LoginScreen({ onLogin, darkMode = false }) {
   );
 }
 
-function RowCalc({ rowKey, rowName, rowVintage, calcCompute, saveCalcHistory, updateListItem }) {
+function RowCalc({ rowKey, rowName, rowVintage, calcCompute, updateListItem }) {
   const [mode, setMode]       = useState('retail');
   const [price, setPrice]     = useState('');
   const [result, setResult]   = useState(null);
@@ -907,7 +907,6 @@ function RowCalc({ rowKey, rowName, rowVintage, calcCompute, saveCalcHistory, up
     if (!result) return;
     navigator.clipboard.writeText(`$${result.reserve}\t$${result.low}\t$${result.high}`).catch(()=>{});
     showFlash('✓ Copied — paste into spreadsheet', 'gold');
-    if (rowName) saveCalcHistory(rowName, rowVintage, mode === 'retail' ? 'Retail' : 'Auction', parseFloat(price), result.reserve, result.low, result.high);
   };
 
   const doApply = () => {
@@ -918,7 +917,7 @@ function RowCalc({ rowKey, rowName, rowVintage, calcCompute, saveCalcHistory, up
       high:    '$' + result.high,
       _calcOpen: false,
     });
-    if (rowName) saveCalcHistory(rowName, rowVintage, mode === 'retail' ? 'Retail' : 'Auction', parseFloat(price), result.reserve, result.low, result.high);
+
     showFlash('✓ Applied to row', 'green');
   };
 
@@ -1908,7 +1907,7 @@ function App() {
                     </div>
                   </div>
                 )}
-                {r._calcOpen && <RowCalc key={r._key+"-calc"} rowKey={r._key} rowName={r.name} rowVintage={r.vintage} calcCompute={calcCompute} saveCalcHistory={saveCalcHistory} updateListItem={updateListItem} />}
+                {r._calcOpen && <RowCalc key={r._key+"-calc"} rowKey={r._key} rowName={r.name} rowVintage={r.vintage} calcCompute={calcCompute} updateListItem={updateListItem} />}
               </div>
             );
           })}
