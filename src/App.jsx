@@ -714,6 +714,35 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .item-edit-btn{background:none;border:1px solid var(--border);border-radius:3px;font-size:9px;font-weight:600;color:var(--text-muted);padding:3px 7px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;flex-shrink:0;margin-top:2px;}
 .item-edit-btn:hover,.item-edit-btn.open{border-color:var(--wine);color:var(--wine);background:rgba(123,29,29,0.03);}
 .item-remove-btn{background:none;border:none;cursor:pointer;color:var(--border-dark);font-size:15px;line-height:1;padding:0;flex-shrink:0;width:15px;margin-top:3px;}
+.item-calc-btn{background:none;border:1px solid var(--border);border-radius:3px;font-size:9px;font-weight:600;color:var(--text-muted);padding:3px 7px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;flex-shrink:0;margin-top:2px;letter-spacing:0.03em;}
+.item-calc-btn:hover,.item-calc-btn.open{border-color:var(--gold);color:var(--gold);background:rgba(184,146,42,0.04);}
+.row-calc{background:var(--cream);border-bottom:1px solid var(--border);padding:11px 12px;border-left:2px solid var(--gold);}
+.row-calc-tabs{display:flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px;}
+.row-calc-tab{flex:1;background:none;border:none;border-right:1px solid var(--border);padding:5px 8px;font-size:9px;font-weight:700;color:var(--text-muted);cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.04em;text-transform:uppercase;}
+.row-calc-tab:last-child{border-right:none;}
+.row-calc-tab.active{background:var(--text);color:var(--gold);}
+.row-calc-price-wrap{position:relative;margin-bottom:9px;}
+.row-calc-dollar{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text-muted);}
+.row-calc-input{width:100%;height:32px;border:1px solid var(--border);background:var(--white);padding:0 9px 0 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--text);border-radius:3px;outline:none;}
+.row-calc-input:focus{border-color:var(--gold);}
+.row-calc-pills{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
+.row-calc-pill{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:6px 6px;text-align:center;}
+.row-calc-pill .rcpl{font-size:8px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;}
+.row-calc-pill .rcpv{font-size:13px;font-weight:600;color:var(--border-dark);}
+.row-calc-pill.rcp-r .rcpl{color:var(--wine);} .row-calc-pill.rcp-r.rcp-active .rcpv{color:var(--wine);}
+.row-calc-pill.rcp-l .rcpl{color:var(--gold);} .row-calc-pill.rcp-l.rcp-active .rcpv{color:var(--gold);}
+.row-calc-pill.rcp-h .rcpl{color:var(--green);} .row-calc-pill.rcp-h.rcp-active .rcpv{color:var(--green);}
+.row-calc-actions{display:flex;gap:5px;}
+.row-calc-copy{flex:1;background:none;border:1px solid var(--border);color:var(--text-muted);padding:7px;font-size:9px;font-weight:600;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.row-calc-copy:not(:disabled):hover{border-color:var(--gold);color:var(--gold);}
+.row-calc-copy:disabled{opacity:0.35;cursor:not-allowed;}
+.row-calc-apply{flex:1;background:var(--wine);color:white;border:none;padding:7px;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.row-calc-apply:disabled{background:var(--border-dark);cursor:not-allowed;}
+.row-calc-apply:not(:disabled):hover{background:#6A1818;}
+.row-calc-clr{background:none;border:1px solid var(--border);color:var(--text-muted);padding:7px 9px;font-size:9px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.row-calc-flash{font-size:9px;font-weight:600;text-align:center;padding:3px 0;min-height:16px;color:transparent;}
+.row-calc-flash.gold{color:var(--gold);}
+.row-calc-flash.green{color:var(--green);}
 .item-remove-btn:hover{color:var(--wine);}
 .item-controls{background:var(--cream);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;flex-direction:column;gap:6px;}
 .ctrl-row{display:flex;align-items:center;gap:5px;}
@@ -848,6 +877,75 @@ function LoginScreen({ onLogin, darkMode = false }) {
         </div>
       </div>
     </>
+  );
+}
+
+function RowCalc({ rowKey, rowName, rowVintage, calcCompute, saveCalcHistory, updateListItem }) {
+  const [mode, setMode]       = useState('retail');
+  const [price, setPrice]     = useState('');
+  const [result, setResult]   = useState(null);
+  const [flash, setFlash]     = useState(null);
+
+  const doCalc = val => {
+    setPrice(val);
+    const v = parseFloat(val);
+    setResult(v > 0 ? calcCompute(v, mode === 'retail') : null);
+  };
+
+  const switchMode = m => {
+    setMode(m);
+    setPrice('');
+    setResult(null);
+  };
+
+  const showFlash = (msg, cls) => {
+    setFlash({msg, cls});
+    setTimeout(() => setFlash(null), 2200);
+  };
+
+  const doCopy = () => {
+    if (!result) return;
+    navigator.clipboard.writeText(`$${result.reserve}\t$${result.low}\t$${result.high}`).catch(()=>{});
+    showFlash('✓ Copied — paste into spreadsheet', 'gold');
+  };
+
+  const doApply = () => {
+    if (!result) return;
+    updateListItem(rowKey, {
+      reserve: '$' + result.reserve,
+      low:     '$' + result.low,
+      high:    '$' + result.high,
+      _calcOpen: false,
+    });
+    if (rowName) saveCalcHistory(rowName, rowVintage, mode === 'retail' ? 'Retail' : 'Auction', parseFloat(price), result.reserve, result.low, result.high);
+    showFlash('✓ Applied to row', 'green');
+  };
+
+  const fmtP = n => '$' + Math.round(n).toLocaleString('en-AU');
+
+  return (
+    <div className="row-calc">
+      <div className="row-calc-tabs">
+        <button className={`row-calc-tab${mode==='retail'?' active':''}`} onClick={() => switchMode('retail')}>From Retail</button>
+        <button className={`row-calc-tab${mode==='auction'?' active':''}`} onClick={() => switchMode('auction')}>From Auction Avg</button>
+      </div>
+      <div className="clabel" style={{marginBottom:4}}>{mode==='retail' ? 'Retail price · Base = Retail × 75%' : 'Average auction price'}</div>
+      <div className="row-calc-price-wrap">
+        <span className="row-calc-dollar">$</span>
+        <input className="row-calc-input" type="number" placeholder="0" value={price} onChange={e => doCalc(e.target.value)} autoFocus />
+      </div>
+      <div className="row-calc-pills">
+        <div className={`row-calc-pill rcp-r${result?' rcp-active':''}`}><div className="rcpl">Reserve</div><div className="rcpv">{result ? fmtP(result.reserve) : '—'}</div></div>
+        <div className={`row-calc-pill rcp-l${result?' rcp-active':''}`}><div className="rcpl">Low</div><div className="rcpv">{result ? fmtP(result.low) : '—'}</div></div>
+        <div className={`row-calc-pill rcp-h${result?' rcp-active':''}`}><div className="rcpl">High</div><div className="rcpv">{result ? fmtP(result.high) : '—'}</div></div>
+      </div>
+      <div className="row-calc-actions">
+        <button className="row-calc-copy" disabled={!result} onClick={doCopy}>⎘ Copy</button>
+        <button className="row-calc-apply" disabled={!result} onClick={doApply}>Apply to row →</button>
+        <button className="row-calc-clr" onClick={() => { setPrice(''); setResult(null); }}>Clear</button>
+      </div>
+      <div className={`row-calc-flash${flash ? ' '+flash.cls : ''}`}>{flash ? flash.msg : ''}</div>
+    </div>
   );
 }
 
@@ -1761,8 +1859,12 @@ function App() {
                     </div>
                   </div>
                   <button className={`item-edit-btn${r._expanded?" open":""}`}
-                    onClick={() => updateListItem(r._key,{_expanded:!r._expanded})}>
+                    onClick={() => updateListItem(r._key,{_expanded:!r._expanded,_calcOpen:false})}>
                     {r._expanded ? "Done" : "Edit"}
+                  </button>
+                  <button className={`item-calc-btn${r._calcOpen?" open":""}`}
+                    onClick={() => updateListItem(r._key,{_calcOpen:!r._calcOpen,_expanded:false})}>
+                    {r._calcOpen ? "Calc ×" : "Calc"}
                   </button>
                   <button className="item-remove-btn" onClick={() => removeListItem(r._key)}>x</button>
                 </div>
@@ -1793,6 +1895,7 @@ function App() {
                     </div>
                   </div>
                 )}
+                {r._calcOpen && <RowCalc key={r._key+"-calc"} rowKey={r._key} rowName={r.name} rowVintage={r.vintage} calcCompute={calcCompute} saveCalcHistory={saveCalcHistory} updateListItem={updateListItem} />}
               </div>
             );
           })}
