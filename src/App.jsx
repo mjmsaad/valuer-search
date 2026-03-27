@@ -612,6 +612,72 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .panel-tab-badge{background:var(--wine);color:white;border-radius:10px;font-size:9px;font-weight:700;padding:2px 5px;min-width:16px;text-align:center;}
 .panel-tab-arrow{color:var(--text-muted);font-size:10px;transition:transform 0.28s ease;}
 .panel-tab.open .panel-tab-arrow{transform:rotate(180deg);}
+.calc-drawer-wrap{border-bottom:2px solid var(--wine);background:var(--white);overflow:hidden;max-height:0;transition:max-height 0.3s ease;flex-shrink:0;}
+.calc-drawer-wrap.open{max-height:700px;}
+.calc-drawer-inner{padding:16px 20px;}
+.calc-drawer-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+.calc-drawer-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--text);}
+.calc-drawer-sub{font-size:10px;color:var(--text-muted);font-style:italic;margin-top:2px;}
+.calc-drawer-close{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;line-height:1;padding:0;}
+.calc-drawer-close:hover{color:var(--wine);}
+.calc-cols{display:grid;grid-template-columns:1fr 1px 1fr;margin-bottom:16px;}
+.calc-col-inner{padding:0 18px;}
+.calc-col-inner:first-child{padding-left:0;}
+.calc-col-inner:last-child{padding-right:0;}
+.calc-col-divider{background:var(--border);margin:0;}
+.calc-col-title{font-size:10px;font-weight:700;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;}
+.calc-col-sub{font-size:9px;color:var(--text-muted);font-style:italic;margin-bottom:11px;}
+.calc-wine-input{width:100%;height:28px;border:1px solid var(--border);background:var(--cream);padding:0 9px;font-family:'Inter',sans-serif;font-size:10px;color:var(--text);border-radius:3px;outline:none;margin-bottom:8px;}
+.calc-wine-input:focus{border-color:var(--gold);}
+.calc-price-wrap{position:relative;margin-bottom:10px;}
+.calc-dollar{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text-muted);}
+.calc-price-input{width:100%;height:34px;border:1px solid var(--border);background:var(--white);padding:0 9px 0 23px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:var(--text);border-radius:3px;outline:none;}
+.calc-price-input:focus{border-color:var(--gold);}
+.calc-pills{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px;}
+.calc-pill{background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:8px 6px;text-align:center;}
+.calc-pill .cpl{font-size:8px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:3px;}
+.calc-pill .cpv{font-size:14px;font-weight:600;color:var(--border-dark);}
+.calc-pill.cpr .cpl{color:var(--wine);} .calc-pill.cpr.cpactive .cpv{color:var(--wine);}
+.calc-pill.cpl2 .cpl{color:var(--gold);} .calc-pill.cpl2.cpactive .cpv{color:var(--gold);}
+.calc-pill.cph .cpl{color:var(--green);} .calc-pill.cph.cpactive .cpv{color:var(--green);}
+.calc-actions{display:flex;gap:6px;margin-bottom:4px;}
+.calc-copy-btn{flex:1;background:none;border:1px solid var(--border);color:var(--text-muted);padding:8px;font-size:10px;font-weight:600;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.calc-copy-btn:not(:disabled):hover{border-color:var(--gold);color:var(--gold);}
+.calc-copy-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.calc-add-btn{flex:1;background:var(--wine);color:white;border:none;padding:8px;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.calc-add-btn:not(:disabled):hover{background:#6A1818;}
+.calc-add-btn:disabled{background:var(--border-dark);cursor:not-allowed;}
+.calc-clr-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:8px 10px;font-size:10px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.calc-flash{font-size:10px;font-weight:600;padding:3px 0;text-align:center;min-height:18px;color:transparent;}
+.calc-flash.gold{color:var(--gold);}
+.calc-flash.green{color:var(--green);}
+.calc-hist-section{border-top:1px solid var(--border);padding-top:13px;}
+.calc-hist-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.calc-hist-title{font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;}
+.calc-hist-search{flex:1;height:26px;border:1px solid var(--border);background:var(--cream);padding:0 9px;font-family:'Inter',sans-serif;font-size:10px;color:var(--text);border-radius:3px;outline:none;max-width:220px;}
+.calc-hist-search:focus{border-color:var(--gold);}
+.calc-hist-count{font-size:10px;color:var(--text-muted);margin-left:auto;}
+.calc-hist-table{width:100%;border-collapse:collapse;}
+.calc-hist-table th{font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;padding:5px 9px;text-align:left;border-bottom:1px solid var(--border);background:var(--cream);}
+.calc-hist-table th.num{text-align:right;}
+.calc-hist-table td{font-size:11px;color:var(--text);padding:7px 9px;border-bottom:1px solid var(--border-light,#F5F2EE);}
+.calc-hist-table tr:last-child td{border-bottom:none;}
+.calc-hist-table tr:hover td{background:var(--cream);}
+.calc-hist-table td.chr{color:var(--wine);font-weight:600;text-align:right;}
+.calc-hist-table td.chl{color:var(--gold);font-weight:600;text-align:right;}
+.calc-hist-table td.chh{color:var(--green);font-weight:600;text-align:right;}
+.calc-hist-table td.chm{font-size:9px;color:var(--text-muted);}
+.calc-hist-table td.chby{font-size:9px;color:var(--text-muted);}
+.calc-hist-table td.chact{text-align:right;white-space:nowrap;}
+.calc-hist-copy{font-size:9px;background:none;border:1px solid var(--border);color:var(--text-muted);padding:2px 7px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.calc-hist-copy:hover{border-color:var(--gold);color:var(--gold);}
+.calc-hist-add{font-size:9px;background:none;border:1px solid var(--border);color:var(--text-muted);padding:2px 7px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;margin-left:4px;}
+.calc-hist-add:hover{border-color:var(--wine);color:var(--wine);}
+.calc-hist-empty{font-size:11px;color:var(--text-muted);font-style:italic;padding:14px 0;text-align:center;}
+.btn-calc-header{background:none;border:1px solid #3A3630;color:#B8922A;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;}
+.btn-calc-header:hover,.btn-calc-header.open{background:rgba(184,146,42,0.1);border-color:#B8922A;}
+.btn-calc-header .calc-caret{font-size:8px;transition:transform 0.2s;}
+.btn-calc-header.open .calc-caret{transform:rotate(180deg);}
 .slide-panel{position:fixed;right:-340px;top:52px;bottom:0;width:340px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:right 0.28s ease;box-shadow:-4px 0 16px rgba(0,0,0,0.06);}
 .slide-panel.open{right:0;}
 .slide-panel-header{padding:13px 15px;border-bottom:1px solid var(--border);background:var(--white);}
@@ -785,7 +851,192 @@ function LoginScreen({ onLogin, darkMode = false }) {
   );
 }
 
-export default function App() {
+function CalcDrawerBody({ session, userProfiles, calcHistory, calcHistSearch, setCalcHistSearch, saveCalcHistory, calcCompute, setListItems, listItems, onClose }) {
+  const fmtP = n => n ? '$' + Math.round(n).toLocaleString('en-AU') : '—';
+  const [retailWine, setRetailWine]     = useState('');
+  const [retailVint, setRetailVint]     = useState('');
+  const [retailPrice, setRetailPrice]   = useState('');
+  const [retailRes, setRetailRes]       = useState(null);
+  const [retailFlash, setRetailFlash]   = useState(null);
+  const [auctionWine, setAuctionWine]   = useState('');
+  const [auctionVint, setAuctionVint]   = useState('');
+  const [auctionPrice, setAuctionPrice] = useState('');
+  const [auctionRes, setAuctionRes]     = useState(null);
+  const [auctionFlash, setAuctionFlash] = useState(null);
+
+  const flash = (setter, msg, cls) => {
+    setter({msg, cls});
+    setTimeout(() => setter(''), 2200);
+  };
+
+  const doRetailCalc = val => {
+    const v = parseFloat(val);
+    setRetailPrice(val);
+    setRetailRes(v > 0 ? calcCompute(v, true) : null);
+  };
+  const doAuctionCalc = val => {
+    const v = parseFloat(val);
+    setAuctionPrice(val);
+    setAuctionRes(v > 0 ? calcCompute(v, false) : null);
+  };
+
+  const copyVals = (res, flashSetter, flashId) => {
+    if (!res) return;
+    navigator.clipboard.writeText(`$${res.reserve}\t$${res.low}\t$${res.high}`).catch(()=>{});
+    flash(flashSetter, '✓ Copied — paste into spreadsheet', 'gold');
+  };
+
+  const addToList = (res, wine, vintage, flashSetter) => {
+    if (!res || !wine.trim()) { flash(flashSetter, '⚠ Enter a wine name first', 'gold'); return; }
+    const key = wine + vintage + Date.now();
+    setListItems(prev => [...prev, {
+      name: wine, vintage, _key: key,
+      reserve: '$' + res.reserve, low: '$' + res.low, high: '$' + res.high,
+      qty: 1, size: '750ml', baseSize: '750ml', sizeMultiplier: 1, applyMultiplier: false, isManual: true
+    }]);
+    flash(flashSetter, '✓ Added to My List', 'green');
+  };
+
+  const saveAndClear = async (isRetail) => {
+    const wine = isRetail ? retailWine : auctionWine;
+    const vint = isRetail ? retailVint : auctionVint;
+    const price = isRetail ? parseFloat(retailPrice) : parseFloat(auctionPrice);
+    const res = isRetail ? retailRes : auctionRes;
+    if (wine.trim() && res) {
+      await saveCalcHistory(wine, vint, isRetail ? 'Retail' : 'Auction', price, res.reserve, res.low, res.high);
+    }
+  };
+
+  const filteredHist = calcHistory.filter(h =>
+    !calcHistSearch || (h.wine_name || '').toLowerCase().includes(calcHistSearch.toLowerCase())
+  );
+
+  return (
+    <div className="calc-drawer-inner">
+      <div className="calc-drawer-hdr">
+        <div>
+          <div className="calc-drawer-title">Pricing Calculator</div>
+          <div className="calc-drawer-sub">Calculations with a wine name save to shared team history</div>
+        </div>
+        <button className="calc-drawer-close" onClick={onClose}>×</button>
+      </div>
+
+      <div className="calc-cols">
+        {/* Retail column */}
+        <div className="calc-col-inner">
+          <div className="calc-col-title">From Retail Price</div>
+          <div className="calc-col-sub">Base = Retail × 75% · Reserve −15%, Low −5%, High +20%</div>
+          <input className="calc-wine-input" placeholder="Wine name" value={retailWine} onChange={e=>setRetailWine(e.target.value)} />
+          <input className="calc-wine-input" placeholder="Vintage (optional)" value={retailVint} onChange={e=>setRetailVint(e.target.value)} style={{marginTop:0}} />
+          <div className="clabel" style={{marginBottom:4}}>Retail price</div>
+          <div className="calc-price-wrap">
+            <span className="calc-dollar">$</span>
+            <input className="calc-price-input" type="number" placeholder="0" value={retailPrice}
+              onChange={e => doRetailCalc(e.target.value)} />
+          </div>
+          <div className="calc-pills">
+            <div className={`calc-pill cpr${retailRes?" cpactive":""}`}><div className="cpl">Reserve</div><div className="cpv">{retailRes ? fmtP(retailRes.reserve) : "—"}</div></div>
+            <div className={`calc-pill cpl2${retailRes?" cpactive":""}`}><div className="cpl">Low</div><div className="cpv">{retailRes ? fmtP(retailRes.low) : "—"}</div></div>
+            <div className={`calc-pill cph${retailRes?" cpactive":""}`}><div className="cpl">High</div><div className="cpv">{retailRes ? fmtP(retailRes.high) : "—"}</div></div>
+          </div>
+          <div className="calc-actions">
+            <button className="calc-copy-btn" disabled={!retailRes} onClick={() => copyVals(retailRes, setRetailFlash)}>⎘ Copy R · L · H</button>
+            <button className="calc-add-btn" disabled={!retailRes} onClick={() => { addToList(retailRes, retailWine, retailVint, setRetailFlash); saveAndClear(true); }}>+ My List</button>
+            <button className="calc-clr-btn" onClick={() => { setRetailWine(''); setRetailVint(''); setRetailPrice(''); setRetailRes(null); }}>Clear</button>
+          </div>
+          <div className={`calc-flash${retailFlash ? ' '+retailFlash.cls : ''}`}>{retailFlash ? retailFlash.msg : ''}</div>
+        </div>
+
+        <div className="calc-col-divider" />
+
+        {/* Auction column */}
+        <div className="calc-col-inner">
+          <div className="calc-col-title">From Auction Average</div>
+          <div className="calc-col-sub">Median recent hammer price · Reserve −15%, Low −5%, High +20%</div>
+          <input className="calc-wine-input" placeholder="Wine name" value={auctionWine} onChange={e=>setAuctionWine(e.target.value)} />
+          <input className="calc-wine-input" placeholder="Vintage (optional)" value={auctionVint} onChange={e=>setAuctionVint(e.target.value)} style={{marginTop:0}} />
+          <div className="clabel" style={{marginBottom:4}}>Average auction price</div>
+          <div className="calc-price-wrap">
+            <span className="calc-dollar">$</span>
+            <input className="calc-price-input" type="number" placeholder="0" value={auctionPrice}
+              onChange={e => doAuctionCalc(e.target.value)} />
+          </div>
+          <div className="calc-pills">
+            <div className={`calc-pill cpr${auctionRes?" cpactive":""}`}><div className="cpl">Reserve</div><div className="cpv">{auctionRes ? fmtP(auctionRes.reserve) : "—"}</div></div>
+            <div className={`calc-pill cpl2${auctionRes?" cpactive":""}`}><div className="cpl">Low</div><div className="cpv">{auctionRes ? fmtP(auctionRes.low) : "—"}</div></div>
+            <div className={`calc-pill cph${auctionRes?" cpactive":""}`}><div className="cpl">High</div><div className="cpv">{auctionRes ? fmtP(auctionRes.high) : "—"}</div></div>
+          </div>
+          <div className="calc-actions">
+            <button className="calc-copy-btn" disabled={!auctionRes} onClick={() => copyVals(auctionRes, setAuctionFlash)}>⎘ Copy R · L · H</button>
+            <button className="calc-add-btn" disabled={!auctionRes} onClick={() => { addToList(auctionRes, auctionWine, auctionVint, setAuctionFlash); saveAndClear(false); }}>+ My List</button>
+            <button className="calc-clr-btn" onClick={() => { setAuctionWine(''); setAuctionVint(''); setAuctionPrice(''); setAuctionRes(null); }}>Clear</button>
+          </div>
+          <div className={`calc-flash${auctionFlash ? ' '+auctionFlash.cls : ''}`}>{auctionFlash ? auctionFlash.msg : ''}</div>
+        </div>
+      </div>
+
+      {/* Shared history table */}
+      <div className="calc-hist-section">
+        <div className="calc-hist-bar">
+          <div className="calc-hist-title">Team Calculation History</div>
+          <input className="calc-hist-search" placeholder="Search by wine name…"
+            value={calcHistSearch} onChange={e => setCalcHistSearch(e.target.value)} />
+          <div className="calc-hist-count">{filteredHist.length} entr{filteredHist.length===1?'y':'ies'}</div>
+        </div>
+        {filteredHist.length === 0 ? (
+          <div className="calc-hist-empty">{calcHistSearch ? `No results for "${calcHistSearch}"` : "No calculations yet — results save here when you enter a wine name"}</div>
+        ) : (
+          <table className="calc-hist-table">
+            <thead>
+              <tr>
+                <th>Wine</th>
+                <th>Vintage</th>
+                <th>By</th>
+                <th>Method</th>
+                <th className="num">Reserve</th>
+                <th className="num">Low</th>
+                <th className="num">High</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredHist.map(h => {
+                const byEmail = userProfiles[h.user_id] || h.user_id?.slice(0,6) + '…';
+                const byName = byEmail.split('@')[0];
+                return (
+                  <tr key={h.id}>
+                    <td>{h.wine_name}</td>
+                    <td>{h.vintage || '—'}</td>
+                    <td className="chby">{byName}</td>
+                    <td className="chm">{h.method} ${h.input_price?.toLocaleString()}</td>
+                    <td className="chr">${Math.round(h.reserve).toLocaleString()}</td>
+                    <td className="chl">${Math.round(h.low).toLocaleString()}</td>
+                    <td className="chh">${Math.round(h.high).toLocaleString()}</td>
+                    <td className="chact">
+                      <button className="calc-hist-add" onClick={() => {
+                        const key = (h.wine_name||'') + (h.vintage||'') + Date.now();
+                        setListItems(prev => [...prev, {
+                          name: h.wine_name, vintage: h.vintage, _key: key,
+                          reserve: '$'+Math.round(h.reserve), low: '$'+Math.round(h.low), high: '$'+Math.round(h.high),
+                          qty: 1, size: '750ml', baseSize: '750ml', sizeMultiplier: 1, applyMultiplier: false, isManual: true
+                        }]);
+                      }}>+ List</button>
+                      <button className="calc-hist-copy" onClick={() =>
+                        navigator.clipboard.writeText(`$${Math.round(h.reserve)}\t$${Math.round(h.low)}\t$${Math.round(h.high)}`).catch(()=>{})
+                      }>⎘ Copy</button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
   const [darkMode, setDarkMode]     = useState(() => localStorage.getItem("darkMode") === "true");
   const [session, setSession]       = useState(null);
   const [checking, setChecking]     = useState(true);
@@ -823,6 +1074,9 @@ export default function App() {
   const [detailRows, setDetailRows]         = useState([]);
   const [detailLoading, setDetailLoading]   = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [calcOpen, setCalcOpen]               = useState(false);
+  const [calcHistory, setCalcHistory]         = useState([]);
+  const [calcHistSearch, setCalcHistSearch]   = useState('');
   const [exportType, setExportType]         = useState(null);
   const [recipientName, setRecipientName]   = useState('');
   const [auctionDates, setAuctionDates]     = useState([]);
@@ -939,6 +1193,23 @@ export default function App() {
     }).catch(() => {});
   }, [session]);
 
+  // Fetch shared calculator history (all team members)
+  const fetchCalcHistory = async () => {
+    if (!session) return;
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/calculator_history?select=*&order=created_at.desc&limit=100`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
+      );
+      const rows = await res.json();
+      if (Array.isArray(rows)) setCalcHistory(rows);
+    } catch(e) {}
+  };
+
+  useEffect(() => {
+    if (calcOpen) fetchCalcHistory();
+  }, [calcOpen, session]);
+
   useEffect(() => {
     if (trendingOpen && session) {
       fetchTrending(trendingPeriod);
@@ -1049,6 +1320,41 @@ export default function App() {
     }
   };
   const removeListItem = key => setListItems(prev => prev.filter(r => r._key !== key));
+
+  const saveCalcHistory = async (wineName, vintage, method, inputPrice, reserve, low, high) => {
+    if (!session || !wineName.trim()) return;
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/calculator_history`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: session.user.id,
+          wine_name: wineName,
+          vintage: vintage || null,
+          method,
+          input_price: inputPrice,
+          reserve,
+          low,
+          high
+        })
+      });
+      fetchCalcHistory();
+    } catch(e) {}
+  };
+
+  const calcCompute = (price, isRetail) => {
+    const base = isRetail ? price * 0.75 : price;
+    return {
+      reserve: Math.round(base * 0.85),
+      low:     Math.round(base * 0.95),
+      high:    Math.round(base * 1.20),
+    };
+  };
 
   const updateListItem = (key, changes) => setListItems(prev =>
     prev.map(r => r._key === key ? { ...r, ...changes } : r)
@@ -1170,10 +1476,29 @@ export default function App() {
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
             <span className="header-user">{session.user?.email}</span>
+            <button className={`btn-calc-header${calcOpen?" open":""}`} onClick={() => setCalcOpen(o=>!o)}>
+              ⊞ Calculator <span className="calc-caret">▼</span>
+            </button>
             <button className="dark-toggle" onClick={() => setDarkMode(d=>!d)}>{darkMode ? "☀" : "☾"}</button>
             <button className="signout" onClick={handleSignOut}>Sign Out</button>
           </div>
         </header>
+
+        {/* ── Calculator Drawer ── */}
+        <div className={`calc-drawer-wrap${calcOpen?" open":""}`}>
+          <CalcDrawerBody
+            session={session}
+            userProfiles={userProfiles}
+            calcHistory={calcHistory}
+            calcHistSearch={calcHistSearch}
+            setCalcHistSearch={setCalcHistSearch}
+            saveCalcHistory={saveCalcHistory}
+            calcCompute={calcCompute}
+            setListItems={setListItems}
+            listItems={listItems}
+            onClose={() => setCalcOpen(false)}
+          />
+        </div>
 
         <main className="main" style={{paddingRight:panelOpen?"360px":undefined}}>
           {error && <div className="err-banner"><span>⚠</span><span>{error}</span></div>}
@@ -1711,3 +2036,5 @@ export default function App() {
     </>
   );
 }
+
+export default App;
