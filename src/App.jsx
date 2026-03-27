@@ -907,6 +907,7 @@ function RowCalc({ rowKey, rowName, rowVintage, calcCompute, saveCalcHistory, up
     if (!result) return;
     navigator.clipboard.writeText(`$${result.reserve}\t$${result.low}\t$${result.high}`).catch(()=>{});
     showFlash('✓ Copied — paste into spreadsheet', 'gold');
+    if (rowName) saveCalcHistory(rowName, rowVintage, mode === 'retail' ? 'Retail' : 'Auction', parseFloat(price), result.reserve, result.low, result.high);
   };
 
   const doApply = () => {
@@ -978,10 +979,15 @@ function CalcDrawerBody({ session, userProfiles, calcHistory, calcHistSearch, se
     setAuctionRes(v > 0 ? calcCompute(v, false) : null);
   };
 
-  const copyVals = (res, flashSetter, flashId) => {
+  const copyVals = (res, flashSetter, isRetail) => {
     if (!res) return;
     navigator.clipboard.writeText(`$${res.reserve}\t$${res.low}\t$${res.high}`).catch(()=>{});
     flash(flashSetter, '✓ Copied — paste into spreadsheet', 'gold');
+    // Save to history if a wine name has been entered
+    const wine = isRetail ? retailWine : auctionWine;
+    const vint = isRetail ? retailVint : auctionVint;
+    const price = isRetail ? parseFloat(retailPrice) : parseFloat(auctionPrice);
+    if (wine.trim()) saveCalcHistory(wine, vint, isRetail ? 'Retail' : 'Auction', price, res.reserve, res.low, res.high);
   };
 
   const addToList = (res, wine, vintage, flashSetter) => {
@@ -1038,8 +1044,8 @@ function CalcDrawerBody({ session, userProfiles, calcHistory, calcHistSearch, se
             <div className={`calc-pill cph${retailRes?" cpactive":""}`}><div className="cpl">High</div><div className="cpv">{retailRes ? fmtP(retailRes.high) : "—"}</div></div>
           </div>
           <div className="calc-actions">
-            <button className="calc-copy-btn" disabled={!retailRes} onClick={() => copyVals(retailRes, setRetailFlash)}>⎘ Copy R · L · H</button>
-            <button className="calc-add-btn" disabled={!retailRes} onClick={() => { addToList(retailRes, retailWine, retailVint, setRetailFlash); saveAndClear(true); }}>+ My List</button>
+            <button className="calc-copy-btn" disabled={!retailRes} onClick={() => copyVals(retailRes, setRetailFlash, true)}>⎘ Copy R · L · H</button>
+            <button className="calc-add-btn" disabled={!retailRes} onClick={async () => { addToList(retailRes, retailWine, retailVint, setRetailFlash); await saveAndClear(true); }}>+ My List</button>
             <button className="calc-clr-btn" onClick={() => { setRetailWine(''); setRetailVint(''); setRetailPrice(''); setRetailRes(null); }}>Clear</button>
           </div>
           <div className={`calc-flash${retailFlash ? ' '+retailFlash.cls : ''}`}>{retailFlash ? retailFlash.msg : ''}</div>
@@ -1065,8 +1071,8 @@ function CalcDrawerBody({ session, userProfiles, calcHistory, calcHistSearch, se
             <div className={`calc-pill cph${auctionRes?" cpactive":""}`}><div className="cpl">High</div><div className="cpv">{auctionRes ? fmtP(auctionRes.high) : "—"}</div></div>
           </div>
           <div className="calc-actions">
-            <button className="calc-copy-btn" disabled={!auctionRes} onClick={() => copyVals(auctionRes, setAuctionFlash)}>⎘ Copy R · L · H</button>
-            <button className="calc-add-btn" disabled={!auctionRes} onClick={() => { addToList(auctionRes, auctionWine, auctionVint, setAuctionFlash); saveAndClear(false); }}>+ My List</button>
+            <button className="calc-copy-btn" disabled={!auctionRes} onClick={() => copyVals(auctionRes, setAuctionFlash, false)}>⎘ Copy R · L · H</button>
+            <button className="calc-add-btn" disabled={!auctionRes} onClick={async () => { addToList(auctionRes, auctionWine, auctionVint, setAuctionFlash); await saveAndClear(false); }}>+ My List</button>
             <button className="calc-clr-btn" onClick={() => { setAuctionWine(''); setAuctionVint(''); setAuctionPrice(''); setAuctionRes(null); }}>Clear</button>
           </div>
           <div className={`calc-flash${auctionFlash ? ' '+auctionFlash.cls : ''}`}>{auctionFlash ? auctionFlash.msg : ''}</div>
@@ -1422,13 +1428,13 @@ function App() {
   const saveCalcHistory = async (wineName, vintage, method, inputPrice, reserve, low, high) => {
     if (!session || !wineName.trim()) return;
     try {
-      await fetch(`${SUPABASE_URL}/rest/v1/calculator_history`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/calculator_history`, {
         method: 'POST',
         headers: {
           apikey: SUPABASE_KEY,
           Authorization: `Bearer ${session.access_token}`,
           'Content-Type': 'application/json',
-          Prefer: 'return=minimal'
+          Prefer: 'return=representation'
         },
         body: JSON.stringify({
           user_id: session.user.id,
@@ -1441,8 +1447,15 @@ function App() {
           high
         })
       });
-      fetchCalcHistory();
-    } catch(e) {}
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error('[CalcHistory] Save failed:', res.status, err);
+      } else {
+        fetchCalcHistory();
+      }
+    } catch(e) {
+      console.error('[CalcHistory] Network error:', e);
+    }
   };
 
   const calcCompute = (price, isRetail) => {
