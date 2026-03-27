@@ -4,6 +4,20 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.2.1] — 27 March 2026 · Valuation Table Fixes
+
+### Improved
+- **Vertical column rules** — thin ruled lines between every column in both email and PDF valuation tables, helping the eye track across long wine names
+- **Colour-coded price columns** — Reserve in burgundy, Low in gold, High in green in both the header row and data rows. Matches the colour language used throughout the app
+- **Right-aligned numbers** — Qty, Reserve, Low and High columns are now right-aligned for cleaner reading
+- **Email table reflows freely** — removed `white-space:nowrap` from all data cells so the table adapts to whatever width Outlook provides. Headers remain locked to one line. Table can now be freely resized after pasting into Outlook
+- **Removed outer email max-width** — the email HTML wrapper no longer constrains the table to 680px
+
+### Fixed
+- **PDF table headers** — a global `th` CSS rule in the PDF stylesheet was overriding all inline styles, forcing headers to uppercase, 9px font and small padding regardless of what the inline styles specified. Fixed to match email: 11px, sentence case, 7px 12px padding
+
+---
+
 ## [2.2.0] — 27 March 2026 · Pricing Calculator
 
 ### New
@@ -276,6 +290,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.2.1 | 27 Mar 2026 | Valuation table — column rules, colour coding, Outlook reflow fix |
 | 2.2.0 | 27 Mar 2026 | Pricing calculator — header drawer, per-row calc, shared history |
 | 2.1.0 | 26 Mar 2026 | My List panel redesign — drag to reorder, collapsed rows |
 | 2.0.25 | 26 Mar 2026 | Bidirectional size price adjustment, normalisation fix |

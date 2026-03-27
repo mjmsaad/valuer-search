@@ -205,13 +205,13 @@ function buildEmailHTML(name, auctions) {
         const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:10px;color:#B8922A;">(${r.size})</span>` : '';
         const qtyNote = r.qty > 1 ? ` <span style="font-size:10px;color:#8A8278;">×${r.qty}</span>` : '';
         return `<tr>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.vintage||""}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${r.name||""}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;text-align:center;">${r.qty||1}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;white-space:nowrap;">${r.size||"750ml"}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${adjP(r.reserve,effM)}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${adjP(r.low,effM)}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1A1714;">${adjP(r.high,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;">${r.vintage||""}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;">${r.name||""}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;text-align:right;">${r.qty||1}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;">${r.size||"750ml"}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#7B1D1D;font-weight:600;text-align:right;">${adjP(r.reserve,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#8A6020;font-weight:500;text-align:right;">${adjP(r.low,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1E5C3A;font-weight:600;text-align:right;">${adjP(r.high,effM)}</td>
     </tr>`;}).join("");
     })() : ""
   
@@ -222,20 +222,20 @@ function buildEmailHTML(name, auctions) {
       <tr><td style="padding:2px 12px 2px 0;color:#8A8278;font-size:11px;font-weight:600;white-space:nowrap;border:none;">MELBOURNE CLOSES</td><td style="padding:2px 0;font-weight:600;border:none;color:#1A1714;">${a.melbourne}</td></tr>
     </table>`).join("");
 
-  return `<div style="font-family:Arial,sans-serif;font-size:13px;color:#1A1714;line-height:1.75;max-width:680px;">
+  return `<div style="font-family:Arial,sans-serif;font-size:13px;color:#1A1714;line-height:1.75;">
 <p style="margin-bottom:12px;">Dear ${name||""},</p>
 <p style="margin-bottom:12px;">Thank you for choosing Wickman's Fine Wine Auctions. We appreciate the opportunity to provide you with a valuation for your wine.</p>
 <p style="margin-bottom:18px;">Using the most up to date auction data and trends we suggest the following values.</p>
 <h2 style="font-size:16px;font-weight:700;color:#7B1D1D;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid #E2DDD6;font-family:Arial,sans-serif;">Your Valuation</h2>
-<table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
+<table style="border-collapse:collapse;margin:0 0 18px;table-layout:auto;">
   <thead><tr>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Vintage</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;">Wine</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:center;white-space:nowrap;">Qty</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Size</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Reserve&nbsp;(R)</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">Low&nbsp;(L)</th>
-    <th style="background:#1A1714;color:white;padding:7px 10px;text-align:left;white-space:nowrap;">High&nbsp;(H)</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;white-space:nowrap;border-right:1px solid #2A2724;">Vintage</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;border-right:1px solid #2A2724;">Wine</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:right;white-space:nowrap;border-right:1px solid #2A2724;">Qty</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;white-space:nowrap;border-right:1px solid #2A2724;">Size</th>
+    <th style="background:#1A1714;color:#E8C97A;padding:7px 12px;text-align:right;white-space:nowrap;border-right:1px solid #2A2724;">Reserve&nbsp;(R)</th>
+    <th style="background:#1A1714;color:#D4B882;padding:7px 12px;text-align:right;white-space:nowrap;border-right:1px solid #2A2724;">Low&nbsp;(L)</th>
+    <th style="background:#1A1714;color:#90C4A8;padding:7px 12px;text-align:right;white-space:nowrap;">High&nbsp;(H)</th>
   </tr></thead>
   <tbody>${rowsHTML}</tbody>
 </table>
@@ -290,13 +290,13 @@ function buildPDFHTML(name, auctions, listItems) {
     const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:9px;color:#B8922A;">(${r.size})</span>` : '';
     const qtyNote = r.qty > 1 ? ` <span style="font-size:9px;color:#8A8278;">×${r.qty}</span>` : '';
     return `<tr>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.vintage||""}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${r.name||""}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg};text-align:center;">${r.qty||1}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg};white-space:nowrap;">${r.size||"750ml"}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${ap(r.reserve,effM)}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${ap(r.low,effM)}</td>
-      <td style="padding:5px 8px;border-bottom:1px solid #E2DDD6;${bg}">${ap(r.high,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;">${r.vintage||""}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;">${r.name||""}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;text-align:right;">${r.qty||1}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;">${r.size||"750ml"}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#7B1D1D;font-weight:600;text-align:right;">${ap(r.reserve,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#8A6020;font-weight:500;text-align:right;">${ap(r.low,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;${bg}color:#1E5C3A;font-weight:600;text-align:right;">${ap(r.high,effM)}</td>
     </tr>`;}).join("");
 
   const auctionHTML = auctions.map(a => `
@@ -314,9 +314,9 @@ function buildPDFHTML(name, auctions, listItems) {
     .page-wrap{max-width:170mm;margin:0 auto;padding:10mm 0;}
     p{margin-bottom:8px;}
     h2{font-size:13px;font-weight:700;color:#7B1D1D;margin:12px 0 5px;padding-bottom:4px;border-bottom:1px solid #E2DDD6;page-break-after:avoid;break-after:avoid;}
-    table{width:100%;border-collapse:collapse;margin:0 0 10px;}
-    th{background:#1A1714;color:white;padding:5px 8px;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:0.05em;}
-    td{padding:5px 8px;border-bottom:1px solid #E2DDD6;font-size:11px;}
+    table{width:100%;border-collapse:collapse;margin:0 0 10px;table-layout:auto;}
+    th{background:#1A1714;color:white;padding:7px 12px;text-align:left;font-size:11px;white-space:nowrap;}
+    td{padding:6px 12px;border-bottom:1px solid #E2DDD6;font-size:11px;}
     tr:last-child td{border-bottom:none;}
     tr{page-break-inside:avoid;}
     h2+p,h2+ul,h2+ol,h2+div,h2+table{page-break-before:avoid;break-before:avoid;}
@@ -336,7 +336,15 @@ function buildPDFHTML(name, auctions, listItems) {
   <p>Thank you for choosing Wickman\'s Fine Wine Auctions. We appreciate the opportunity to provide you with a valuation for your wine.</p>
   <p>Using the most up to date auction data and trends we suggest the following values.</p>
   <h2>Your Valuation</h2>
-  <table><thead><tr><th style="white-space:nowrap;">Vintage</th><th>Wine</th><th style="text-align:center;white-space:nowrap;">Qty</th><th style="white-space:nowrap;">Size</th><th style="white-space:nowrap;">Reserve&nbsp;(R)</th><th style="white-space:nowrap;">Low</th><th style="white-space:nowrap;">High</th></tr></thead>
+  <table style="border-collapse:collapse;table-layout:auto;"><thead><tr>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;white-space:nowrap;border-right:1px solid #2A2724;">Vintage</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;border-right:1px solid #2A2724;">Wine</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:right;white-space:nowrap;border-right:1px solid #2A2724;">Qty</th>
+    <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;white-space:nowrap;border-right:1px solid #2A2724;">Size</th>
+    <th style="background:#1A1714;color:#E8C97A;padding:7px 12px;text-align:right;white-space:nowrap;border-right:1px solid #2A2724;">Reserve&nbsp;(R)</th>
+    <th style="background:#1A1714;color:#D4B882;padding:7px 12px;text-align:right;white-space:nowrap;border-right:1px solid #2A2724;">Low&nbsp;(L)</th>
+    <th style="background:#1A1714;color:#90C4A8;padding:7px 12px;text-align:right;white-space:nowrap;">High&nbsp;(H)</th>
+  </tr></thead>
   <tbody>${rowsHTML}</tbody></table>
   <div class="note"><strong>NOTES:</strong><ol>
     <li>Lots marked as "<u><strong>Not Suitable for Auction</strong></u>" are due to conditional issues and concerns, or their values not meeting our minimum value requirements to be entered into auction.</li>
