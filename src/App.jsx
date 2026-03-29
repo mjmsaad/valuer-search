@@ -682,6 +682,40 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .calc-hist-add{font-size:9px;background:none;border:1px solid var(--border);color:var(--text-muted);padding:2px 7px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;margin-left:4px;}
 .calc-hist-add:hover{border-color:var(--wine);color:var(--wine);}
 .calc-hist-empty{font-size:11px;color:var(--text-muted);font-style:italic;padding:14px 0;text-align:center;}
+.btn-hist-header{font-size:10px;font-weight:600;color:#8A8278;background:none;border:1px solid #3A3630;padding:5px 12px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.btn-hist-header:hover,.btn-hist-header.open{background:rgba(255,255,255,.06);border-color:#5A5248;color:#B8B0A8;}
+.hist-panel{position:fixed;left:-360px;top:52px;bottom:0;width:360px;background:var(--cream);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:left 0.28s ease;box-shadow:4px 0 16px rgba(0,0,0,0.08);}
+.hist-panel.open{left:0;}
+.hist-panel-hdr{padding:13px 15px;border-bottom:1px solid var(--border);background:var(--white);flex-shrink:0;}
+.hist-panel-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--text);display:flex;align-items:baseline;justify-content:space-between;}
+.hist-panel-sub{font-size:10px;color:var(--text-muted);font-style:italic;margin-top:2px;}
+.hist-search-wrap{padding:9px 13px;border-bottom:1px solid var(--border);background:var(--white);flex-shrink:0;}
+.hist-search-input{width:100%;height:28px;border:1px solid var(--border);background:var(--cream);padding:0 9px;font-family:'Inter',sans-serif;font-size:10px;color:var(--text);border-radius:3px;outline:none;}
+.hist-search-input:focus{border-color:var(--gold);}
+.hist-items{flex:1;overflow-y:auto;}
+.hist-item{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.hist-item:hover{background:var(--white);}
+.hist-item.open{border-left:2px solid var(--wine);}
+.hist-item-row{padding:10px 13px;display:flex;align-items:flex-start;gap:8px;}
+.hist-type-badge{font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.hist-type-badge.email{background:rgba(123,29,29,.07);color:var(--wine);border:1px solid rgba(123,29,29,.2);}
+.hist-type-badge.pdf{background:rgba(30,92,58,.07);color:var(--green);border:1px solid rgba(30,92,58,.2);}
+.hist-info{flex:1;min-width:0;}
+.hist-recipient{font-size:12px;font-weight:500;color:var(--text);}
+.hist-meta{font-size:10px;color:var(--text-muted);margin-top:2px;}
+.hist-item-count{font-size:10px;color:var(--text-muted);white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.hist-detail{background:var(--cream);padding:9px 13px;border-bottom:1px solid var(--border);}
+.hist-detail-label{font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px;}
+.hist-wine-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border-light,#F5F2EE);}
+.hist-wine-row:last-child{border-bottom:none;}
+.hist-wine-vbadge{font-size:9px;font-weight:700;color:#8A6020;background:#FBF6EC;border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;}
+.hist-wine-name{font-size:10px;color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-wine-price{font-size:10px;font-weight:600;color:var(--wine);white-space:nowrap;}
+.hist-action-row{display:flex;gap:6px;margin-top:9px;}
+.hist-regen-btn{flex:1;background:var(--wine);color:white;border:none;padding:7px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.hist-load-btn{flex:1;background:none;border:1px solid var(--border);color:var(--text-muted);padding:7px;font-size:9px;font-weight:600;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
+.hist-load-btn:hover{border-color:var(--wine);color:var(--wine);}
+.hist-empty{padding:32px;text-align:center;font-size:11px;color:var(--border-dark);line-height:1.7;}
 .btn-ident-tool{font-size:10px;font-weight:600;color:#8A8278;background:none;border:1px solid #3A3630;padding:5px 12px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:5px;text-decoration:none;}
 .btn-ident-tool:hover{border-color:#5A5248;color:#B8B0A8;}
 .ident-arr{font-size:8px;opacity:0.5;}
@@ -1189,6 +1223,10 @@ function App() {
   const [detailLoading, setDetailLoading]   = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [calcOpen, setCalcOpen]               = useState(false);
+  const [histOpen, setHistOpen]               = useState(false);
+  const [valuationHistory, setValuationHistory] = useState([]);
+  const [histSearch, setHistSearch]           = useState('');
+  const [expandedHist, setExpandedHist]       = useState(null);
   const [calcHistory, setCalcHistory]         = useState([]);
   const [calcHistSearch, setCalcHistSearch]   = useState('');
   const [exportType, setExportType]         = useState(null);
@@ -1325,6 +1363,10 @@ function App() {
   }, [calcOpen, session]);
 
   useEffect(() => {
+    if (histOpen) fetchValuationHistory();
+  }, [histOpen, session]);
+
+  useEffect(() => {
     if (trendingOpen && session) {
       fetchTrending(trendingPeriod);
     }
@@ -1434,6 +1476,45 @@ function App() {
     }
   };
   const removeListItem = key => setListItems(prev => prev.filter(r => r._key !== key));
+
+  const fetchValuationHistory = async () => {
+    if (!session) return;
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/valuation_history?select=*&order=created_at.desc&limit=50`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
+      );
+      const rows = await res.json();
+      if (Array.isArray(rows)) setValuationHistory(rows);
+    } catch(e) {}
+  };
+
+  const saveValuationHistory = async (recipientName, exportType, items) => {
+    if (!session) return;
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/valuation_history`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: session.user.id,
+          recipient_name: recipientName || 'Unknown',
+          export_type: exportType,
+          items: items.map(r => ({
+            name: r.name, vintage: r.vintage, qty: r.qty||1,
+            size: r.size||'750ml', reserve: r.reserve, low: r.low, high: r.high,
+            last_auction: r.last_auction
+          }))
+        })
+      });
+      if (!res.ok) { const e = await res.json().catch(()=>({})); console.error('[ValHistory] Save failed:', res.status, e); }
+      else fetchValuationHistory();
+    } catch(e) { console.error('[ValHistory] Network error:', e); }
+  };
 
   const saveCalcHistory = async (wineName, vintage, method, inputPrice, reserve, low, high) => {
     if (!session || !wineName.trim()) return;
@@ -1548,9 +1629,11 @@ function App() {
     setShowExportModal(false);
     setEmailCopied(false);
     setShowEmailWindow(true);
+    saveValuationHistory(recipientName, 'Email', listItems);
   };
 
   const handlePDF = (w) => {
+    saveValuationHistory(recipientName, 'PDF', listItems);
     window._listItemsForExport = listItems;
     const safeName = (recipientName || 'valuation').replace(/[^a-zA-Z0-9]/g, '_');
     const html = buildPDFHTML(recipientName, auctionDates, listItems);
@@ -1597,6 +1680,9 @@ function App() {
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
             <span className="header-user">{session.user?.email}</span>
+            <button className={`btn-hist-header${histOpen?" open":""}`} onClick={() => setHistOpen(o=>!o)}>
+              ⏱ History
+            </button>
             <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer" className="btn-ident-tool">
               Sami-Odi Identification Tool <span className="ident-arr">↗</span>
             </a>
@@ -1817,12 +1903,95 @@ function App() {
         </main>
       </div>
 
+      {/* Valuation History Panel */}
+      {/* History panel */}
+        <div className={`hist-panel${histOpen?" open":""}`}>
+          <div className="hist-panel-hdr">
+            <div className="hist-panel-title">
+              Valuation History
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,color:"var(--text-muted)",fontStyle:"italic",fontWeight:400}}>{valuationHistory.length} export{valuationHistory.length===1?"":"s"}</span>
+            </div>
+            <div className="hist-panel-sub">All team members · newest first</div>
+          </div>
+          <div className="hist-search-wrap">
+            <input className="hist-search-input" placeholder="Search by recipient name…" value={histSearch}
+              onChange={e => setHistSearch(e.target.value)} />
+          </div>
+          <div className="hist-items">
+            {valuationHistory.length === 0 ? (
+              <div className="hist-empty">No exports yet.<br/>Send an email or generate a PDF<br/>and it will appear here.</div>
+            ) : (() => {
+              const filtered = valuationHistory.filter(h =>
+                !histSearch || (h.recipient_name||'').toLowerCase().includes(histSearch.toLowerCase())
+              );
+              if (filtered.length === 0) return <div className="hist-empty">No results for "{histSearch}"</div>;
+              return filtered.map(h => {
+                const isOpen = expandedHist === h.id;
+                const byEmail = userProfiles[h.user_id] || h.user_id?.slice(0,6)+'…';
+                const byName = byEmail.split('@')[0];
+                const date = new Date(h.created_at);
+                const now = new Date();
+                const isToday = date.toDateString() === now.toDateString();
+                const isYest = new Date(now-86400000).toDateString() === date.toDateString();
+                const dateStr = isToday ? `Today ${date.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}`
+                  : isYest ? `Yesterday ${date.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}`
+                  : date.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+                const items = Array.isArray(h.items) ? h.items : [];
+                return (
+                  <div key={h.id} className={`hist-item${isOpen?" open":""}`} onClick={() => setExpandedHist(isOpen?null:h.id)}>
+                    <div className="hist-item-row">
+                      <div className={`hist-type-badge ${(h.export_type||'').toLowerCase()}`}>{h.export_type||'Export'}</div>
+                      <div className="hist-info">
+                        <div className="hist-recipient">{h.recipient_name||'Unknown'}</div>
+                        <div className="hist-meta">{dateStr} · {byName}</div>
+                      </div>
+                      <div className="hist-item-count">{items.length} wine{items.length===1?"":"s"}</div>
+                    </div>
+                    {isOpen && (
+                      <div className="hist-detail">
+                        <div className="hist-detail-label">Items sent</div>
+                        {items.map((it,i) => (
+                          <div key={i} className="hist-wine-row">
+                            <span className="hist-wine-vbadge">{it.vintage||'—'}</span>
+                            <span className="hist-wine-name" title={it.name}>{it.name}</span>
+                            <span className="hist-wine-price">{it.high||'—'}</span>
+                          </div>
+                        ))}
+                        <div className="hist-action-row">
+                          <button className="hist-regen-btn" onClick={async e => {
+                            e.stopPropagation();
+                            setListItems(items.map((it,i) => ({...it, _key: it.name+(it.vintage||'')+i+Date.now(), qty: it.qty||1, size: it.size||'750ml', baseSize: it.size||'750ml', sizeMultiplier:1, applyMultiplier:false})));
+                            setHistOpen(false);
+                            setPanelOpen(true);
+                          }}>Load to My List →</button>
+                          <button className="hist-load-btn" onClick={async e => {
+                            e.stopPropagation();
+                            const a = await computeAuctions();
+                            setAuctionDates(a);
+                            setRecipientName(h.recipient_name||'');
+                            setListItems(items.map((it,i) => ({...it, _key: it.name+(it.vintage||'')+i+Date.now(), qty: it.qty||1, size: it.size||'750ml', baseSize: it.size||'750ml', sizeMultiplier:1, applyMultiplier:false})));
+                            setExportType(h.export_type==='PDF'?'pdf':'email');
+                            setShowExportModal(true);
+                            setHistOpen(false);
+                          }}>Re-generate {h.export_type} →</button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </div>
+      )}
+
       {/* My List tab */}
       <div className={`panel-tab${panelOpen?" open":""}`} onClick={() => setPanelOpen(o => !o)}>
         <span className="panel-tab-arrow">{panelOpen?"▶":"◀"}</span>
         <span className="panel-tab-label">My list</span>
         {listItems.length > 0 && <span className="panel-tab-badge">{listItems.length}</span>}
       </div>
+
 
       {/* My List panel */}
       <div className={`slide-panel${panelOpen?" open":""}`}>
