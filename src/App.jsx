@@ -897,17 +897,17 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
   .err-banner{margin:0;}
 }
 @media(min-width:769px){.mob-view{display:none!important;}.mob-nav-bar{display:none!important;}.mob-sheet-overlay{display:none!important;}}
-.mob-view{flex:1;overflow-y:auto;padding:5px 8px 8px;flex-direction:column;gap:4px;background:#ECEAE6;}
+.mob-view{flex:1;overflow-y:auto;padding:5px 8px 8px;flex-direction:column;gap:4px;background:var(--cream);}
 .mob-view::-webkit-scrollbar{width:3px;}
 .mob-view::-webkit-scrollbar-thumb{background:#D8D0C8;border-radius:3px;}
-.mob-nav-bar{position:fixed;bottom:0;left:0;right:0;background:#1A1714;border-top:1px solid #2A2724;z-index:200;}
-.mob-nav-bar-inner{display:flex;}
+.mob-nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--text);border-top:1px solid var(--border);z-index:200;}
+.mob-nav-bar-inner{display:flex;width:100%;}
 .mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px 10px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
 .mob-nav-icon-wrap{font-size:18px;line-height:1;}
 .mob-nav-lbl{font-size:7px;font-weight:600;color:#5A5248;letter-spacing:.04em;text-transform:uppercase;}
 .mob-nav-btn.mob-active .mob-nav-lbl{color:var(--gold);}
 .mob-pip{background:var(--wine);border-radius:20px;font-size:7px;font-weight:700;color:white;padding:1px 4px;display:inline-block;margin-left:2px;}
-.mob-card{background:white;border:1px solid #E2DDD6;border-radius:7px;overflow:hidden;padding:7px 9px;flex-shrink:0;}
+.mob-card{background:var(--white);border:1px solid var(--border);border-radius:7px;overflow:hidden;padding:7px 9px;flex-shrink:0;}
 .mob-card-r1{display:flex;align-items:center;gap:5px;margin-bottom:5px;}
 .mob-card-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:5px;overflow:hidden;}
 .mob-card-name{font-size:10px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -923,17 +923,17 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .mob-pill.res .mob-pill-lbl{color:var(--wine);} .mob-pill.res .mob-pill-val{color:var(--wine);}
 .mob-pill.low .mob-pill-lbl{color:var(--gold);} .mob-pill.low .mob-pill-val{color:var(--gold);}
 .mob-pill.hi .mob-pill-lbl{color:var(--green);} .mob-pill.hi .mob-pill-val{color:var(--green);}
-.mob-list-hdr{background:#1A1714;padding:10px 13px;flex-shrink:0;}
+.mob-list-hdr{background:var(--text);padding:10px 13px;flex-shrink:0;}
 .mob-list-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold);display:flex;align-items:baseline;justify-content:space-between;}
 .mob-list-badge{background:var(--wine);color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 7px;font-family:'Inter',sans-serif;}
 .mob-list-sub{font-size:9px;color:#5A5248;font-style:italic;margin-top:2px;}
-.mob-list-footer{position:fixed;bottom:52px;left:0;right:0;padding:9px 10px;background:white;border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
+.mob-list-footer{position:fixed;bottom:52px;left:0;right:0;padding:9px 10px;background:var(--white);border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
 .mob-copy-btn{width:100%;background:#1A1714;color:var(--gold);border:none;padding:9px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-send-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .mob-email-btn{background:var(--wine);color:white;border:none;padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-pdf-btn{background:none;color:var(--wine);border:1px solid rgba(123,29,29,.35);padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-sheet-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
-.mob-sheet{background:white;border-radius:14px 14px 0 0;border-top:1px solid var(--border);}
+.mob-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);}
 .mob-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
 .mob-sheet-hdr{padding:10px 14px 9px;border-bottom:1px solid var(--border);}
 .mob-sheet-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
@@ -952,6 +952,31 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .mss-v{font-size:11px;font-weight:500;color:var(--text);}
 .mob-sheet-add{width:100%;background:var(--wine);color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
 .mob-sheet-add.mob-added{background:var(--green);}
+.mob-calc-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
+.mob-calc-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);max-height:85vh;overflow-y:auto;}
+.mob-calc-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
+.mob-calc-hdr{padding:10px 14px 9px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+.mob-calc-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--text);}
+.mob-calc-sub{font-size:9px;color:var(--text-muted);font-style:italic;}
+.mob-calc-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+.mob-calc-card{background:var(--cream);border:1px solid var(--border);border-radius:7px;padding:12px;}
+.mob-calc-card-title{font-size:9px;font-weight:700;color:var(--text);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;}
+.mob-calc-card-sub{font-size:9px;color:var(--text-muted);font-style:italic;margin-bottom:9px;}
+.mob-calc-label{font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.mob-calc-input-wrap{position:relative;margin-bottom:9px;}
+.mob-calc-dollar{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--text-muted);}
+.mob-calc-input{width:100%;height:40px;border:1px solid var(--border);background:var(--white);padding:0 10px 0 26px;font-family:'Inter',sans-serif;font-size:16px;font-weight:500;color:var(--text);border-radius:6px;outline:none;}
+.mob-calc-input:focus{border-color:var(--gold);}
+.mob-calc-pills{display:flex;gap:4px;margin-bottom:8px;}
+.mob-calc-pill{flex:1;background:var(--white);border:1px solid var(--border);border-radius:5px;padding:6px 4px;text-align:center;}
+.mob-calc-pill .mcpl{font-size:7px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;}
+.mob-calc-pill .mcpv{font-size:13px;font-weight:600;color:var(--text-muted);}
+.mob-calc-pill.res .mcpl{color:var(--wine);} .mob-calc-pill.res.on .mcpv{color:var(--wine);}
+.mob-calc-pill.low .mcpl{color:var(--gold);} .mob-calc-pill.low.on .mcpv{color:var(--gold);}
+.mob-calc-pill.hi .mcpl{color:var(--green);} .mob-calc-pill.hi.on .mcpv{color:var(--green);}
+.mob-calc-copy{width:100%;background:none;border:1px solid var(--border);color:var(--text-muted);padding:9px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
+.mob-calc-copy:not(:disabled):hover{border-color:var(--gold);color:var(--gold);}
+.mob-calc-copy:disabled{opacity:.35;}
 `;
 function LoginScreen({ onLogin, darkMode = false }) {
   const [email, setEmail] = useState("");
@@ -1292,8 +1317,11 @@ function App() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [calcOpen, setCalcOpen]               = useState(false);
   const [histOpen, setHistOpen]               = useState(false);
-  const [mobSheet, setMobSheet]               = useState(null);   // wine obj for bottom sheet
-  const [mobNav, setMobNav]                   = useState('search'); // search | list | calc
+  const [mobSheet, setMobSheet]               = useState(null);
+  const [mobNav, setMobNav]                   = useState('search');
+  const [mobCalcOpen, setMobCalcOpen]         = useState(false);
+  const [mobRetailPrice, setMobRetailPrice]   = useState('');
+  const [mobAuctionPrice, setMobAuctionPrice] = useState('');
   const [valuationHistory, setValuationHistory] = useState([]);
   const [histSearch, setHistSearch]           = useState('');
   const [expandedHist, setExpandedHist]       = useState(null);
@@ -2108,7 +2136,7 @@ function App() {
             <div className="mob-nav-icon-wrap">📋</div>
             <div className="mob-nav-lbl">My List{listItems.length > 0 && <span className="mob-pip">{listItems.length}</span>}</div>
           </button>
-          <button className={`mob-nav-btn${mobNav==='calc'?' mob-active':''}`} onClick={() => { setMobNav('calc'); setCalcOpen(true); }}>
+          <button className={`mob-nav-btn${mobNav==='calc'?' mob-active':''}`} onClick={() => setMobCalcOpen(o => !o)}>
             <div className="mob-nav-icon-wrap">⊞</div>
             <div className="mob-nav-lbl">Calc</div>
           </button>
@@ -2185,6 +2213,82 @@ function App() {
                 onClick={() => { isInList(mobSheet) ? removeFromList(mobSheet) : addToList(mobSheet); setMobSheet(null); }}>
                 {isInList(mobSheet) ? "✓ Added to My List" : "+ Add to My List"}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Mobile Calculator Sheet ── */}
+      {mobCalcOpen && (
+        <div className="mob-calc-overlay" onClick={() => setMobCalcOpen(false)}>
+          <div className="mob-calc-sheet" onClick={e => e.stopPropagation()}>
+            <div className="mob-calc-handle"></div>
+            <div className="mob-calc-hdr">
+              <div className="mob-calc-title">Pricing Calculator</div>
+              <div className="mob-calc-sub">Wickman's bottle pricing formula</div>
+            </div>
+            <div className="mob-calc-body">
+              {/* Retail */}
+              <div className="mob-calc-card">
+                <div className="mob-calc-card-title">From Retail Price</div>
+                <div className="mob-calc-card-sub">Base = Retail × 75% · R −15%, L −5%, H +20%</div>
+                <div className="mob-calc-label">Retail price</div>
+                <div className="mob-calc-input-wrap">
+                  <span className="mob-calc-dollar">$</span>
+                  <input className="mob-calc-input" type="number" inputMode="numeric" placeholder="0"
+                    value={mobRetailPrice} onChange={e => setMobRetailPrice(e.target.value)} />
+                </div>
+                {(() => {
+                  const v = parseFloat(mobRetailPrice);
+                  const base = v > 0 ? v * 0.75 : null;
+                  const res = base ? Math.round(base * 0.85) : null;
+                  const low = base ? Math.round(base * 0.95) : null;
+                  const hi  = base ? Math.round(base * 1.20) : null;
+                  return (
+                    <>
+                      <div className="mob-calc-pills">
+                        <div className={`mob-calc-pill res${res?' on':''}`}><div className="mcpl">Reserve</div><div className="mcpv">{res ? `$${res}` : '—'}</div></div>
+                        <div className={`mob-calc-pill low${low?' on':''}`}><div className="mcpl">Low</div><div className="mcpv">{low ? `$${low}` : '—'}</div></div>
+                        <div className={`mob-calc-pill hi${hi?' on':''}`}><div className="mcpl">High</div><div className="mcpv">{hi ? `$${hi}` : '—'}</div></div>
+                      </div>
+                      <button className="mob-calc-copy" disabled={!res}
+                        onClick={() => { navigator.clipboard?.writeText(`${res}	${low}	${hi}`); }}>
+                        ⎘ Copy R · L · H
+                      </button>
+                    </>
+                  );
+                })()}
+              </div>
+              {/* Auction */}
+              <div className="mob-calc-card">
+                <div className="mob-calc-card-title">From Auction Average</div>
+                <div className="mob-calc-card-sub">R −15%, L −5%, H +20% of average</div>
+                <div className="mob-calc-label">Average auction price</div>
+                <div className="mob-calc-input-wrap">
+                  <span className="mob-calc-dollar">$</span>
+                  <input className="mob-calc-input" type="number" inputMode="numeric" placeholder="0"
+                    value={mobAuctionPrice} onChange={e => setMobAuctionPrice(e.target.value)} />
+                </div>
+                {(() => {
+                  const v = parseFloat(mobAuctionPrice);
+                  const res = v > 0 ? Math.round(v * 0.85) : null;
+                  const low = v > 0 ? Math.round(v * 0.95) : null;
+                  const hi  = v > 0 ? Math.round(v * 1.20) : null;
+                  return (
+                    <>
+                      <div className="mob-calc-pills">
+                        <div className={`mob-calc-pill res${res?' on':''}`}><div className="mcpl">Reserve</div><div className="mcpv">{res ? `$${res}` : '—'}</div></div>
+                        <div className={`mob-calc-pill low${low?' on':''}`}><div className="mcpl">Low</div><div className="mcpv">{low ? `$${low}` : '—'}</div></div>
+                        <div className={`mob-calc-pill hi${hi?' on':''}`}><div className="mcpl">High</div><div className="mcpv">{hi ? `$${hi}` : '—'}</div></div>
+                      </div>
+                      <button className="mob-calc-copy" disabled={!res}
+                        onClick={() => { navigator.clipboard?.writeText(`${res}	${low}	${hi}`); }}>
+                        ⎘ Copy R · L · H
+                      </button>
+                    </>
+                  );
+                })()}
+              </div>
             </div>
           </div>
         </div>
