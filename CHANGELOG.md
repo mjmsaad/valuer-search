@@ -4,6 +4,38 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.3.0] — 30 March 2026 · Mobile Layout
+
+### New
+- **Mobile layout at 768px breakpoint** — at screen widths of 768px and below the desktop table is replaced with a card-based layout. All features remain accessible on mobile
+- **Variant D result cards** — each search result is displayed as a compact card with the wine name, vintage badge, and three horizontal price pills (Reserve, Low, High) with colour coding matching the desktop. All three values are always visible without tapping
+- **+ List and ⓘ buttons per card** — both actions sit side by side on the top row of every card. + List toggles the wine in/out of My List; ⓘ opens the detail bottom sheet
+- **Bottom sheet detail** — tapping ⓘ slides up a sheet from the bottom of the screen over the dimmed search results. Shows all three prices plus Last sale, Average, Total sales and Source. Tap outside or swipe down to dismiss
+- **My List mobile screen** — tapping My List in the bottom nav opens a full-screen overlay showing all added wines in the same card format as search results. Each card shows R/L/H prices. × removes a wine
+- **Copy, Email and PDF on mobile** — Copy rows, ✉ Email and ⬇ PDF buttons are pinned just above the bottom nav bar on the My List screen
+- **Bottom navigation bar** — fixed to the bottom of the screen with four tabs: Search, My List (with red count badge), Calc and Tools (opens Sami-Odi Identification Tool in a new tab)
+- **Header simplified on mobile** — History, Sami-Odi, Calculator and other header controls are hidden on mobile since they are replaced by the bottom nav
+
+---
+
+## [2.2.3] — 30 March 2026 · Valuation History
+
+### New
+- **Valuation History panel** — ⏱ History button in the header slides in a panel from the left edge of the screen. Shows all email and PDF exports made by any team member, newest first
+- **Auto-saves on every export** — every time an email is copied or a PDF is generated, a record is saved automatically to Supabase (`valuation_history` table). No extra steps required
+- **Searchable by recipient** — filter the history list by typing a recipient name into the search box at the top of the panel
+- **Expandable entries** — click any history entry to expand it and see the full item list with vintage badges and High prices for each wine
+- **Re-generate** — clicking Re-generate loads the saved items back into My List and pre-fills the recipient name, then opens the export modal ready to send again
+- **Load to My List** — loads all wines from a past export into My List in one click, without opening the export modal
+- **Export type badges** — each entry is labelled Email or PDF so you can see at a glance what was sent
+- **Smart date labels** — entries from today show time (e.g. "Today 2:14pm"), yesterday shows "Yesterday", older entries show the date
+- **Left-side panel** — slides in from the left to avoid any overlap with the My List panel which lives on the right
+
+### Requires
+- Supabase table: `valuation_history` (id, user_id, recipient_name, export_type, items JSONB, created_at) with RLS and grants applied
+
+---
+
 ## [2.2.2] — 28 March 2026 · Sami-Odi Identification Tool Link
 
 ### New
@@ -297,6 +329,8 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.3.0 | 30 Mar 2026 | Mobile layout — Variant D cards, bottom sheet, bottom nav, 768px breakpoint |
+| 2.2.3 | 30 Mar 2026 | Valuation History — auto-save, left-side panel, re-generate |
 | 2.2.2 | 28 Mar 2026 | Add Sami-Odi Identification Tool link to header |
 | 2.2.1 | 27 Mar 2026 | Valuation table — column rules, colour coding, Outlook reflow fix |
 | 2.2.0 | 27 Mar 2026 | Pricing calculator — header drawer, per-row calc, shared history |

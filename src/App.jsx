@@ -884,6 +884,74 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .btn-window-close{background:none;color:var(--text-muted);border:1px solid var(--border);padding:7px 18px;font-size:11px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
 .btn-window-close:hover{border-color:var(--wine);color:var(--wine);}
 @media(max-width:640px){.header{padding:0 16px;}.main{padding:16px;}.header-sub,.header-sep,.header-user{display:none;}}
+@media(max-width:768px){
+  .header{padding:0 12px;height:46px;}
+  .header-sub,.header-sep,.header-user,.btn-hist-header,.btn-ident-tool,.btn-calc-header,.calc-drawer{display:none!important;}
+  .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
+  .search-section{padding:8px 10px;gap:6px;}
+  .trend-toggle-bar,.trend-strip{display:none;}
+  .table-wrap,.slide-panel,.panel-tab,.hist-panel{display:none!important;}
+  .mob-view{display:flex;}
+  .mob-nav-bar{display:flex;}
+  .search-wrap input{font-size:14px;padding:0 12px 0 34px;}
+  .err-banner{margin:0;}
+}
+@media(min-width:769px){.mob-view{display:none!important;}.mob-nav-bar{display:none!important;}.mob-sheet-overlay{display:none!important;}}
+.mob-view{flex:1;overflow-y:auto;padding:5px 8px 8px;flex-direction:column;gap:4px;background:#ECEAE6;}
+.mob-view::-webkit-scrollbar{width:3px;}
+.mob-view::-webkit-scrollbar-thumb{background:#D8D0C8;border-radius:3px;}
+.mob-nav-bar{position:fixed;bottom:0;left:0;right:0;background:#1A1714;border-top:1px solid #2A2724;z-index:200;}
+.mob-nav-bar-inner{display:flex;}
+.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px 10px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
+.mob-nav-icon-wrap{font-size:18px;line-height:1;}
+.mob-nav-lbl{font-size:7px;font-weight:600;color:#5A5248;letter-spacing:.04em;text-transform:uppercase;}
+.mob-nav-btn.mob-active .mob-nav-lbl{color:var(--gold);}
+.mob-pip{background:var(--wine);border-radius:20px;font-size:7px;font-weight:700;color:white;padding:1px 4px;display:inline-block;margin-left:2px;}
+.mob-card{background:white;border:1px solid #E2DDD6;border-radius:7px;overflow:hidden;padding:7px 9px;flex-shrink:0;}
+.mob-card-r1{display:flex;align-items:center;gap:5px;margin-bottom:5px;}
+.mob-card-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:5px;overflow:hidden;}
+.mob-card-name{font-size:10px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mob-vbadge{font-size:8px;font-weight:700;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;}
+.mob-card-btns{display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.mob-add-btn{border:none;color:white;font-size:8px;font-weight:700;padding:3px 7px;border-radius:3px;cursor:pointer;font-family:'Inter',sans-serif;background:var(--wine);}
+.mob-add-btn.mob-added{background:var(--green);}
+.mob-info-btn{width:22px;height:22px;background:var(--cream);border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;color:var(--text-muted);}
+.mob-card-r2{display:flex;gap:3px;}
+.mob-pill{display:flex;align-items:center;gap:3px;background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:3px 6px;flex:1;}
+.mob-pill-lbl{font-size:6.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
+.mob-pill-val{font-size:11px;font-weight:600;margin-left:auto;}
+.mob-pill.res .mob-pill-lbl{color:var(--wine);} .mob-pill.res .mob-pill-val{color:var(--wine);}
+.mob-pill.low .mob-pill-lbl{color:var(--gold);} .mob-pill.low .mob-pill-val{color:var(--gold);}
+.mob-pill.hi .mob-pill-lbl{color:var(--green);} .mob-pill.hi .mob-pill-val{color:var(--green);}
+.mob-list-hdr{background:#1A1714;padding:10px 13px;flex-shrink:0;}
+.mob-list-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold);display:flex;align-items:baseline;justify-content:space-between;}
+.mob-list-badge{background:var(--wine);color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 7px;font-family:'Inter',sans-serif;}
+.mob-list-sub{font-size:9px;color:#5A5248;font-style:italic;margin-top:2px;}
+.mob-list-footer{position:fixed;bottom:52px;left:0;right:0;padding:9px 10px;background:white;border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
+.mob-copy-btn{width:100%;background:#1A1714;color:var(--gold);border:none;padding:9px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
+.mob-send-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.mob-email-btn{background:var(--wine);color:white;border:none;padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
+.mob-pdf-btn{background:none;color:var(--wine);border:1px solid rgba(123,29,29,.35);padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
+.mob-sheet-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
+.mob-sheet{background:white;border-radius:14px 14px 0 0;border-top:1px solid var(--border);}
+.mob-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
+.mob-sheet-hdr{padding:10px 14px 9px;border-bottom:1px solid var(--border);}
+.mob-sheet-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.mob-sheet-sub{font-size:9px;color:var(--text-muted);}
+.mob-sheet-body{padding:12px 14px;}
+.mob-sheet-prices{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:11px;}
+.msp{background:var(--cream);border:1px solid var(--border);border-radius:5px;padding:8px 5px;text-align:center;}
+.msp .mspl{font-size:7px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;}
+.msp .mspv{font-size:15px;font-weight:600;}
+.msp.res .mspl{color:var(--wine);} .msp.res .mspv{color:var(--wine);}
+.msp.low .mspl{color:var(--gold);} .msp.low .mspv{color:var(--gold);}
+.msp.hi .mspl{color:var(--green);} .msp.hi .mspv{color:var(--green);}
+.mob-sheet-stats{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:11px;}
+.mss{background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:7px 9px;}
+.mss-l{font-size:8px;color:var(--text-muted);margin-bottom:1px;}
+.mss-v{font-size:11px;font-weight:500;color:var(--text);}
+.mob-sheet-add{width:100%;background:var(--wine);color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
+.mob-sheet-add.mob-added{background:var(--green);}
 `;
 function LoginScreen({ onLogin, darkMode = false }) {
   const [email, setEmail] = useState("");
@@ -1224,6 +1292,8 @@ function App() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [calcOpen, setCalcOpen]               = useState(false);
   const [histOpen, setHistOpen]               = useState(false);
+  const [mobSheet, setMobSheet]               = useState(null);   // wine obj for bottom sheet
+  const [mobNav, setMobNav]                   = useState('search'); // search | list | calc
   const [valuationHistory, setValuationHistory] = useState([]);
   const [histSearch, setHistSearch]           = useState('');
   const [expandedHist, setExpandedHist]       = useState(null);
@@ -1899,6 +1969,40 @@ function App() {
                 </table>
               </div>
             )}
+
+            {/* ── Mobile card view (≤768px) ── */}
+            <div className="mob-view">
+              {!dq ? (
+                <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
+                  Search the database<br/>Type a keyword above to begin
+                </div>
+              ) : rows.length === 0 ? (
+                <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
+                  No results found for "{dq}"
+                </div>
+              ) : rows.map((r, i) => (
+                <div className="mob-card" key={i}>
+                  <div className="mob-card-r1">
+                    <div className="mob-card-info">
+                      <span className="mob-vbadge">{r.vintage||"NV"}</span>
+                      <span className="mob-card-name">{r.name}</span>
+                    </div>
+                    <div className="mob-card-btns">
+                      <button className={`mob-add-btn${isInList(r)?" mob-added":""}`}
+                        onClick={() => toggleListItem(r)}>
+                        {isInList(r) ? "✓" : "+ List"}
+                      </button>
+                      <button className="mob-info-btn" onClick={() => setMobSheet(r)}>ⓘ</button>
+                    </div>
+                  </div>
+                  <div className="mob-card-r2">
+                    <div className="mob-pill res"><span className="mob-pill-lbl">Reserve</span><span className="mob-pill-val">{r.reserve ? `$${Math.round(cleanPrice(r.reserve))}` : "—"}</span></div>
+                    <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
+                    <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </main>
       </div>
@@ -1992,6 +2096,99 @@ function App() {
         {listItems.length > 0 && <span className="panel-tab-badge">{listItems.length}</span>}
       </div>
 
+
+      {/* ── Mobile bottom nav ── */}
+      <div className="mob-nav-bar">
+        <div className="mob-nav-bar-inner">
+          <button className={`mob-nav-btn${mobNav==='search'?' mob-active':''}`} onClick={() => setMobNav('search')}>
+            <div className="mob-nav-icon-wrap">🔍</div>
+            <div className="mob-nav-lbl">Search</div>
+          </button>
+          <button className={`mob-nav-btn${mobNav==='list'?' mob-active':''}`} onClick={() => setMobNav('list')}>
+            <div className="mob-nav-icon-wrap">📋</div>
+            <div className="mob-nav-lbl">My List{listItems.length > 0 && <span className="mob-pip">{listItems.length}</span>}</div>
+          </button>
+          <button className={`mob-nav-btn${mobNav==='calc'?' mob-active':''}`} onClick={() => { setMobNav('calc'); setCalcOpen(true); }}>
+            <div className="mob-nav-icon-wrap">⊞</div>
+            <div className="mob-nav-lbl">Calc</div>
+          </button>
+          <button className="mob-nav-btn" onClick={() => window.open('https://mjmsaad.github.io/Sami-Odi-Identification-Tool/','_blank')}>
+            <div className="mob-nav-icon-wrap">↗</div>
+            <div className="mob-nav-lbl">Tools</div>
+          </button>
+        </div>
+      </div>
+
+      {/* ── Mobile My List view ── */}
+      {mobNav === 'list' && (
+        <div style={{position:'fixed',inset:0,top:46,bottom:52,background:'#ECEAE6',zIndex:190,display:'flex',flexDirection:'column',overflowY:'auto'}}>
+          <div className="mob-list-hdr">
+            <div className="mob-list-title">My List <span className="mob-list-badge">{listItems.length}</span></div>
+            <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottles`}</div>
+          </div>
+          <div style={{flex:1,overflowY:'auto',padding:'5px 8px 130px',display:'flex',flexDirection:'column',gap:4}}>
+            {listItems.length === 0 ? (
+              <div className="mob-list-empty">No wines added yet.<br/>Search and tap + List to add wines here.</div>
+            ) : listItems.map((r, i) => (
+              <div className="mob-card" key={r._key||i}>
+                <div className="mob-card-r1">
+                  <div className="mob-card-info">
+                    <span className="mob-vbadge">{r.vintage||"NV"}</span>
+                    <span className="mob-card-name">{r.name}</span>
+                  </div>
+                  <div className="mob-card-btns">
+                    <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(items => items.filter((_,j)=>j!==i))}>×</button>
+                  </div>
+                </div>
+                <div className="mob-card-r2">
+                  <div className="mob-pill res"><span className="mob-pill-lbl">Reserve</span><span className="mob-pill-val">{r.reserve ? `$${Math.round(cleanPrice(r.reserve))}` : "—"}</span></div>
+                  <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
+                  <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {listItems.length > 0 && (
+            <div className="mob-list-footer">
+              <button className="mob-copy-btn" onClick={() => { window._listItemsForExport = listItems; handleEmail(); }}>Copy rows to clipboard</button>
+              <div className="mob-send-row">
+                <button className="mob-email-btn" onClick={() => { window._listItemsForExport = listItems; setShowExportModal(true); }}>✉ Email</button>
+                <button className="mob-pdf-btn" onClick={() => { window._listItemsForExport = listItems; handlePDF(window.open('','_blank')); }}>⬇ PDF</button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Mobile bottom sheet detail ── */}
+      {mobSheet && (
+        <div className="mob-sheet-overlay" onClick={() => setMobSheet(null)}>
+          <div className="mob-sheet" onClick={e => e.stopPropagation()}>
+            <div className="mob-sheet-handle"></div>
+            <div className="mob-sheet-hdr">
+              <div className="mob-sheet-name">{mobSheet.name}</div>
+              <div className="mob-sheet-sub">{mobSheet.vintage||"NV"} · {mobSheet.auction_house} · {mobSheet.size||"750ml"}</div>
+            </div>
+            <div className="mob-sheet-body">
+              <div className="mob-sheet-prices">
+                <div className="msp res"><div className="mspl">Reserve</div><div className="mspv">{mobSheet.reserve ? `$${Math.round(cleanPrice(mobSheet.reserve))}` : "—"}</div></div>
+                <div className="msp low"><div className="mspl">Low</div><div className="mspv">{mobSheet.low ? `$${Math.round(cleanPrice(mobSheet.low))}` : "—"}</div></div>
+                <div className="msp hi"><div className="mspl">High</div><div className="mspv">{mobSheet.high ? `$${Math.round(cleanPrice(mobSheet.high))}` : "—"}</div></div>
+              </div>
+              <div className="mob-sheet-stats">
+                <div className="mss"><div className="mss-l">Last sale</div><div className="mss-v">{mobSheet.last_sale ? `$${Math.round(cleanPrice(mobSheet.last_sale))}` : "—"}</div></div>
+                <div className="mss"><div className="mss-l">Average</div><div className="mss-v">{mobSheet.ave ? `$${Math.round(cleanPrice(mobSheet.ave))}` : "—"}</div></div>
+                <div className="mss"><div className="mss-l">Total sales</div><div className="mss-v">{mobSheet.qty||"—"}</div></div>
+                <div className="mss"><div className="mss-l">Source</div><div className="mss-v">{mobSheet.auction_house||"—"}</div></div>
+              </div>
+              <button className={`mob-sheet-add${isInList(mobSheet)?" mob-added":""}`}
+                onClick={() => { isInList(mobSheet) ? removeFromList(mobSheet) : addToList(mobSheet); setMobSheet(null); }}>
+                {isInList(mobSheet) ? "✓ Added to My List" : "+ Add to My List"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* My List panel */}
       <div className={`slide-panel${panelOpen?" open":""}`}>
