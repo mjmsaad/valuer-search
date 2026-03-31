@@ -896,18 +896,18 @@ html.is-mobile .mob-search-header{display:flex;}
 html.is-mobile .err-banner{margin:0;}
 html:not(.is-mobile) .mob-search-header{display:none!important;}
 html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob-nav-bar{display:none!important;}html:not(.is-mobile) .mob-sheet-overlay{display:none!important;}html:not(.is-mobile) .mob-calc-overlay{display:none!important;}
-.mob-search-header{flex-direction:column;background:var(--text);padding:10px 14px 0;flex-shrink:0;}
+.mob-search-header{flex-direction:column;background:var(--cream);padding:9px 12px 0;flex-shrink:0;border-bottom:1px solid var(--border);}
 .mob-search-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.mob-search-pill-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:7px 14px;margin-bottom:9px;}
-.mob-search-pill-icon{font-size:15px;color:#5A5248;flex-shrink:0;}
-.mob-search-pill-input{flex:1;background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:16px;color:white;caret-color:var(--gold);}
-.mob-search-pill-input::placeholder{color:#5A5248;}
-.mob-search-pill-clear{width:22px;height:22px;background:rgba(255,255,255,.12);border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8A8278;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+.mob-search-pill-wrap{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:100px;padding:7px 14px;margin-bottom:8px;}
+.mob-search-pill-icon{font-size:15px;color:var(--text-muted);flex-shrink:0;}
+.mob-search-pill-input{flex:1;background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:16px;color:var(--text);caret-color:var(--gold);}
+.mob-search-pill-input::placeholder{color:var(--text-muted);}
+.mob-search-pill-clear{width:22px;height:22px;background:var(--border);border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
 .mob-chips-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none;}
 .mob-chips-row::-webkit-scrollbar{display:none;}
-.mob-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:4px 12px;font-size:9px;font-weight:700;color:#8A8278;white-space:nowrap;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.03em;}
-.mob-chip.active{background:var(--gold-pale);border-color:rgba(184,146,42,.4);color:var(--gold);}
-.mob-count-bar{padding:4px 9px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;}
+.mob-chip{background:var(--white);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:9px;font-weight:700;color:var(--text-muted);white-space:nowrap;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.03em;}
+.mob-chip.active{background:var(--wine);border-color:var(--wine);color:white;}
+.mob-count-bar{padding:4px 12px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;}
 .mob-count-bar span{font-size:9px;color:var(--text-muted,#8A8278);}
 .mob-view{flex:1;overflow-y:auto;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
 .mob-view::-webkit-scrollbar{width:3px;}
@@ -1848,7 +1848,7 @@ function App() {
         {/* ── Mobile Option C search header ── */}
         {isMobile && <div className="mob-search-header">
           <div className="mob-search-header-top">
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:500,color:"#E8C97A"}}>wickman's</div>
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:500,color:darkMode?"#E8C97A":"#7B1D1D"}}>wickman's</div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
               <div style={{display:"flex",alignItems:"center",gap:4}}>
                 <div style={{width:7,height:7,background:"#4CAF50",borderRadius:"50%"}}></div>
