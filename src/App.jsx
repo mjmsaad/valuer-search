@@ -884,22 +884,18 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .btn-window-close{background:none;color:var(--text-muted);border:1px solid var(--border);padding:7px 18px;font-size:11px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;}
 .btn-window-close:hover{border-color:var(--wine);color:var(--wine);}
 @media(max-width:640px){.header{padding:0 16px;}.main{padding:16px;}.header-sub,.header-sep,.header-user{display:none;}}
-@media(max-width:768px){
-  .header{padding:0 12px;height:46px;}
-  .header-sub,.header-sep,.header-user,.btn-hist-header,.btn-ident-tool,.btn-calc-header,.calc-drawer{display:none!important;}
-  .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
-  .search-section{display:none!important;}
-  .trend-toggle-bar,.trend-strip{display:none;}
-  .table-wrap,.slide-panel,.panel-tab,.hist-panel{display:none!important;}
-  .mob-view{display:flex;}
-  .mob-nav-bar{display:flex;}
-  .mob-search-header{display:flex;}
-  .err-banner{margin:0;}
-}
-@media(min-width:769px){
-  .mob-search-header{display:none!important;}
-}
-@media(min-width:769px){.mob-view{display:none!important;}.mob-nav-bar{display:none!important;}.mob-sheet-overlay{display:none!important;}}
+html.is-mobile .header{padding:0 12px;height:46px;}
+html.is-mobile .header-sub,html.is-mobile .header-sep,html.is-mobile .header-user,html.is-mobile .btn-hist-header,html.is-mobile .btn-ident-tool,html.is-mobile .btn-calc-header,html.is-mobile .calc-drawer{display:none!important;}
+html.is-mobile .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
+html.is-mobile .search-section{display:none!important;}
+html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
+html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel{display:none!important;}
+html.is-mobile .mob-view{display:flex;}
+html.is-mobile .mob-nav-bar{display:flex;}
+html.is-mobile .mob-search-header{display:flex;}
+html.is-mobile .err-banner{margin:0;}
+html:not(.is-mobile) .mob-search-header{display:none!important;}
+html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob-nav-bar{display:none!important;}html:not(.is-mobile) .mob-sheet-overlay{display:none!important;}html:not(.is-mobile) .mob-calc-overlay{display:none!important;}
 .mob-search-header{flex-direction:column;background:var(--text);padding:10px 14px 0;flex-shrink:0;}
 .mob-search-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .mob-search-pill-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:7px 14px;margin-bottom:9px;}
@@ -1339,17 +1335,28 @@ function App() {
   const [mobSheet, setMobSheet]               = useState(null);
   const [mobNav, setMobNav]                   = useState('search');
   const [mobCalcOpen, setMobCalcOpen]         = useState(false);
+  const [isMobile, setIsMobile]               = useState(false);
 
-  // Prevent iOS zoom on input focus
+  // Detect mobile device and set viewport
   useEffect(() => {
-    const meta = document.querySelector('meta[name="viewport"]');
-    if (meta) {
-      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-    } else {
-      const m = document.createElement('meta');
-      m.name = 'viewport';
-      m.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-      document.head.appendChild(m);
+    const ua = navigator.userAgent || '';
+    const mobile = /iPhone|iPad|iPod|Android|Mobile|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    // Also catch small touchscreen devices that don't match UA but have touch + narrow screen
+    const smallTouch = ('ontouchstart' in window) && window.innerWidth <= 768;
+    const detected = mobile || smallTouch;
+    setIsMobile(detected);
+    if (detected) {
+      document.documentElement.classList.add('is-mobile');
+      // Prevent iOS zoom on input focus
+      const meta = document.querySelector('meta[name="viewport"]');
+      if (meta) {
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+      } else {
+        const m = document.createElement('meta');
+        m.name = 'viewport';
+        m.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.head.appendChild(m);
+      }
     }
   }, []);
   const [mobRetailPrice, setMobRetailPrice]   = useState('');
@@ -1841,7 +1848,7 @@ function App() {
         </div>
 
         {/* ── Mobile Option C search header ── */}
-        <div className="mob-search-header">
+        {isMobile && <div className="mob-search-header">
           <div className="mob-search-header-top">
             <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:500,color:"#E8C97A"}}>wickman's</div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -1865,7 +1872,8 @@ function App() {
             ))}
           </div>
         </div>
-        {dq && <div className="mob-count-bar"><span>{totalCount.toLocaleString()} wine{totalCount!==1?"s":""} · page {page} of {totalPages}</span></div>}
+        }
+        {isMobile && dq && <div className="mob-count-bar"><span>{totalCount.toLocaleString()} wine{totalCount!==1?"s":""} · page {page} of {totalPages}</span></div>}
 
         <main className="main" style={{paddingRight:panelOpen?"360px":undefined}}>
           {error && <div className="err-banner"><span>⚠</span><span>{error}</span></div>}
