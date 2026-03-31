@@ -888,17 +888,31 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
   .header{padding:0 12px;height:46px;}
   .header-sub,.header-sep,.header-user,.btn-hist-header,.btn-ident-tool,.btn-calc-header,.calc-drawer{display:none!important;}
   .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
-  .search-section{padding:8px 10px;gap:6px;}
+  .search-section{display:none!important;}
   .trend-toggle-bar,.trend-strip{display:none;}
   .table-wrap,.slide-panel,.panel-tab,.hist-panel{display:none!important;}
   .mob-view{display:flex;}
   .mob-nav-bar{display:flex;}
-  .search-wrap input{font-size:16px;padding:0 12px 0 34px;}
-  .search-section select{font-size:16px;}
-  .mob-calc-input{font-size:16px;}
+  .mob-search-header{display:flex;}
   .err-banner{margin:0;}
 }
+@media(min-width:769px){
+  .mob-search-header{display:none!important;}
+}
 @media(min-width:769px){.mob-view{display:none!important;}.mob-nav-bar{display:none!important;}.mob-sheet-overlay{display:none!important;}}
+.mob-search-header{flex-direction:column;background:var(--text);padding:10px 14px 0;flex-shrink:0;}
+.mob-search-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mob-search-pill-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:7px 14px;margin-bottom:9px;}
+.mob-search-pill-icon{font-size:15px;color:#5A5248;flex-shrink:0;}
+.mob-search-pill-input{flex:1;background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:16px;color:white;caret-color:var(--gold);}
+.mob-search-pill-input::placeholder{color:#5A5248;}
+.mob-search-pill-clear{width:22px;height:22px;background:rgba(255,255,255,.12);border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8A8278;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+.mob-chips-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none;}
+.mob-chips-row::-webkit-scrollbar{display:none;}
+.mob-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:4px 12px;font-size:9px;font-weight:700;color:#8A8278;white-space:nowrap;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.03em;}
+.mob-chip.active{background:var(--gold-pale);border-color:rgba(184,146,42,.4);color:var(--gold);}
+.mob-count-bar{padding:4px 9px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;}
+.mob-count-bar span{font-size:9px;color:var(--text-muted,#8A8278);}
 .mob-view{flex:1;overflow-y:auto;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
 .mob-view::-webkit-scrollbar{width:3px;}
 .mob-view::-webkit-scrollbar-thumb{background:#D8D0C8;border-radius:3px;}
@@ -938,7 +952,7 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .mob-email-btn{background:var(--wine);color:white;border:none;padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-pdf-btn{background:none;color:var(--wine);border:1px solid rgba(123,29,29,.35);padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-sheet-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
-.mob-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);}
+.mob-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);overscroll-behavior:contain;}
 .mob-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
 .mob-sheet-hdr{padding:10px 14px 9px;border-bottom:1px solid var(--border);}
 .mob-sheet-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
@@ -958,7 +972,7 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .mob-sheet-add{width:100%;background:var(--wine);color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
 .mob-sheet-add.mob-added{background:var(--green);}
 .mob-calc-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
-.mob-calc-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);max-height:85vh;overflow-y:auto;}
+.mob-calc-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);max-height:80vh;overflow-y:auto;overscroll-behavior:contain;}
 .mob-calc-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
 .mob-calc-hdr{padding:10px 14px 9px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
 .mob-calc-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--text);}
@@ -1330,11 +1344,11 @@ function App() {
   useEffect(() => {
     const meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
-      meta.content = 'width=device-width, initial-scale=1, maximum-scale=1';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
     } else {
       const m = document.createElement('meta');
       m.name = 'viewport';
-      m.content = 'width=device-width, initial-scale=1, maximum-scale=1';
+      m.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
       document.head.appendChild(m);
     }
   }, []);
@@ -1826,6 +1840,33 @@ function App() {
           />
         </div>
 
+        {/* ── Mobile Option C search header ── */}
+        <div className="mob-search-header">
+          <div className="mob-search-header-top">
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:500,color:"#E8C97A"}}>wickman's</div>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <div style={{display:"flex",alignItems:"center",gap:4}}>
+                <div style={{width:7,height:7,background:"#4CAF50",borderRadius:"50%"}}></div>
+                <span style={{fontSize:9,color:"#5A5248"}}>{onlineCount} online</span>
+              </div>
+              <button onClick={() => setDarkMode(d=>!d)} style={{width:28,height:28,background:"rgba(255,255,255,.07)",border:"1px solid #3A3630",borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:"#5A5248",cursor:"pointer",fontFamily:"inherit"}}>{darkMode?"☀":"☾"}</button>
+            </div>
+          </div>
+          <div className="mob-search-pill-wrap">
+            <span className="mob-search-pill-icon">⌕</span>
+            <input className="mob-search-pill-input" placeholder="Search wines…"
+              value={q} onChange={e => handleQ(e.target.value)} />
+            {q && <button className="mob-search-pill-clear" onClick={() => { setQ(""); setDq(""); setPage(1); }}>×</button>}
+          </div>
+          <div className="mob-chips-row">
+            <button className={`mob-chip${house==="__all__"?" active":""}`} onClick={() => { setHouse("__all__"); setPage(1); }}>All sources</button>
+            {houses.map(h => (
+              <button key={h} className={`mob-chip${house===h?" active":""}`} onClick={() => { setHouse(h); setPage(1); }}>{h}</button>
+            ))}
+          </div>
+        </div>
+        {dq && <div className="mob-count-bar"><span>{totalCount.toLocaleString()} wine{totalCount!==1?"s":""} · page {page} of {totalPages}</span></div>}
+
         <main className="main" style={{paddingRight:panelOpen?"360px":undefined}}>
           {error && <div className="err-banner"><span>⚠</span><span>{error}</span></div>}
 
@@ -2241,9 +2282,12 @@ function App() {
         <div className="mob-calc-overlay" onClick={() => setMobCalcOpen(false)}>
           <div className="mob-calc-sheet" onClick={e => e.stopPropagation()}>
             <div className="mob-calc-handle"></div>
-            <div className="mob-calc-hdr">
-              <div className="mob-calc-title">Pricing Calculator</div>
-              <div className="mob-calc-sub">Wickman's bottle pricing formula</div>
+            <div className="mob-calc-hdr" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+              <div>
+                <div className="mob-calc-title">Pricing Calculator</div>
+                <div className="mob-calc-sub">Wickman's bottle pricing formula</div>
+              </div>
+              <button onClick={() => setMobCalcOpen(false)} style={{background:"none",border:"none",fontSize:22,color:"var(--text-muted)",cursor:"pointer",padding:"0 0 0 12px",lineHeight:1}}>×</button>
             </div>
             <div className="mob-calc-body">
               {/* Retail */}
