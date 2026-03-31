@@ -1340,10 +1340,8 @@ function App() {
   // Detect mobile device and set viewport
   useEffect(() => {
     const ua = navigator.userAgent || '';
-    const mobile = /iPhone|iPad|iPod|Android|Mobile|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-    // Also catch small touchscreen devices that don't match UA but have touch + narrow screen
-    const smallTouch = ('ontouchstart' in window) && window.innerWidth <= 768;
-    const detected = mobile || smallTouch;
+    // UA detection only — no screen width fallback to avoid false positives on desktop browsers
+    const detected = /iPhone|iPad|iPod|Android|Mobile|BlackBerry|IEMobile|Opera Mini/i.test(ua);
     setIsMobile(detected);
     if (detected) {
       document.documentElement.classList.add('is-mobile');
