@@ -4,6 +4,22 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.3.1] — 1 April 2026 · Mobile Polish
+
+### Improved
+- **Option C pill search header** — the mobile search bar is now a full rounded pill with horizontal source filter chips (All sources, Wickmans, AWA etc.) populated from the database. Replaces the previous square search bar. Tapping a chip filters results instantly without a dropdown
+- **Fully unified colour flow** — the search header now uses the same background as the card area (`var(--cream)`) in both light and dark mode. Previously the header used `var(--text)` which inverted the colour scheme. Logo adapts — burgundy in light mode, gold in dark mode
+- **Device-only mobile detection** — mobile layout now triggers via user agent string detection only (iPhone, iPad, Android, etc.), not screen width. Desktop browsers at any window size always get the full table view
+
+### Fixed
+- **iOS zoom on input tap** — all mobile inputs are now `font-size:16px` and the viewport has `maximum-scale=1, user-scalable=no`, preventing iOS Safari from auto-zooming when tapping the search bar
+- **Bottom nav cutoff** — card scroll area now has `padding-bottom:60px` so results are never hidden behind the fixed bottom nav
+- **Calculator scroll bleed** — `overscroll-behavior:contain` added to the calculator and detail bottom sheets so scrolling inside them no longer scrolls the results behind
+- **Calculator close button** — added an × button to the top right of the calculator sheet header. Previously the only way to close it was tapping the dim overlay
+- **Desktop split-view false trigger** — removed the `touch + narrow window` fallback from mobile detection that was incorrectly triggering the mobile layout on Chrome/macOS in split view
+
+---
+
 ## [2.3.0] — 30 March 2026 · Mobile Layout
 
 ### New
@@ -329,6 +345,7 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.3.1 | 1 Apr 2026  | Mobile polish — pill search, unified colours, device detection, iOS fixes |
 | 2.3.0 | 30 Mar 2026 | Mobile layout — Variant D cards, bottom sheet, bottom nav, 768px breakpoint |
 | 2.2.3 | 30 Mar 2026 | Valuation History — auto-save, left-side panel, re-generate |
 | 2.2.2 | 28 Mar 2026 | Add Sami-Odi Identification Tool link to header |
