@@ -889,6 +889,7 @@ html.is-mobile .header-sub,html.is-mobile .header-sep,html.is-mobile .header-use
 html.is-mobile .header{height:0!important;overflow:hidden!important;padding:0!important;min-height:0!important;}
 html.is-mobile .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
 html.is-mobile .search-section{display:none!important;}
+html.is-mobile .meta{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
 html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel{display:none!important;}
 html.is-mobile .mob-view{display:flex;}
@@ -1916,7 +1917,7 @@ function App() {
         {/* ── Mobile Option C search header ── */}
         {isMobile && <div className="mob-search-header">
           <div className="mob-search-header-top">
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:500,color:darkMode?"#E8C97A":"#7B1D1D"}}>wickman's</div>
+            <WickmanLogo dark={darkMode} style={{height:28,width:"auto"}} />
             <div style={{display:"flex",alignItems:"center",gap:8}}>
               <div style={{display:"flex",alignItems:"center",gap:4}}>
                 <div style={{width:7,height:7,background:"#4CAF50",borderRadius:"50%"}}></div>
