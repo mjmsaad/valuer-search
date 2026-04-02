@@ -2222,6 +2222,7 @@ function App() {
             </div>
           </div>
         </main>
+      </div>
 
       {/* ── Mobile bottom nav ── */}
       <div className="mob-nav-bar">
@@ -2576,7 +2577,57 @@ function App() {
         </div>
       </div>
 
-      {/* Wine Detail Overlay */}
+      {/* Valuation History Panel */}
+      <div className={`hist-panel${histOpen?" open":""}`}>
+        <div className="hist-panel-header">
+          <div className="hist-panel-title">⏱ Valuation History</div>
+          <input className="hist-search-input" placeholder="Search by recipient…"
+            value={histSearch} onChange={e => setHistSearch(e.target.value)} />
+        </div>
+        <div className="hist-panel-body">
+          {valuationHistory.filter(h => !histSearch || (h.recipient_name||'').toLowerCase().includes(histSearch.toLowerCase())).map(h => {
+            const isExp = expandedHist === h.id;
+            const d = new Date(h.created_at);
+            const now = new Date();
+            const sameDay = d.toDateString() === now.toDateString();
+            const yesterday = new Date(now - 86400000).toDateString() === d.toDateString();
+            const dateLabel = sameDay ? `Today ${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}` : yesterday ? 'Yesterday' : d.toLocaleDateString([],{day:'numeric',month:'short',year:'numeric'});
+            return (
+              <div key={h.id} className="hist-entry" onClick={() => setExpandedHist(isExp ? null : h.id)}>
+                <div className="hist-entry-row">
+                  <div className="hist-entry-name">{h.recipient_name || 'Unknown'}</div>
+                  <span className={`hist-type-badge ${h.export_type}`}>{h.export_type}</span>
+                </div>
+                <div className="hist-entry-meta">{dateLabel} · {(h.items||[]).length} wine{(h.items||[]).length!==1?'s':''}</div>
+                {isExp && (
+                  <div className="hist-entry-items">
+                    {(h.items||[]).map((it,i) => (
+                      <div key={i} className="hist-item-row">
+                        <span className="hist-item-vbadge">{it.vintage||'NV'}</span>
+                        <span className="hist-item-name">{it.name}</span>
+                        <span className="hist-item-price">{it.high ? `$${Math.round(cleanPrice(it.high))}` : '—'}</span>
+                      </div>
+                    ))}
+                    <div className="hist-entry-actions">
+                      <button className="hist-btn-regen" onClick={e => { e.stopPropagation(); setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setRecipientName(h.recipient_name||''); setShowExportModal(true); setExpandedHist(null); setHistOpen(false); }}>Re-generate</button>
+                      <button className="hist-btn-load" onClick={e => { e.stopPropagation(); setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setExpandedHist(null); setHistOpen(false); }}>Load to My List</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {valuationHistory.length === 0 && <div className="hist-empty">No exports yet. Emails and PDFs will appear here.</div>}
+        </div>
+      </div>
+
+      {/* My List tab */}
+      <div className={`panel-tab${panelOpen?" open":""}`} onClick={() => setPanelOpen(o=>!o)}>
+        <span className="panel-tab-arrow">{panelOpen?"▶":"◀"}</span>
+        <span className="panel-tab-label">My list</span>
+        {listItems.length > 0 && <span className="panel-tab-badge">{listItems.length}</span>}
+      </div>
+
       {detailWine && (
         <div className="detail-overlay">
           <div className="detail-topbar">
