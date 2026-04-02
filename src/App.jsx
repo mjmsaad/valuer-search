@@ -2220,7 +2220,10 @@ function App() {
                 </div>
               )}
             </div>
-{/* ── Mobile bottom nav ── */}
+          </div>
+        </main>
+
+      {/* ── Mobile bottom nav ── */}
       <div className="mob-nav-bar">
         <div className="mob-nav-bar-inner">
           <button className={`mob-nav-btn${mobNav==='search'?' mob-active':''}`} onClick={() => setMobNav('search')}>
