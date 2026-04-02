@@ -920,6 +920,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-nav-btn.mob-active .mob-nav-lbl{color:var(--gold);}
 .mob-pip{background:var(--wine);border-radius:20px;font-size:7px;font-weight:700;color:white;padding:1px 4px;display:inline-block;margin-left:2px;}
 .mob-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;padding:8px 10px;flex-shrink:0;}
+.mob-card.mob-card-added{border-color:rgba(30,92,58,.35);background:rgba(30,92,58,.02);}
 .mob-card-r1{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .mob-card-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:5px;overflow:hidden;}
 .mob-card-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -967,6 +968,39 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mss-v{font-size:11px;font-weight:500;color:var(--text);}
 .mob-sheet-add{width:100%;background:var(--wine);color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
 .mob-sheet-add.mob-added{background:var(--green);}
+/* Pagination */
+.mob-pag{padding:7px 10px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.mob-pag-btn{width:32px;height:32px;background:var(--cream);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text);cursor:pointer;font-weight:600;font-family:'Inter',sans-serif;}
+.mob-pag-btn:disabled{color:var(--border);cursor:default;}
+.mob-pag-pages{display:flex;align-items:center;gap:3px;}
+.mob-pag-page{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--text-muted);background:var(--cream);font-family:'Inter',sans-serif;}
+.mob-pag-page.on{background:#1A1714;color:#E8C97A;border-color:#1A1714;}
+.mob-pag-dots{font-size:11px;color:var(--border);padding:0 1px;}
+/* Dark mode toggle */
+.mob-dm-pill{display:flex;align-items:center;gap:4px;background:var(--cream);border:1px solid var(--border);border-radius:100px;padding:3px 6px 3px 9px;cursor:pointer;user-select:none;}
+.mob-dm-lbl{font-size:8px;font-weight:600;color:var(--text-muted);}
+.mob-dm-track{width:28px;height:16px;background:var(--border);border-radius:100px;position:relative;transition:background .2s;flex-shrink:0;}
+.mob-dm-track.on{background:#1A1714;}
+.mob-dm-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;background:white;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.mob-dm-track.on .mob-dm-thumb{left:14px;}
+/* My List mobile edit controls */
+.mob-lc-controls{background:var(--cream);border-top:1px solid var(--border);padding:8px 10px;display:flex;flex-direction:column;gap:7px;}
+.mob-ctrl-row{display:flex;align-items:center;gap:7px;}
+.mob-ctrl-lbl{font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;width:30px;flex-shrink:0;}
+.mob-qty-wrap{display:flex;align-items:center;border:1px solid var(--border);border-radius:5px;overflow:hidden;background:var(--white);}
+.mob-qty-btn{width:28px;height:28px;background:none;border:none;font-size:15px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+.mob-qty-val{font-size:11px;font-weight:600;color:var(--text);padding:0 10px;border-left:1px solid var(--border);border-right:1px solid var(--border);}
+.mob-size-sel{flex:1;height:28px;border:1px solid var(--border);background:var(--white);border-radius:5px;font-family:'Inter',sans-serif;font-size:9px;color:var(--text);padding:0 6px;}
+.mob-ctrl-arrow{font-size:10px;color:var(--text-muted);}
+.mob-edit-btn{background:none;border:1px solid var(--border);border-radius:3px;font-size:8px;font-weight:600;color:var(--text-muted);padding:3px 8px;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+.mob-edit-btn.open{color:var(--wine);border-color:rgba(123,29,29,.35);}
+/* Swipe cards */
+.mob-swipe-wrap{position:relative;overflow:hidden;border-radius:8px;flex-shrink:0;}
+.mob-swipe-bg{position:absolute;inset:0;display:flex;align-items:center;border-radius:8px;}
+.mob-swipe-bg.add{background:var(--green);padding-left:16px;}
+.mob-swipe-bg.dismiss{background:#C8C0B8;justify-content:flex-end;padding-right:16px;}
+.mob-swipe-hint{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:white;}
+.mob-swipe-inner{position:relative;touch-action:pan-y;will-change:transform;}
 .mob-calc-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
 .mob-calc-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);max-height:80vh;overflow-y:auto;overscroll-behavior:contain;}
 .mob-calc-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
@@ -1333,6 +1367,8 @@ function App() {
   const [calcOpen, setCalcOpen]               = useState(false);
   const [histOpen, setHistOpen]               = useState(false);
   const [mobSheet, setMobSheet]               = useState(null);
+  const [mobEditRow, setMobEditRow]           = useState(null);   // _key of expanded list row
+  const [swipeState, setSwipeState]           = useState({});     // {key: 'add'|'dismiss'|null}
   const [mobNav, setMobNav]                   = useState('search');
   const [mobCalcOpen, setMobCalcOpen]         = useState(false);
   const [isMobile, setIsMobile]               = useState(false);
@@ -1854,7 +1890,10 @@ function App() {
                 <div style={{width:7,height:7,background:"#4CAF50",borderRadius:"50%"}}></div>
                 <span style={{fontSize:9,color:"#5A5248"}}>{onlineCount} online</span>
               </div>
-              <button onClick={() => setDarkMode(d=>!d)} style={{width:28,height:28,background:"rgba(255,255,255,.07)",border:"1px solid #3A3630",borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:"#5A5248",cursor:"pointer",fontFamily:"inherit"}}>{darkMode?"☀":"☾"}</button>
+              <div className="mob-dm-pill" onClick={() => setDarkMode(d=>!d)}>
+                  <span className="mob-dm-lbl">{darkMode?"Dark":"Light"}</span>
+                  <div className={`mob-dm-track${darkMode?" on":""}`}><div className="mob-dm-thumb"></div></div>
+                </div>
             </div>
           </div>
           <div className="mob-search-pill-wrap">
@@ -2096,6 +2135,32 @@ function App() {
                 </div>
               ))}
             </div>
+
+            {/* Mobile pagination */}
+            {dq && totalPages > 1 && (
+              <div className="mob-pag">
+                <button className="mob-pag-btn" disabled={page<=1} onClick={() => { setPage(p=>p-1); window.scrollTo(0,0); }}>‹</button>
+                <div className="mob-pag-pages">
+                  {(() => {
+                    const pages = [];
+                    if (totalPages <= 5) {
+                      for (let i=1;i<=totalPages;i++) pages.push(i);
+                    } else if (page <= 3) {
+                      pages.push(1,2,3,4,'…',totalPages);
+                    } else if (page >= totalPages-2) {
+                      pages.push(1,'…',totalPages-3,totalPages-2,totalPages-1,totalPages);
+                    } else {
+                      pages.push(1,'…',page-1,page,page+1,'…',totalPages);
+                    }
+                    return pages.map((p,i) => p === '…'
+                      ? <span key={`d${i}`} className="mob-pag-dots">…</span>
+                      : <button key={p} className={`mob-pag-page${p===page?' on':''}`} onClick={() => { setPage(p); window.scrollTo(0,0); }}>{p}</button>
+                    );
+                  })()}
+                </div>
+                <button className="mob-pag-btn" disabled={page>=totalPages} onClick={() => { setPage(p=>p+1); window.scrollTo(0,0); }}>›</button>
+              </div>
+            )}
           </div>
         </main>
       </div>
@@ -2272,6 +2337,7 @@ function App() {
                 <div className="mss"><div className="mss-l">Last sale</div><div className="mss-v">{mobSheet.last_sale ? `$${Math.round(cleanPrice(mobSheet.last_sale))}` : "—"}</div></div>
                 <div className="mss"><div className="mss-l">Average</div><div className="mss-v">{mobSheet.ave ? `$${Math.round(cleanPrice(mobSheet.ave))}` : "—"}</div></div>
                 <div className="mss"><div className="mss-l">Total sales</div><div className="mss-v">{mobSheet.qty||"—"}</div></div>
+                <div className="mss" style={{background:'var(--gold-pale)',border:'1px solid rgba(184,146,42,.25)'}}><div className="mss-l" style={{color:'var(--gold)'}}>Last auction</div><div className="mss-v" style={{color:'var(--gold)'}}>{mobSheet.last_auction||"—"}</div></div>
                 <div className="mss"><div className="mss-l">Source</div><div className="mss-v">{mobSheet.auction_house||"—"}</div></div>
               </div>
               <button className={`mob-sheet-add${isInList(mobSheet)?" mob-added":""}`}
