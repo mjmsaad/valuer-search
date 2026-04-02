@@ -885,7 +885,8 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .btn-window-close:hover{border-color:var(--wine);color:var(--wine);}
 @media(max-width:640px){.header{padding:0 16px;}.main{padding:16px;}.header-sub,.header-sep,.header-user{display:none;}}
 html.is-mobile .header{padding:0 12px;height:46px;}
-html.is-mobile .header-sub,html.is-mobile .header-sep,html.is-mobile .header-user,html.is-mobile .btn-hist-header,html.is-mobile .btn-ident-tool,html.is-mobile .btn-calc-header,html.is-mobile .calc-drawer{display:none!important;}
+html.is-mobile .header-sub,html.is-mobile .header-sep,html.is-mobile .header-user,html.is-mobile .btn-hist-header,html.is-mobile .btn-ident-tool,html.is-mobile .btn-calc-header,html.is-mobile .calc-drawer,html.is-mobile .dark-toggle,html.is-mobile .header-count,html.is-mobile .header-right,html.is-mobile .signout,html.is-mobile .header-brand{display:none!important;}
+html.is-mobile .header{height:0!important;overflow:hidden;padding:0!important;}
 html.is-mobile .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
 html.is-mobile .search-section{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
@@ -998,7 +999,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-swipe-wrap{position:relative;overflow:hidden;border-radius:8px;flex-shrink:0;}
 .mob-swipe-bg{position:absolute;inset:0;display:flex;align-items:center;border-radius:8px;}
 .mob-swipe-bg.add{background:var(--green);padding-left:16px;}
-.mob-swipe-bg.dismiss{background:#C8C0B8;justify-content:flex-end;padding-right:16px;}
+.mob-swipe-bg.dismiss{background:#B8B0A8;justify-content:flex-end;padding-right:16px;}
 .mob-swipe-hint{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:white;}
 .mob-swipe-inner{position:relative;touch-action:pan-y;will-change:transform;}
 .mob-calc-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
@@ -2104,158 +2105,91 @@ function App() {
 
             {/* ── Mobile card view (≤768px) ── */}
             <div className="mob-view">
-              {!dq ? (
-                <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
-                  Search the database<br/>Type a keyword above to begin
-                </div>
-              ) : rows.length === 0 ? (
+              {rows.length === 0 && dq ? (
                 <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
                   No results found for "{dq}"
                 </div>
-              ) : rows.map((r, i) => (
-                <div className="mob-card" key={i}>
-                  <div className="mob-card-r1">
-                    <div className="mob-card-info">
-                      <span className="mob-vbadge">{r.vintage||"NV"}</span>
-                      <span className="mob-card-name">{r.name}</span>
-                    </div>
-                    <div className="mob-card-btns">
-                      <button className={`mob-add-btn${isInList(r)?" mob-added":""}`}
-                        onClick={() => toggleListItem(r)}>
-                        {isInList(r) ? "✓" : "+ List"}
-                      </button>
-                      <button className="mob-info-btn" onClick={() => setMobSheet(r)}>ⓘ</button>
-                    </div>
-                  </div>
-                  <div className="mob-card-r2">
-                    <div className="mob-pill res"><span className="mob-pill-lbl">Reserve</span><span className="mob-pill-val">{r.reserve ? `$${Math.round(cleanPrice(r.reserve))}` : "—"}</span></div>
-                    <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
-                    <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
-                  </div>
+              ) : rows.length === 0 ? (
+                <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
+                  {loading ? "Loading…" : "Type a keyword to search"}
                 </div>
-              ))}
-            </div>
-
-            {/* Mobile pagination */}
-            {dq && totalPages > 1 && (
-              <div className="mob-pag">
-                <button className="mob-pag-btn" disabled={page<=1} onClick={() => { setPage(p=>p-1); window.scrollTo(0,0); }}>‹</button>
-                <div className="mob-pag-pages">
-                  {(() => {
-                    const pages = [];
-                    if (totalPages <= 5) {
-                      for (let i=1;i<=totalPages;i++) pages.push(i);
-                    } else if (page <= 3) {
-                      pages.push(1,2,3,4,'…',totalPages);
-                    } else if (page >= totalPages-2) {
-                      pages.push(1,'…',totalPages-3,totalPages-2,totalPages-1,totalPages);
-                    } else {
-                      pages.push(1,'…',page-1,page,page+1,'…',totalPages);
-                    }
-                    return pages.map((p,i) => p === '…'
-                      ? <span key={`d${i}`} className="mob-pag-dots">…</span>
-                      : <button key={p} className={`mob-pag-page${p===page?' on':''}`} onClick={() => { setPage(p); window.scrollTo(0,0); }}>{p}</button>
-                    );
-                  })()}
-                </div>
-                <button className="mob-pag-btn" disabled={page>=totalPages} onClick={() => { setPage(p=>p+1); window.scrollTo(0,0); }}>›</button>
-              </div>
-            )}
-          </div>
-        </main>
-      </div>
-
-      {/* Valuation History Panel */}
-      {/* History panel */}
-        <div className={`hist-panel${histOpen?" open":""}`}>
-          <div className="hist-panel-hdr">
-            <div className="hist-panel-title">
-              Valuation History
-              <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,color:"var(--text-muted)",fontStyle:"italic",fontWeight:400}}>{valuationHistory.length} export{valuationHistory.length===1?"":"s"}</span>
-            </div>
-            <div className="hist-panel-sub">All team members · newest first</div>
-          </div>
-          <div className="hist-search-wrap">
-            <input className="hist-search-input" placeholder="Search by recipient name…" value={histSearch}
-              onChange={e => setHistSearch(e.target.value)} />
-          </div>
-          <div className="hist-items">
-            {valuationHistory.length === 0 ? (
-              <div className="hist-empty">No exports yet.<br/>Send an email or generate a PDF<br/>and it will appear here.</div>
-            ) : (() => {
-              const filtered = valuationHistory.filter(h =>
-                !histSearch || (h.recipient_name||'').toLowerCase().includes(histSearch.toLowerCase())
-              );
-              if (filtered.length === 0) return <div className="hist-empty">No results for "{histSearch}"</div>;
-              return filtered.map(h => {
-                const isOpen = expandedHist === h.id;
-                const byEmail = userProfiles[h.user_id] || h.user_id?.slice(0,6)+'…';
-                const byName = byEmail.split('@')[0];
-                const date = new Date(h.created_at);
-                const now = new Date();
-                const isToday = date.toDateString() === now.toDateString();
-                const isYest = new Date(now-86400000).toDateString() === date.toDateString();
-                const dateStr = isToday ? `Today ${date.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}`
-                  : isYest ? `Yesterday ${date.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}`
-                  : date.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
-                const items = Array.isArray(h.items) ? h.items : [];
+              ) : rows.map((r, i) => {
+                const sw = swipeState[i] || 0;
+                const action = sw > 55 ? 'add' : null;
                 return (
-                  <div key={h.id} className={`hist-item${isOpen?" open":""}`} onClick={() => setExpandedHist(isOpen?null:h.id)}>
-                    <div className="hist-item-row">
-                      <div className={`hist-type-badge ${(h.export_type||'').toLowerCase()}`}>{h.export_type||'Export'}</div>
-                      <div className="hist-info">
-                        <div className="hist-recipient">{h.recipient_name||'Unknown'}</div>
-                        <div className="hist-meta">{dateStr} · {byName}</div>
-                      </div>
-                      <div className="hist-item-count">{items.length} wine{items.length===1?"":"s"}</div>
+                  <div className="mob-swipe-wrap" key={i}
+                    onTouchStart={e => {
+                      e.currentTarget._tx = e.touches[0].clientX;
+                      e.currentTarget._ty = e.touches[0].clientY;
+                      e.currentTarget._locked = null;
+                    }}
+                    onTouchMove={e => {
+                      const dx = e.touches[0].clientX - (e.currentTarget._tx||0);
+                      const dy = e.touches[0].clientY - (e.currentTarget._ty||0);
+                      if (e.currentTarget._locked === null) {
+                        e.currentTarget._locked = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+                      }
+                      if (e.currentTarget._locked === 'v') return;
+                      setSwipeState(s => ({...s, [i]: Math.max(-80, Math.min(110, dx))}));
+                    }}
+                    onTouchEnd={() => {
+                      const s = swipeState[i] || 0;
+                      if (s > 55) toggleListItem(r);
+                      setSwipeState(prev => ({...prev, [i]: 0}));
+                    }}>
+                    <div className={`mob-swipe-bg${action==='add'?' add':sw<-30?' dismiss':''}`}>
+                      {action==='add' && <div className="mob-swipe-hint"><span>✓</span> Add to List</div>}
+                      {sw < -30 && <div className="mob-swipe-hint" style={{color:'rgba(255,255,255,.7)'}}>✕ Dismiss</div>}
                     </div>
-                    {isOpen && (
-                      <div className="hist-detail">
-                        <div className="hist-detail-label">Items sent</div>
-                        {items.map((it,i) => (
-                          <div key={i} className="hist-wine-row">
-                            <span className="hist-wine-vbadge">{it.vintage||'—'}</span>
-                            <span className="hist-wine-name" title={it.name}>{it.name}</span>
-                            <span className="hist-wine-price">{it.high||'—'}</span>
+                    <div className="mob-swipe-inner"
+                      style={{transform:`translateX(${sw}px)`,transition:sw===0?'transform .25s ease':'none'}}>
+                      <div className={`mob-card${isInList(r)?' mob-card-added':''}`}>
+                        <div className="mob-card-r1">
+                          <div className="mob-card-info">
+                            <span className="mob-vbadge">{r.vintage||"NV"}</span>
+                            <span className="mob-card-name">{r.name}</span>
                           </div>
-                        ))}
-                        <div className="hist-action-row">
-                          <button className="hist-regen-btn" onClick={async e => {
-                            e.stopPropagation();
-                            setListItems(items.map((it,i) => ({...it, _key: it.name+(it.vintage||'')+i+Date.now(), qty: it.qty||1, size: it.size||'750ml', baseSize: it.size||'750ml', sizeMultiplier:1, applyMultiplier:false})));
-                            setHistOpen(false);
-                            setPanelOpen(true);
-                          }}>Load to My List →</button>
-                          <button className="hist-load-btn" onClick={async e => {
-                            e.stopPropagation();
-                            const a = await computeAuctions();
-                            setAuctionDates(a);
-                            setRecipientName(h.recipient_name||'');
-                            setListItems(items.map((it,i) => ({...it, _key: it.name+(it.vintage||'')+i+Date.now(), qty: it.qty||1, size: it.size||'750ml', baseSize: it.size||'750ml', sizeMultiplier:1, applyMultiplier:false})));
-                            setExportType(h.export_type==='PDF'?'pdf':'email');
-                            setShowExportModal(true);
-                            setHistOpen(false);
-                          }}>Re-generate {h.export_type} →</button>
+                          <div className="mob-card-btns">
+                            <button className={`mob-add-btn${isInList(r)?" mob-added":""}`}
+                              onClick={() => toggleListItem(r)}>
+                              {isInList(r) ? "✓" : "+ List"}
+                            </button>
+                            <button className="mob-info-btn" onClick={() => setMobSheet(r)}>ⓘ</button>
+                          </div>
+                        </div>
+                        <div className="mob-card-r2">
+                          <div className="mob-pill res"><span className="mob-pill-lbl">Reserve</span><span className="mob-pill-val">{r.reserve && cleanPrice(r.reserve) ? `$${Math.round(cleanPrice(r.reserve))}` : "—"}</span></div>
+                          <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low && cleanPrice(r.low) ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
+                          <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high && cleanPrice(r.high) ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
                         </div>
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
-              });
-            })()}
-          </div>
-        </div>
-      )}
+              })}
 
-      {/* My List tab */}
-      <div className={`panel-tab${panelOpen?" open":""}`} onClick={() => setPanelOpen(o => !o)}>
-        <span className="panel-tab-arrow">{panelOpen?"▶":"◀"}</span>
-        <span className="panel-tab-label">My list</span>
-        {listItems.length > 0 && <span className="panel-tab-badge">{listItems.length}</span>}
-      </div>
-
-
-      {/* ── Mobile bottom nav ── */}
+              {/* Mobile pagination */}
+              {totalPages > 1 && (
+                <div className="mob-pag">
+                  <button className="mob-pag-btn" disabled={page<=1} onClick={() => { setPage(p=>p-1); window.scrollTo(0,0); }}>‹</button>
+                  <div className="mob-pag-pages">
+                    {(() => {
+                      const pages = [];
+                      if (totalPages <= 5) { for (let i=1;i<=totalPages;i++) pages.push(i); }
+                      else if (page <= 3) { pages.push(1,2,3,4,'…',totalPages); }
+                      else if (page >= totalPages-2) { pages.push(1,'…',totalPages-3,totalPages-2,totalPages-1,totalPages); }
+                      else { pages.push(1,'…',page-1,page,page+1,'…',totalPages); }
+                      return pages.map((p,idx) => p === '…'
+                        ? <span key={`d${idx}`} className="mob-pag-dots">…</span>
+                        : <button key={p} className={`mob-pag-page${p===page?' on':''}`} onClick={() => { setPage(p); window.scrollTo(0,0); }}>{p}</button>
+                      );
+                    })()}
+                  </div>
+                  <button className="mob-pag-btn" disabled={page>=totalPages} onClick={() => { setPage(p=>p+1); window.scrollTo(0,0); }}>›</button>
+                </div>
+              )}
+            </div>
+{/* ── Mobile bottom nav ── */}
       <div className="mob-nav-bar">
         <div className="mob-nav-bar-inner">
           <button className={`mob-nav-btn${mobNav==='search'?' mob-active':''}`} onClick={() => setMobNav('search')}>
@@ -2279,32 +2213,61 @@ function App() {
 
       {/* ── Mobile My List view ── */}
       {mobNav === 'list' && (
-        <div style={{position:'fixed',inset:0,top:46,bottom:52,background:'#ECEAE6',zIndex:190,display:'flex',flexDirection:'column',overflowY:'auto'}}>
+        <div style={{position:'fixed',inset:0,top:46,bottom:52,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
           <div className="mob-list-hdr">
             <div className="mob-list-title">My List <span className="mob-list-badge">{listItems.length}</span></div>
-            <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottles`}</div>
+            <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottle${listItems.reduce((a,r)=>a+(r.qty||1),0)!==1?'s':''}`}</div>
           </div>
           <div style={{flex:1,overflowY:'auto',padding:'5px 8px 130px',display:'flex',flexDirection:'column',gap:4}}>
             {listItems.length === 0 ? (
               <div className="mob-list-empty">No wines added yet.<br/>Search and tap + List to add wines here.</div>
-            ) : listItems.map((r, i) => (
-              <div className="mob-card" key={r._key||i}>
-                <div className="mob-card-r1">
-                  <div className="mob-card-info">
-                    <span className="mob-vbadge">{r.vintage||"NV"}</span>
-                    <span className="mob-card-name">{r.name}</span>
+            ) : listItems.map((r, i) => {
+              const isEditing = mobEditRow === (r._key||i);
+              return (
+                <div key={r._key||i} style={{background:'var(--white)',border:`1px solid ${isEditing?'rgba(123,29,29,.35)':'var(--border)'}`,borderRadius:8,overflow:'hidden',flexShrink:0}}>
+                  <div style={{padding:'8px 10px'}}>
+                    <div className="mob-card-r1">
+                      <span className="mob-vbadge">{r.vintage||"NV"}</span>
+                      <span className="mob-card-name">{r.name}</span>
+                      <button className={`mob-edit-btn${isEditing?' open':''}`} onClick={() => setMobEditRow(isEditing?null:(r._key||i))}>{isEditing?'Done':'Edit'}</button>
+                      <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(prev => prev.filter((_,j)=>j!==i))}>×</button>
+                    </div>
+                    <div style={{display:'flex',alignItems:'center',gap:5,marginBottom:6}}>
+                      {r.last_auction && <span style={{fontSize:8,color:'var(--text-muted)'}}>{r.last_auction}</span>}
+                      <span style={{fontSize:8,color:'#5A5248',background:'#F0EDE9',border:'1px solid var(--border)',borderRadius:3,padding:'1px 4px'}}>×{r.qty||1} · {r.size||'750ml'}</span>
+                      <span style={{fontSize:10,fontWeight:600,color:'var(--wine)',marginLeft:'auto'}}>{r.reserve ? `$${Math.round(cleanPrice(r.reserve))}` : '—'}</span>
+                    </div>
+                    <div className="mob-card-r2">
+                      <div className="mob-pill res"><span className="mob-pill-lbl">Reserve</span><span className="mob-pill-val">{r.reserve ? `$${Math.round(cleanPrice(r.reserve))}` : "—"}</span></div>
+                      <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
+                      <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
+                    </div>
                   </div>
-                  <div className="mob-card-btns">
-                    <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(items => items.filter((_,j)=>j!==i))}>×</button>
-                  </div>
+                  {isEditing && (
+                    <div className="mob-lc-controls">
+                      <div className="mob-ctrl-row">
+                        <span className="mob-ctrl-lbl">Qty</span>
+                        <div className="mob-qty-wrap">
+                          <button className="mob-qty-btn" onClick={() => setListItems(prev => prev.map((x,j)=>j===i?{...x,qty:Math.max(1,(x.qty||1)-1)}:x))}>−</button>
+                          <span className="mob-qty-val">{r.qty||1}</span>
+                          <button className="mob-qty-btn" onClick={() => setListItems(prev => prev.map((x,j)=>j===i?{...x,qty:(x.qty||1)+1}:x))}>+</button>
+                        </div>
+                      </div>
+                      <div className="mob-ctrl-row">
+                        <span className="mob-ctrl-lbl">From</span>
+                        <select className="mob-size-sel" value={r.baseSize||r.size||'750ml'} onChange={e=>setListItems(prev=>prev.map((x,j)=>j===i?{...x,baseSize:e.target.value}:x))}>
+                          {SIZE_MULTIPLIERS.map(s=><option key={s.value} value={s.value}>{s.label}</option>)}
+                        </select>
+                        <span className="mob-ctrl-arrow">→</span>
+                        <select className="mob-size-sel" value={r.size||'750ml'} onChange={e=>setListItems(prev=>prev.map((x,j)=>j===i?{...x,size:e.target.value}:x))}>
+                          {SIZE_MULTIPLIERS.map(s=><option key={s.value} value={s.value}>{s.label}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="mob-card-r2">
-                  <div className="mob-pill res"><span className="mob-pill-lbl">Reserve</span><span className="mob-pill-val">{r.reserve ? `$${Math.round(cleanPrice(r.reserve))}` : "—"}</span></div>
-                  <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
-                  <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           {listItems.length > 0 && (
             <div className="mob-list-footer">
