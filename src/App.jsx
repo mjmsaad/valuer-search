@@ -886,7 +886,7 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 @media(max-width:640px){.header{padding:0 16px;}.main{padding:16px;}.header-sub,.header-sep,.header-user{display:none;}}
 html.is-mobile .header{padding:0 12px;height:46px;}
 html.is-mobile .header-sub,html.is-mobile .header-sep,html.is-mobile .header-user,html.is-mobile .btn-hist-header,html.is-mobile .btn-ident-tool,html.is-mobile .btn-calc-header,html.is-mobile .calc-drawer,html.is-mobile .dark-toggle,html.is-mobile .header-count,html.is-mobile .header-right,html.is-mobile .signout,html.is-mobile .header-brand{display:none!important;}
-html.is-mobile .header{height:0!important;overflow:hidden;padding:0!important;}
+html.is-mobile .header{height:0!important;overflow:hidden!important;padding:0!important;min-height:0!important;}
 html.is-mobile .main{padding:0!important;padding-right:0!important;padding-bottom:56px!important;}
 html.is-mobile .search-section{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
@@ -894,6 +894,7 @@ html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab
 html.is-mobile .mob-view{display:flex;}
 html.is-mobile .mob-nav-bar{display:flex;}
 html.is-mobile .mob-search-header{display:flex;}
+.mob-search-header{position:sticky;top:0;z-index:10;}
 html.is-mobile .err-banner{margin:0;}
 html:not(.is-mobile) .mob-search-header{display:none!important;}
 html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob-nav-bar{display:none!important;}html:not(.is-mobile) .mob-sheet-overlay{display:none!important;}html:not(.is-mobile) .mob-calc-overlay{display:none!important;}
@@ -1002,6 +1003,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-swipe-bg.dismiss{background:#B8B0A8;justify-content:flex-end;padding-right:16px;}
 .mob-swipe-hint{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:white;}
 .mob-swipe-inner{position:relative;touch-action:pan-y;will-change:transform;}
+.mob-swipe-wrap{touch-action:pan-y;}
 .mob-calc-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
 .mob-calc-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);max-height:80vh;overflow-y:auto;overscroll-behavior:contain;}
 .mob-calc-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
@@ -1373,6 +1375,35 @@ function App() {
   const [mobNav, setMobNav]                   = useState('search');
   const [mobCalcOpen, setMobCalcOpen]         = useState(false);
   const [isMobile, setIsMobile]               = useState(false);
+
+  // Attach non-passive touch listeners for swipe cards
+  useEffect(() => {
+    if (!isMobile) return;
+    const handleTouchMove = (e) => {
+      const el = e.currentTarget;
+      if (!el) return;
+      const dx = e.touches[0].clientX - (el._tx||0);
+      const dy = e.touches[0].clientY - (el._ty||0);
+      if (el._locked === null) {
+        el._locked = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+      }
+      if (el._locked === 'h') {
+        e.preventDefault(); // safe here — non-passive listener
+      }
+    };
+    const attach = () => {
+      document.querySelectorAll('.mob-swipe-wrap').forEach(el => {
+        el.removeEventListener('touchmove', handleTouchMove);
+        el.addEventListener('touchmove', handleTouchMove, { passive: false });
+      });
+    };
+    // Re-attach when rows change
+    const observer = new MutationObserver(attach);
+    const mob = document.querySelector('.mob-view');
+    if (mob) observer.observe(mob, { childList: true, subtree: true });
+    attach();
+    return () => observer.disconnect();
+  }, [isMobile, rows]);
 
   // Detect mobile device and set viewport
   useEffect(() => {
@@ -2213,7 +2244,7 @@ function App() {
 
       {/* ── Mobile My List view ── */}
       {mobNav === 'list' && (
-        <div style={{position:'fixed',inset:0,top:46,bottom:52,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
+        <div style={{position:'fixed',inset:0,top:0,bottom:52,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
           <div className="mob-list-hdr">
             <div className="mob-list-title">My List <span className="mob-list-badge">{listItems.length}</span></div>
             <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottle${listItems.reduce((a,r)=>a+(r.qty||1),0)!==1?'s':''}`}</div>
