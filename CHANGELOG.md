@@ -4,6 +4,28 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 ---
 
+## [2.3.3] — 3 April 2026 · Mobile Feature Pack
+
+### New
+- **Pagination on mobile** — prev/next arrows and numbered page pills pinned between the last card and the bottom nav. Current page highlighted dark. Ellipsis for skipped pages on long result sets. Tapping any page scrolls to the top automatically
+- **My List edit controls** — every My List card has an Edit button that expands inline controls: qty stepper (−/+) and From→To size selectors matching the desktop panel exactly. Auction date and qty badge always visible on collapsed rows. Tap Done to collapse
+- **Dark mode toggle pill** — replaced the buried icon in the mobile header with a labelled Light/Dark toggle pill. The track animates between states on tap
+- **Last Auction date in detail sheet** — added as a gold-highlighted stat tile in the ⓘ bottom sheet alongside Last sale, Average, Total sales and Source. Data was already fetched, just not shown on mobile
+- **Swipe to add on search cards** — swipe a result card right to add it to My List (green background reveals). Swipe left to dismiss. Added cards get a subtle green border. Non-passive touch listener ensures swipe doesn't fight vertical scroll
+
+### Fixed
+- **Duplicate desktop pagination on mobile** — the desktop meta/pagination bar was visible above the mobile card view. Now hidden on mobile with `display:none` so only the pill pagination shows
+- **Wickman's logo in mobile header** — replaced the plain "wickman's" text with the actual WickmanLogo SVG component at 28px height, matching the desktop header and login screen. Respects dark mode automatically
+
+---
+
+## [2.3.2] — 1 April 2026 · Mobile Colour Fix
+
+### Fixed
+- **Fully unified colour flow** — search header background corrected to `var(--cream)` in both light and dark mode. Previously used `var(--text)` which inverted the scheme — dark in light mode, light in dark mode. Logo adapts: burgundy in light mode, gold in dark mode
+
+---
+
 ## [2.3.1] — 1 April 2026 · Mobile Polish
 
 ### Improved
