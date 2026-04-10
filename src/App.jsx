@@ -891,7 +891,7 @@ html.is-mobile .main{padding:0!important;padding-right:0!important;padding-botto
 html.is-mobile .search-section{display:none!important;}
 html.is-mobile .meta{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
-html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel{display:none!important;}
+html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header{display:none!important;}
 html.is-mobile .mob-view{display:flex;}
 html.is-mobile .mob-nav-bar{display:flex;}
 html.is-mobile .mob-search-header{display:flex;}
@@ -971,6 +971,83 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mss-v{font-size:11px;font-weight:500;color:var(--text);}
 .mob-sheet-add{width:100%;background:var(--wine);color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
 .mob-sheet-add.mob-added{background:var(--green);}
+/* ── Size flag styles ── */
+.size-flag-cell{position:relative;}
+.size-flagged-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(196,120,0,.09);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 7px;cursor:pointer;color:#C47800;font-size:10px;font-weight:600;}
+.size-unflagged{cursor:pointer;color:var(--text-muted);}
+.size-unflagged:hover{color:#C47800;}
+.size-flag-hint{opacity:0;font-size:8px;color:#C47800;margin-left:3px;transition:opacity .12s;}
+.size-unflagged:hover .size-flag-hint{opacity:1;}
+.flag-popover{position:absolute;top:calc(100% + 8px);left:-8px;width:300px;background:var(--white);border:1px solid var(--border);border-radius:9px;box-shadow:0 12px 36px rgba(0,0,0,.15);z-index:500;overflow:hidden;}
+.flag-popover-arrow{position:absolute;top:-6px;left:18px;width:11px;height:11px;background:var(--white);border-left:1px solid var(--border);border-top:1px solid var(--border);transform:rotate(45deg);}
+.flag-pop-hdr{background:#1A1714;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
+.flag-pop-ttl{font-size:9px;font-weight:700;color:#E8C97A;letter-spacing:.06em;text-transform:uppercase;}
+.flag-pop-x{background:none;border:none;color:#5A5248;font-size:16px;cursor:pointer;line-height:1;font-family:'Inter',sans-serif;}
+.flag-pop-body{padding:12px;}
+.flag-pop-wine{font-size:11px;font-weight:500;color:var(--text);margin-bottom:1px;}
+.flag-pop-sub{font-size:9px;color:var(--text-muted);margin-bottom:10px;}
+.flag-pop-lbl{font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;display:block;}
+.flag-size-preview{display:flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 9px;background:var(--cream);border:1px solid var(--border);border-radius:5px;}
+.flag-preview-from{font-size:10px;font-weight:500;color:var(--text);}
+.flag-preview-arrow{font-size:11px;color:var(--text-muted);}
+.flag-preview-to{font-size:10px;font-weight:600;color:#C47800;}
+.flag-preview-to.empty{color:var(--border);font-weight:400;font-style:italic;}
+.flag-size-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:10px;}
+.flag-size-opt{background:var(--cream);border:1px solid var(--border);border-radius:5px;padding:5px 4px;text-align:center;cursor:pointer;transition:all .12s;}
+.flag-size-opt:hover{border-color:#C47800;background:rgba(196,120,0,.05);}
+.flag-size-opt.selected{border-color:#C47800;background:rgba(196,120,0,.1);}
+.flag-size-opt-val{font-size:10px;font-weight:600;color:var(--text);}
+.flag-size-opt.selected .flag-size-opt-val{color:#C47800;}
+.flag-size-opt-lbl{font-size:7px;color:var(--text-muted);}
+.flag-note-wrap{position:relative;margin-bottom:10px;}
+.flag-note-ta{width:100%;height:64px;border:1px solid var(--border);background:var(--cream);border-radius:5px;font-family:'Inter',sans-serif;font-size:10px;color:var(--text);padding:7px 9px;resize:none;outline:none;transition:border-color .15s;}
+.flag-note-ta:focus{border-color:#C47800;}
+.flag-note-chars{position:absolute;bottom:5px;right:7px;font-size:8px;color:var(--text-muted);}
+.flag-submit-btn{width:100%;background:#C47800;color:white;border:none;padding:9px;border-radius:5px;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;}
+.flag-submit-btn:disabled{background:var(--border);color:var(--text-muted);cursor:default;}
+.flag-cancel-btn{width:100%;background:none;border:1px solid var(--border);color:var(--text-muted);padding:7px;border-radius:5px;font-family:'Inter',sans-serif;font-size:9px;cursor:pointer;margin-top:5px;}
+.flag-confirmed{padding:18px 16px;text-align:center;}
+.flag-conf-tick{font-size:28px;margin-bottom:6px;}
+.flag-conf-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.flag-conf-sub{font-size:9px;color:var(--text-muted);margin-bottom:10px;}
+.flag-conf-done{width:100%;background:#1A1714;color:#E8C97A;border:none;padding:9px;border-radius:5px;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;}
+.flag-view-body{padding:12px;}
+.flag-view-sz-row{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.flag-view-from{font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:2px 8px;}
+.flag-view-arrow{font-size:12px;color:var(--text-muted);}
+.flag-view-to{font-size:11px;font-weight:600;color:#C47800;background:rgba(196,120,0,.08);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 8px;}
+.flag-view-note{font-size:9px;color:#6A5020;font-style:italic;background:#FDF8F0;border:1px solid rgba(196,120,0,.15);border-radius:4px;padding:5px 8px;margin-bottom:7px;}
+.flag-view-meta{font-size:8px;color:var(--text-muted);margin-bottom:10px;}
+.flag-view-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.flag-view-resolve{background:#1A1714;color:#E8C97A;border:none;padding:7px;border-radius:4px;font-family:'Inter',sans-serif;font-size:9px;font-weight:600;cursor:pointer;}
+.flag-view-dismiss{background:none;border:1px solid var(--border);color:var(--text-muted);padding:7px;border-radius:4px;font-family:'Inter',sans-serif;font-size:9px;cursor:pointer;}
+.flag-badge{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;color:#C47800;background:rgba(196,120,0,.1);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:1px 5px;margin-left:4px;}
+tr.row-flagged{background:rgba(196,120,0,.03)!important;}
+tr.row-flagged:hover{background:rgba(196,120,0,.07)!important;}
+.flag-panel{position:fixed;right:-380px;top:52px;bottom:0;width:380px;background:var(--cream);border-left:1px solid var(--border);z-index:100;display:flex;flex-direction:column;transition:right .25s ease;}
+.flag-panel.open{right:0;}
+.flag-panel-hdr{background:#1A1714;padding:12px 16px;display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0;}
+.flag-panel-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#E8C97A;}
+.flag-panel-badge{background:#C47800;color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 8px;font-family:'Inter',sans-serif;}
+.flag-panel-body{flex:1;overflow-y:auto;padding:8px 10px;}
+.flag-entry{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:10px 12px;margin-bottom:6px;}
+.flag-entry.resolved{opacity:.45;}
+.fe-r1{display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap;}
+.fe-vb{font-size:8px;font-weight:700;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:1px 5px;flex-shrink:0;}
+.fe-nm{font-size:10px;font-weight:500;color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fe-src{font-size:8px;color:var(--text-muted);}
+.fe-res-badge{font-size:8px;font-weight:700;color:var(--green);background:var(--green-pale);border:1px solid rgba(30,92,58,.2);border-radius:3px;padding:1px 6px;flex-shrink:0;}
+.fe-szrow{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.fe-from{font-size:10px;background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:2px 7px;}
+.fe-arr{font-size:10px;color:var(--text-muted);}
+.fe-to{font-size:10px;font-weight:600;color:#C47800;background:rgba(196,120,0,.08);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 7px;}
+.fe-note{font-size:9px;color:#6A5020;font-style:italic;background:#FDF8F0;border:1px solid rgba(196,120,0,.12);border-radius:3px;padding:4px 8px;margin-bottom:5px;}
+.fe-meta{font-size:8px;color:var(--text-muted);margin-bottom:6px;}
+.fe-actions{display:flex;gap:5px;}
+.fe-resolve{background:#1A1714;color:#E8C97A;border:none;padding:4px 10px;border-radius:3px;font-family:'Inter',sans-serif;font-size:8px;font-weight:700;cursor:pointer;}
+.fe-dismiss{background:none;border:1px solid var(--border);color:var(--text-muted);padding:4px 10px;border-radius:3px;font-family:'Inter',sans-serif;font-size:8px;cursor:pointer;}
+.btn-flag-header{background:rgba(196,120,0,.08);border:1px solid rgba(196,120,0,.3);color:#C47800;padding:4px 10px;border-radius:4px;font-family:'Inter',sans-serif;font-size:9px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-flag-header.open{background:#C47800;color:white;}
 /* Pagination */
 .mob-pag{padding:7px 10px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .mob-pag-btn{width:32px;height:32px;background:var(--cream);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text);cursor:pointer;font-weight:600;font-family:'Inter',sans-serif;}
@@ -1370,6 +1447,11 @@ function App() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [calcOpen, setCalcOpen]               = useState(false);
   const [histOpen, setHistOpen]               = useState(false);
+  const [flagPanelOpen, setFlagPanelOpen]     = useState(false);
+  const [sizeFlags, setSizeFlags]             = useState([]);   // {wine_name,vintage,auction_house,listed_size,suggested_size,note,flagged_by,id,resolved}
+  const [flagPopover, setFlagPopover]         = useState(null); // row key of open popover
+  const [flagForm, setFlagForm]               = useState({size:'',note:''});
+  const [flagSubmitting, setFlagSubmitting]   = useState(false);
   const [mobSheet, setMobSheet]               = useState(null);
   const [mobEditRow, setMobEditRow]           = useState(null);   // _key of expanded list row
   const [swipeState, setSwipeState]           = useState({});     // {key: 'add'|'dismiss'|null}
@@ -1550,6 +1632,79 @@ function App() {
   }, [session]);
 
   // Fetch shared calculator history (all team members)
+  const fetchSizeFlags = async () => {
+    if (!session) return;
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/size_flags?select=*&order=created_at.desc`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } }
+      );
+      const data = await res.json();
+      if (Array.isArray(data)) setSizeFlags(data);
+    } catch(e) { console.error('[SizeFlags] fetch failed', e); }
+  };
+
+  const submitSizeFlag = async (r) => {
+    if (!session || !flagForm.size) return;
+    setFlagSubmitting(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/size_flags`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          wine_name: r.name,
+          vintage: r.vintage,
+          auction_house: r.auction_house,
+          listed_size: r.size || '750ml',
+          suggested_size: flagForm.size,
+          note: flagForm.note || null,
+          flagged_by: session.user.id,
+          resolved: false
+        })
+      });
+      if (res.ok) {
+        await fetchSizeFlags();
+        setFlagPopover('confirmed:' + (r.vintage + r.name + r.auction_house));
+        setFlagForm({size:'', note:''});
+      } else {
+        const e = await res.json().catch(()=>({}));
+        console.error('[SizeFlags] submit failed:', res.status, e);
+      }
+    } catch(e) { console.error('[SizeFlags] network error', e); }
+    setFlagSubmitting(false);
+  };
+
+  const resolveFlag = async (id) => {
+    if (!session) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/size_flags?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ resolved: true })
+    });
+    fetchSizeFlags();
+  };
+
+  const dismissFlag = async (id) => {
+    if (!session) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/size_flags?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` }
+    });
+    fetchSizeFlags();
+  };
+
+  const getFlagForRow = (r) => sizeFlags.find(f =>
+    !f.resolved &&
+    f.wine_name === r.name &&
+    f.vintage === r.vintage &&
+    f.auction_house === r.auction_house
+  );
+
   const fetchCalcHistory = async () => {
     if (!session) return;
     try {
@@ -1565,6 +1720,10 @@ function App() {
   useEffect(() => {
     if (calcOpen) fetchCalcHistory();
   }, [calcOpen, session]);
+
+  useEffect(() => {
+    if (session) fetchSizeFlags();
+  }, [session]);
 
   useEffect(() => {
     if (histOpen) fetchValuationHistory();
@@ -1871,7 +2030,7 @@ function App() {
   return (
     <>
       <style>{css}</style>
-      <div className="app">
+      <div className="app" onClick={() => { if(flagPopover && !flagPopover.startsWith('confirmed:')) setFlagPopover(null); }}>
         <header className="header">
           <div className="header-brand">
             <WickmanLogo dark={darkMode} style={{height:32,width:"auto"}} />
@@ -1884,6 +2043,9 @@ function App() {
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
             <span className="header-user">{session.user?.email}</span>
+            <button className={`btn-flag-header${flagPanelOpen?" open":""}`} onClick={() => setFlagPanelOpen(o=>!o)}>
+              ⚑ Flagged{sizeFlags.filter(f=>!f.resolved).length > 0 && ` (${sizeFlags.filter(f=>!f.resolved).length})`}
+            </button>
             <button className={`btn-hist-header${histOpen?" open":""}`} onClick={() => setHistOpen(o=>!o)}>
               ⏱ History
             </button>
@@ -2119,9 +2281,87 @@ function App() {
                           <button className="info-btn" title="View price history">ⓘ</button>
                         </td>
                         <td><span className="vintage-badge"><Hl text={r.vintage} keywords={keywords} /></span></td>
-                        <td className="wine-col" title={r.name}><Hl text={r.name} keywords={keywords} /></td>
+                        <td className="wine-col" title={r.name}><Hl text={r.name} keywords={keywords} /> {getFlagForRow(r) && <span className="flag-badge">⚑ SIZE</span>}</td>
                         <td><span className="qty-text">{r.qty}</span></td>
-                        <td><span className="qty-text">{r.size}</span></td>
+                        {(() => {
+                          const rowKey = r.vintage + r.name + r.auction_house;
+                          const existingFlag = getFlagForRow(r);
+                          const isOpen = flagPopover === rowKey;
+                          const isConfirmed = flagPopover === ('confirmed:' + rowKey);
+                          const userProf = userProfiles[existingFlag?.flagged_by] || existingFlag?.flagged_by || '';
+                          return (
+                            <td className="size-flag-cell">
+                              {existingFlag ? (
+                                <span className="size-flagged-pill" onClick={e => { e.stopPropagation(); setFlagPopover(isOpen?null:rowKey); }}>
+                                  {r.size||'750ml'} ⚑
+                                </span>
+                              ) : (
+                                <span className="size-unflagged" onClick={e => { e.stopPropagation(); setFlagPopover(isOpen?null:rowKey); setFlagForm({size:'',note:''}); }}>
+                                  {r.size||'750ml'}<span className="size-flag-hint">⚑</span>
+                                </span>
+                              )}
+                              {(isOpen || isConfirmed) && (
+                                <div className="flag-popover" onClick={e=>e.stopPropagation()}>
+                                  <div className="flag-popover-arrow"></div>
+                                  <div className="flag-pop-hdr">
+                                    <span className="flag-pop-ttl">{existingFlag ? '⚑ Size Flag' : '⚑ Flag size issue'}</span>
+                                    <button className="flag-pop-x" onClick={()=>setFlagPopover(null)}>×</button>
+                                  </div>
+                                  {isConfirmed ? (
+                                    <div className="flag-confirmed">
+                                      <div className="flag-conf-tick">✓</div>
+                                      <div className="flag-conf-title">Flag recorded</div>
+                                      <div className="flag-conf-sub">Visible to all team members.</div>
+                                      <button className="flag-conf-done" onClick={()=>setFlagPopover(null)}>Done</button>
+                                    </div>
+                                  ) : existingFlag ? (
+                                    <div className="flag-view-body">
+                                      <div className="flag-pop-wine">{r.name}</div>
+                                      <div className="flag-pop-sub">{r.vintage} · {r.auction_house}</div>
+                                      <div className="flag-view-sz-row">
+                                        <span className="flag-view-from">{existingFlag.listed_size}</span>
+                                        <span className="flag-view-arrow">→</span>
+                                        <span className="flag-view-to">{existingFlag.suggested_size}</span>
+                                      </div>
+                                      {existingFlag.note && <div className="flag-view-note">"{existingFlag.note}"</div>}
+                                      <div className="flag-view-meta">⚑ {userProf} · {new Date(existingFlag.created_at).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}</div>
+                                      <div className="flag-view-actions">
+                                        <button className="flag-view-resolve" onClick={()=>{resolveFlag(existingFlag.id);setFlagPopover(null);}}>✓ Mark resolved</button>
+                                        <button className="flag-view-dismiss" onClick={()=>{dismissFlag(existingFlag.id);setFlagPopover(null);}}>Dismiss</button>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="flag-pop-body">
+                                      <div className="flag-pop-wine">{r.name}</div>
+                                      <div className="flag-pop-sub">{r.vintage} · {r.auction_house} · Listed: {r.size||'750ml'}</div>
+                                      <div className="flag-size-preview">
+                                        <span className="flag-preview-from">{r.size||'750ml'}</span>
+                                        <span className="flag-preview-arrow">→</span>
+                                        <span className={`flag-preview-to${flagForm.size?'':' empty'}`}>{flagForm.size||'select below…'}</span>
+                                      </div>
+                                      <label className="flag-pop-lbl">What size should it be?</label>
+                                      <div className="flag-size-grid">
+                                        {[['375ml','Half'],['700ml','Spirits'],['1500ml','Magnum'],['3000ml','Dbl Mag'],['4500ml','Jeroboam'],['6000ml','Imperial']].map(([val,lbl])=>(
+                                          <div key={val} className={`flag-size-opt${flagForm.size===val?' selected':''}`} onClick={()=>setFlagForm(f=>({...f,size:val}))}>
+                                            <div className="flag-size-opt-val">{val}</div>
+                                            <div className="flag-size-opt-lbl">{lbl}</div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                      <label className="flag-pop-lbl">Note <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--border)'}}>optional</span></label>
+                                      <div className="flag-note-wrap">
+                                        <textarea className="flag-note-ta" maxLength={200} placeholder="e.g. confirmed with client, lot photos show magnum…" value={flagForm.note} onChange={e=>setFlagForm(f=>({...f,note:e.target.value}))} />
+                                        <span className="flag-note-chars">{flagForm.note.length} / 200</span>
+                                      </div>
+                                      <button className="flag-submit-btn" disabled={!flagForm.size||flagSubmitting} onClick={()=>submitSizeFlag(r)}>{flagSubmitting?'Submitting…':'Submit flag'}</button>
+                                      <button className="flag-cancel-btn" onClick={()=>setFlagPopover(null)}>Cancel</button>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </td>
+                          );
+                        })()}
                         <td><Price v={r.reserve} /></td>
                         <td><Price v={r.low} /></td>
                         <td><Price v={r.high} cls="price-high" /></td>
@@ -2426,6 +2666,42 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* ── Flag Panel ── */}
+      <div className={`flag-panel${flagPanelOpen?" open":""}`}>
+        <div className="flag-panel-hdr">
+          <div className="flag-panel-title">⚑ Size Flags</div>
+          <span className="flag-panel-badge">{sizeFlags.filter(f=>!f.resolved).length} active</span>
+        </div>
+        <div className="flag-panel-body">
+          {sizeFlags.length === 0 && (
+            <div style={{padding:'32px 16px',textAlign:'center',fontSize:11,color:'var(--text-muted)',lineHeight:1.7}}>No size flags yet.<br/>Hover any Size cell in the results to flag it.</div>
+          )}
+          {sizeFlags.map(f => (
+            <div key={f.id} className={`flag-entry${f.resolved?' resolved':''}`}>
+              <div className="fe-r1">
+                <span className="fe-vb">{f.vintage||'NV'}</span>
+                <span className="fe-nm">{f.wine_name}</span>
+                <span className="fe-src">{f.auction_house}</span>
+                {f.resolved && <span className="fe-res-badge">✓ Resolved</span>}
+              </div>
+              <div className="fe-szrow">
+                <span className="fe-from">{f.listed_size}</span>
+                <span className="fe-arr">→</span>
+                <span className="fe-to">{f.suggested_size}</span>
+              </div>
+              {f.note && <div className="fe-note">"{f.note}"</div>}
+              <div className="fe-meta">⚑ {userProfiles[f.flagged_by]||f.flagged_by} · {new Date(f.created_at).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}</div>
+              {!f.resolved && (
+                <div className="fe-actions">
+                  <button className="fe-resolve" onClick={()=>resolveFlag(f.id)}>✓ Mark resolved</button>
+                  <button className="fe-dismiss" onClick={()=>dismissFlag(f.id)}>Dismiss</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* My List panel */}
       <div className={`slide-panel${panelOpen?" open":""}`}>
