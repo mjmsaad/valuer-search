@@ -49,12 +49,41 @@ async function signOut(token) {
   });
 }
 
+async function refreshSession(refreshToken) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: "POST",
+      headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.access_token) return null;
+    const newSession = {
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      expires_at: Math.floor(Date.now() / 1000) + (data.expires_in || 3600),
+      user: data.user,
+    };
+    localStorage.setItem("sb_session", JSON.stringify(newSession));
+    return newSession;
+  } catch { return null; }
+}
+
 async function getSession() {
   const raw = localStorage.getItem("sb_session");
   if (!raw) return null;
   try {
     const s = JSON.parse(raw);
-    if (s.expires_at && Date.now() / 1000 > s.expires_at) { localStorage.removeItem("sb_session"); return null; }
+    // If token expired or expiring within 5 minutes, try to refresh it silently
+    if (s.expires_at && Date.now() / 1000 > s.expires_at - 300) {
+      if (s.refresh_token) {
+        const refreshed = await refreshSession(s.refresh_token);
+        if (refreshed) return refreshed;
+      }
+      localStorage.removeItem("sb_session");
+      return null;
+    }
     return s;
   } catch { return null; }
 }
@@ -719,7 +748,7 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .calc-hist-empty{font-size:11px;color:var(--text-muted);font-style:italic;padding:14px 0;text-align:center;}
 .btn-hist-header{font-size:10px;font-weight:600;color:#8A8278;background:none;border:1px solid #3A3630;padding:5px 12px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:5px;}
 .btn-hist-header:hover,.btn-hist-header.open{background:rgba(255,255,255,.06);border-color:#5A5248;color:#B8B0A8;}
-.hist-panel{position:fixed;left:-360px;top:52px;bottom:0;width:360px;background:var(--cream);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:left 0.28s ease;box-shadow:4px 0 16px rgba(0,0,0,0.08);}
+.hist-panel{position:fixed;left:-360px;top:66px;bottom:0;width:360px;background:var(--cream);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:left 0.28s ease;box-shadow:4px 0 16px rgba(0,0,0,0.08);}
 .hist-panel.open{left:0;}
 .hist-panel-hdr{padding:13px 15px;border-bottom:1px solid var(--border);background:var(--white);flex-shrink:0;}
 .hist-panel-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--text);display:flex;align-items:baseline;justify-content:space-between;}
@@ -758,7 +787,7 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .btn-calc-header:hover,.btn-calc-header.open{background:rgba(184,146,42,0.1);border-color:#B8922A;}
 .btn-calc-header .calc-caret{font-size:8px;transition:transform 0.2s;}
 .btn-calc-header.open .calc-caret{transform:rotate(180deg);}
-.slide-panel{position:fixed;right:-340px;top:52px;bottom:0;width:340px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:right 0.28s ease;box-shadow:-4px 0 16px rgba(0,0,0,0.06);}
+.slide-panel{position:fixed;right:-340px;top:66px;bottom:0;width:340px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column;z-index:99;transition:right 0.28s ease;box-shadow:-4px 0 16px rgba(0,0,0,0.06);}
 .slide-panel.open{right:0;}
 .slide-panel-header{padding:13px 15px;border-bottom:1px solid var(--border);background:var(--white);}
 .slide-panel-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:var(--text);display:flex;align-items:baseline;justify-content:space-between;}
@@ -1058,11 +1087,11 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .flag-badge{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;color:#C47800;background:rgba(196,120,0,.1);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:1px 5px;margin-left:4px;}
 tr.row-flagged{background:rgba(196,120,0,.03)!important;}
 tr.row-flagged:hover{background:rgba(196,120,0,.07)!important;}
-.flag-panel{position:fixed;right:-380px;top:52px;bottom:0;width:380px;background:var(--cream);border-left:1px solid var(--border);z-index:100;display:flex;flex-direction:column;transition:right .25s ease;}
-.flag-panel.open{right:0;}
-.flag-panel-hdr{background:#1A1714;padding:12px 16px;display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0;}
-.flag-panel-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#E8C97A;}
-.flag-panel-badge{background:#C47800;color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 8px;font-family:'Inter',sans-serif;}
+.flag-panel{position:fixed;left:-380px;top:66px;bottom:0;width:380px;background:var(--cream);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;transition:left .25s ease;}
+.flag-panel.open{left:0;}
+.flag-panel-hdr{background:var(--white);padding:13px 15px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0;}
+.flag-panel-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--text);display:flex;align-items:baseline;justify-content:space-between;}
+.flag-panel-badge{background:rgba(196,120,0,.1);color:#C47800;border:1px solid rgba(196,120,0,.3);border-radius:20px;font-size:8px;font-weight:700;padding:2px 8px;font-family:'Inter',sans-serif;}
 .flag-panel-body{flex:1;overflow-y:auto;padding:8px 10px;}
 .flag-entry{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:10px 12px;margin-bottom:6px;}
 .flag-entry.resolved{opacity:.45;}
@@ -1636,7 +1665,15 @@ function App() {
     return () => { clearInterval(pingInterval); clearInterval(countInterval); };
   }, [session]);
 
-  useEffect(() => { getSession().then(s => { setSession(s); setChecking(false); }); }, []);
+  useEffect(() => {
+    getSession().then(s => { setSession(s); setChecking(false); });
+    // Silently refresh the token every 45 minutes while the app is open
+    const refreshInterval = setInterval(async () => {
+      const s = await getSession();
+      if (s) setSession(s);
+    }, 45 * 60 * 1000);
+    return () => clearInterval(refreshInterval);
+  }, []);
 
   useEffect(() => {
     if (!session) return;
@@ -2089,10 +2126,10 @@ function App() {
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
             <span className="header-user">{session.user?.email}</span>
-            <button className={`btn-flag-header${flagPanelOpen?" open":""}`} onClick={() => setFlagPanelOpen(o=>!o)}>
+            <button className={`btn-flag-header${flagPanelOpen?" open":""}`} onClick={() => { setFlagPanelOpen(o=>!o); setHistOpen(false); }}>
               ⚑ Flagged{sizeFlags.filter(f=>!f.resolved).length > 0 && ` (${sizeFlags.filter(f=>!f.resolved).length})`}
             </button>
-            <button className={`btn-hist-header${histOpen?" open":""}`} onClick={() => setHistOpen(o=>!o)}>
+            <button className={`btn-hist-header${histOpen?" open":""}`} onClick={() => { setHistOpen(o=>!o); setFlagPanelOpen(false); }}>
               ⏱ History
             </button>
             <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer" className="btn-ident-tool">
@@ -2153,7 +2190,7 @@ function App() {
         }
         {isMobile && dq && <div className="mob-count-bar"><span>{totalCount.toLocaleString()} wine{totalCount!==1?"s":""} · page {page} of {totalPages}</span></div>}
 
-        <main className="main" style={{paddingRight:panelOpen?"360px":undefined}}>
+        <main className="main">
           {error && <div className="err-banner"><span>⚠</span><span>{error}</span></div>}
 
           <div className="search-section">
@@ -2918,12 +2955,20 @@ function App() {
 
       {/* Valuation History Panel */}
       <div className={`hist-panel${histOpen?" open":""}`}>
-        <div className="hist-panel-header">
-          <div className="hist-panel-title">⏱ Valuation History</div>
+        <div className="hist-panel-hdr">
+          <div className="hist-panel-title">
+            <span>⏱ Valuation History</span>
+          </div>
+          <div className="hist-panel-sub">All team exports — newest first</div>
+        </div>
+        <div className="hist-search-wrap">
           <input className="hist-search-input" placeholder="Search by recipient…"
             value={histSearch} onChange={e => setHistSearch(e.target.value)} />
         </div>
-        <div className="hist-panel-body">
+        <div className="hist-items">
+          {valuationHistory.length === 0 && (
+            <div className="hist-empty">No exports yet.<br/>Generate an email or PDF to see history here.</div>
+          )}
           {valuationHistory.filter(h => !histSearch || (h.recipient_name||'').toLowerCase().includes(histSearch.toLowerCase())).map(h => {
             const isExp = expandedHist === h.id;
             const d = new Date(h.created_at);
@@ -2932,31 +2977,34 @@ function App() {
             const yesterday = new Date(now - 86400000).toDateString() === d.toDateString();
             const dateLabel = sameDay ? `Today ${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}` : yesterday ? 'Yesterday' : d.toLocaleDateString([],{day:'numeric',month:'short',year:'numeric'});
             return (
-              <div key={h.id} className="hist-entry" onClick={() => setExpandedHist(isExp ? null : h.id)}>
-                <div className="hist-entry-row">
-                  <div className="hist-entry-name">{h.recipient_name || 'Unknown'}</div>
-                  <span className={`hist-type-badge ${h.export_type}`}>{h.export_type}</span>
+              <div key={h.id} className={`hist-item${isExp?' open':''}`} onClick={() => setExpandedHist(isExp ? null : h.id)}>
+                <div className="hist-item-row">
+                  <span className={`hist-type-badge ${h.export_type?.toLowerCase()||'email'}`}>{h.export_type||'Email'}</span>
+                  <div className="hist-info">
+                    <div className="hist-recipient">{h.recipient_name || 'Unknown'}</div>
+                    <div className="hist-meta">{dateLabel}</div>
+                  </div>
+                  <div className="hist-item-count">{(h.items||[]).length} wine{(h.items||[]).length!==1?'s':''}</div>
                 </div>
-                <div className="hist-entry-meta">{dateLabel} · {(h.items||[]).length} wine{(h.items||[]).length!==1?'s':''}</div>
                 {isExp && (
-                  <div className="hist-entry-items">
+                  <div className="hist-detail">
+                    <div className="hist-detail-label">Items</div>
                     {(h.items||[]).map((it,i) => (
-                      <div key={i} className="hist-item-row">
-                        <span className="hist-item-vbadge">{it.vintage||'NV'}</span>
-                        <span className="hist-item-name">{it.name}</span>
-                        <span className="hist-item-price">{it.high ? `$${Math.round(cleanPrice(it.high))}` : '—'}</span>
+                      <div key={i} className="hist-wine-row">
+                        <span className="hist-wine-vbadge">{it.vintage||'NV'}</span>
+                        <span className="hist-wine-name">{it.name}</span>
+                        <span className="hist-wine-price">{it.high ? `$${Math.round(cleanPrice(it.high)||0)}` : '—'}</span>
                       </div>
                     ))}
-                    <div className="hist-entry-actions">
-                      <button className="hist-btn-regen" onClick={e => { e.stopPropagation(); setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setRecipientName(h.recipient_name||''); setShowExportModal(true); setExpandedHist(null); setHistOpen(false); }}>Re-generate</button>
-                      <button className="hist-btn-load" onClick={e => { e.stopPropagation(); setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setExpandedHist(null); setHistOpen(false); }}>Load to My List</button>
+                    <div className="hist-action-row">
+                      <button className="hist-regen-btn" onClick={e => { e.stopPropagation(); setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setRecipientName(h.recipient_name||''); setShowExportModal(true); setExpandedHist(null); setHistOpen(false); }}>Re-generate</button>
+                      <button className="hist-load-btn" onClick={e => { e.stopPropagation(); setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setExpandedHist(null); setHistOpen(false); }}>Load to My List</button>
                     </div>
                   </div>
                 )}
               </div>
             );
           })}
-          {valuationHistory.length === 0 && <div className="hist-empty">No exports yet. Emails and PDFs will appear here.</div>}
         </div>
       </div>
 

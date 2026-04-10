@@ -1,6 +1,18 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.4.0**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.4.1**.
+
+---
+
+## [2.4.1] — 10 April 2026 · Panel & Session Fixes
+
+### Fixed
+- **History panel formatting lost** — the history panel JSX had been rewritten with entirely different class names from the CSS (`hist-panel-header` vs `hist-panel-hdr`, `hist-entry` vs `hist-item`, `hist-btn-regen` vs `hist-regen-btn` etc.). None of the styling was applying, leaving plain unstyled text. All class names corrected to match the CSS
+- **Flag panel moved to left side** — the Flagged panel was opening on the right, sitting behind and overlapping the My List tab. Moved to the left side alongside History
+- **Flag and History panels mutually exclusive** — opening one now automatically closes the other. Previously both could be open simultaneously, with one rendering behind the other
+- **My List panel shrinking results** — the main content area had `paddingRight: 340px` added dynamically when My List opened, physically squishing the table. Removed — My List now overlays like the other panels
+- **All panels misaligned with header** — all three side panels were at `top: 52px`, placing them 12px inside the header. Corrected to `top: 66px` (64px header + 2px wine border line) so panels start flush below the red border line
+- **Random session logouts** — the app used a hand-rolled session manager with no token refresh logic. When the JWT expired (default 1 hour), it deleted the session and logged the user out silently. Added a `refreshSession()` function that calls Supabase's refresh token endpoint before giving up, plus a background interval that silently refreshes the token every 45 minutes while the app is open
 
 ---
 
@@ -381,6 +393,7 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.4.1 | 10 Apr 2026 | Panel layout fixes, session refresh, History panel styling restored |
 | 2.4.0 | 10 Apr 2026 | Size flags, text notes in paste-from-spreadsheet, Mixed Lots note |
 | 2.3.3 | 3 Apr 2026  | Mobile feature pack — pagination, My List edit, dark toggle, swipe, logo |
 | 2.3.2 | 1 Apr 2026  | Mobile colour fix — search header unified background |
