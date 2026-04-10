@@ -537,7 +537,7 @@ select:focus{border-color:var(--wine);}
 .pg:hover:not(:disabled){border-color:var(--wine);color:var(--wine);}
 .pg.on{background:var(--wine);color:white;border-color:var(--wine);}
 .pg:disabled{opacity:0.35;cursor:not-allowed;}
-.table-card{background:var(--white);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);}
+.table-card{background:var(--white);border:1px solid var(--border);box-shadow:var(--shadow-sm);}
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead{background:var(--cream);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:10;}
@@ -977,7 +977,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .size-flag-btn{background:none;border:1px solid var(--border);cursor:pointer;font-size:11px;color:var(--text-muted);padding:2px 5px;line-height:1;border-radius:3px;transition:all .12s;font-family:'Inter',sans-serif;height:20px;display:inline-flex;align-items:center;}
 .size-flag-btn:hover{color:#C47800;border-color:rgba(196,120,0,.4);background:rgba(196,120,0,.06);}
 .size-flag-btn.flagged{color:#C47800;border-color:rgba(196,120,0,.4);background:rgba(196,120,0,.08);}
-.flag-popover{position:absolute;top:calc(100% + 8px);left:-8px;width:300px;background:var(--white);border:1px solid var(--border);border-radius:9px;box-shadow:0 12px 36px rgba(0,0,0,.15);z-index:500;overflow:hidden;}
+.flag-popover{position:fixed;width:300px;background:var(--white);border:1px solid var(--border);border-radius:9px;box-shadow:0 12px 36px rgba(0,0,0,.18);z-index:9999;overflow:hidden;}
 .flag-popover-arrow{position:absolute;top:-6px;left:18px;width:11px;height:11px;background:var(--white);border-left:1px solid var(--border);border-top:1px solid var(--border);transform:rotate(45deg);}
 .flag-pop-hdr{background:#1A1714;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
 .flag-pop-ttl{font-size:9px;font-weight:700;color:#E8C97A;letter-spacing:.06em;text-transform:uppercase;}
@@ -1449,6 +1449,7 @@ function App() {
   const [flagPanelOpen, setFlagPanelOpen]     = useState(false);
   const [sizeFlags, setSizeFlags]             = useState([]);   // {wine_name,vintage,auction_house,listed_size,suggested_size,note,flagged_by,id,resolved}
   const [flagPopover, setFlagPopover]         = useState(null); // row key of open popover
+  const [flagPopoverPos, setFlagPopoverPos]   = useState({top:0,left:0}); // fixed coords for popover
   const [flagForm, setFlagForm]               = useState({size:'',note:''});
   const [flagSubmitting, setFlagSubmitting]   = useState(false);
   const [mobSheet, setMobSheet]               = useState(null);
@@ -2306,69 +2307,19 @@ function App() {
                                 <button
                                   className={`size-flag-btn${existingFlag?' flagged':''}`}
                                   title={existingFlag ? 'View flag' : 'Flag size issue'}
-                                  onClick={e => { e.stopPropagation(); setFlagPopover(isOpen?null:rowKey); if(!existingFlag) setFlagForm({size:'',note:''}); }}>
+                                  onClick={e => {
+                                  e.stopPropagation();
+                                  if (isOpen) { setFlagPopover(null); return; }
+                                  const rect = e.currentTarget.getBoundingClientRect();
+                                  setFlagPopoverPos({top: rect.bottom + 8, left: Math.min(rect.left, window.innerWidth - 316)});
+                                  setFlagPopover(rowKey);
+                                  if (!existingFlag) setFlagForm({size:'',note:''});
+                                }}>
                                   ⚑
                                 </button>
                               </div>
-                              {(isOpen || isConfirmed) && (
-                                <div className="flag-popover" onClick={e=>e.stopPropagation()}>
-                                  <div className="flag-popover-arrow"></div>
-                                  <div className="flag-pop-hdr">
-                                    <span className="flag-pop-ttl">{existingFlag ? '⚑ Size Flag' : '⚑ Flag size issue'}</span>
-                                    <button className="flag-pop-x" onClick={()=>setFlagPopover(null)}>×</button>
-                                  </div>
-                                  {isConfirmed ? (
-                                    <div className="flag-confirmed">
-                                      <div className="flag-conf-tick">✓</div>
-                                      <div className="flag-conf-title">Flag recorded</div>
-                                      <div className="flag-conf-sub">Visible to all team members.</div>
-                                      <button className="flag-conf-done" onClick={()=>setFlagPopover(null)}>Done</button>
-                                    </div>
-                                  ) : existingFlag ? (
-                                    <div className="flag-view-body">
-                                      <div className="flag-pop-wine">{r.name}</div>
-                                      <div className="flag-pop-sub">{r.vintage} · {r.auction_house}</div>
-                                      <div className="flag-view-sz-row">
-                                        <span className="flag-view-from">{existingFlag.listed_size}</span>
-                                        <span className="flag-view-arrow">→</span>
-                                        <span className="flag-view-to">{existingFlag.suggested_size}</span>
-                                      </div>
-                                      {existingFlag.note && <div className="flag-view-note">"{existingFlag.note}"</div>}
-                                      <div className="flag-view-meta">⚑ {userProf} · {new Date(existingFlag.created_at).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}</div>
-                                      <div className="flag-view-actions">
-                                        <button className="flag-view-resolve" onClick={()=>{resolveFlag(existingFlag.id);setFlagPopover(null);}}>✓ Mark resolved</button>
-                                        <button className="flag-view-dismiss" onClick={()=>{dismissFlag(existingFlag.id);setFlagPopover(null);}}>Dismiss</button>
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <div className="flag-pop-body">
-                                      <div className="flag-pop-wine">{r.name}</div>
-                                      <div className="flag-pop-sub">{r.vintage} · {r.auction_house} · Listed: {r.size||'750ml'}</div>
-                                      <div className="flag-size-preview">
-                                        <span className="flag-preview-from">{r.size||'750ml'}</span>
-                                        <span className="flag-preview-arrow">→</span>
-                                        <span className={`flag-preview-to${flagForm.size?'':' empty'}`}>{flagForm.size||'select below…'}</span>
-                                      </div>
-                                      <label className="flag-pop-lbl">What size should it be?</label>
-                                      <div className="flag-size-grid">
-                                        {[['375ml','Half'],['700ml','Spirits'],['1500ml','Magnum'],['3000ml','Dbl Mag'],['4500ml','Jeroboam'],['6000ml','Imperial']].map(([val,lbl])=>(
-                                          <div key={val} className={`flag-size-opt${flagForm.size===val?' selected':''}`} onClick={()=>setFlagForm(f=>({...f,size:val}))}>
-                                            <div className="flag-size-opt-val">{val}</div>
-                                            <div className="flag-size-opt-lbl">{lbl}</div>
-                                          </div>
-                                        ))}
-                                      </div>
-                                      <label className="flag-pop-lbl">Note <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--border)'}}>optional</span></label>
-                                      <div className="flag-note-wrap">
-                                        <textarea className="flag-note-ta" maxLength={200} placeholder="e.g. confirmed with client, lot photos show magnum…" value={flagForm.note} onChange={e=>setFlagForm(f=>({...f,note:e.target.value}))} />
-                                        <span className="flag-note-chars">{flagForm.note.length} / 200</span>
-                                      </div>
-                                      <button className="flag-submit-btn" disabled={!flagForm.size||flagSubmitting} onClick={()=>submitSizeFlag(r)}>{flagSubmitting?'Submitting…':'Submit flag'}</button>
-                                      <button className="flag-cancel-btn" onClick={()=>setFlagPopover(null)}>Cancel</button>
-                                    </div>
-                                  )}
-                                </div>
                               )}
+                            </td> )}
                             </td>
                           );
                         })()}
@@ -2676,6 +2627,74 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* ── Flag Popover (rendered at app level to avoid overflow clipping) ── */}
+      {flagPopover && (() => {
+        const isConfirmed = flagPopover.startsWith('confirmed:');
+        const activeKey = isConfirmed ? flagPopover.replace('confirmed:','') : flagPopover;
+        const activeRow = rows.find(r => (r.vintage + r.name + r.auction_house) === activeKey);
+        const existingFlag = activeRow ? getFlagForRow(activeRow) : null;
+        const userProf = userProfiles[existingFlag?.flagged_by] || existingFlag?.flagged_by || '';
+        if (!activeRow && !isConfirmed) return null;
+        return (
+          <div className="flag-popover" style={{top:flagPopoverPos.top, left:flagPopoverPos.left}} onClick={e=>e.stopPropagation()}>
+            <div className="flag-pop-hdr">
+              <span className="flag-pop-ttl">{isConfirmed ? '⚑ Flag submitted' : existingFlag ? '⚑ Size Flag' : '⚑ Flag size issue'}</span>
+              <button className="flag-pop-x" onClick={()=>setFlagPopover(null)}>×</button>
+            </div>
+            {isConfirmed ? (
+              <div className="flag-confirmed">
+                <div className="flag-conf-tick">✓</div>
+                <div className="flag-conf-title">Flag recorded</div>
+                <div className="flag-conf-sub">Visible to all team members.</div>
+                <button className="flag-conf-done" onClick={()=>setFlagPopover(null)}>Done</button>
+              </div>
+            ) : existingFlag ? (
+              <div className="flag-view-body">
+                <div className="flag-pop-wine">{activeRow?.name}</div>
+                <div className="flag-pop-sub">{activeRow?.vintage} · {activeRow?.auction_house}</div>
+                <div className="flag-view-sz-row">
+                  <span className="flag-view-from">{existingFlag.listed_size}</span>
+                  <span className="flag-view-arrow">→</span>
+                  <span className="flag-view-to">{existingFlag.suggested_size}</span>
+                </div>
+                {existingFlag.note && <div className="flag-view-note">"{existingFlag.note}"</div>}
+                <div className="flag-view-meta">⚑ {userProf} · {new Date(existingFlag.created_at).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}</div>
+                <div className="flag-view-actions">
+                  <button className="flag-view-resolve" onClick={()=>{resolveFlag(existingFlag.id);setFlagPopover(null);}}>✓ Mark resolved</button>
+                  <button className="flag-view-dismiss" onClick={()=>{dismissFlag(existingFlag.id);setFlagPopover(null);}}>Dismiss</button>
+                </div>
+              </div>
+            ) : activeRow ? (
+              <div className="flag-pop-body">
+                <div className="flag-pop-wine">{activeRow.name}</div>
+                <div className="flag-pop-sub">{activeRow.vintage} · {activeRow.auction_house} · Listed: {activeRow.size||'750ml'}</div>
+                <div className="flag-size-preview">
+                  <span className="flag-preview-from">{activeRow.size||'750ml'}</span>
+                  <span className="flag-preview-arrow">→</span>
+                  <span className={`flag-preview-to${flagForm.size?'':' empty'}`}>{flagForm.size||'select below…'}</span>
+                </div>
+                <label className="flag-pop-lbl">What size should it be?</label>
+                <div className="flag-size-grid">
+                  {[['375ml','Half'],['700ml','Spirits'],['1500ml','Magnum'],['3000ml','Dbl Mag'],['4500ml','Jeroboam'],['6000ml','Imperial']].map(([val,lbl])=>(
+                    <div key={val} className={`flag-size-opt${flagForm.size===val?' selected':''}`} onClick={()=>setFlagForm(f=>({...f,size:val}))}>
+                      <div className="flag-size-opt-val">{val}</div>
+                      <div className="flag-size-opt-lbl">{lbl}</div>
+                    </div>
+                  ))}
+                </div>
+                <label className="flag-pop-lbl">Note <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--border)'}}>optional</span></label>
+                <div className="flag-note-wrap">
+                  <textarea className="flag-note-ta" maxLength={200} placeholder="e.g. confirmed with client, lot photos show magnum…" value={flagForm.note} onChange={e=>setFlagForm(f=>({...f,note:e.target.value}))} />
+                  <span className="flag-note-chars">{flagForm.note.length} / 200</span>
+                </div>
+                <button className="flag-submit-btn" disabled={!flagForm.size||flagSubmitting} onClick={()=>submitSizeFlag(activeRow)}>{flagSubmitting?'Submitting…':'Submit flag'}</button>
+                <button className="flag-cancel-btn" onClick={()=>setFlagPopover(null)}>Cancel</button>
+              </div>
+            ) : null}
+          </div>
+        );
+      })()}
 
       {/* ── Flag Panel ── */}
       <div className={`flag-panel${flagPanelOpen?" open":""}`}>
