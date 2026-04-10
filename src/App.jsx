@@ -974,10 +974,9 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 /* ── Size flag styles ── */
 .size-flag-cell{position:relative;}
 .size-flagged-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(196,120,0,.09);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 7px;cursor:pointer;color:#C47800;font-size:10px;font-weight:600;}
-.size-unflagged{cursor:pointer;color:var(--text-muted);}
-.size-unflagged:hover{color:#C47800;}
-.size-flag-hint{opacity:0;font-size:8px;color:#C47800;margin-left:3px;transition:opacity .12s;}
-.size-unflagged:hover .size-flag-hint{opacity:1;}
+.size-flag-btn{background:none;border:none;cursor:pointer;font-size:10px;color:var(--border);padding:0 2px;line-height:1;border-radius:2px;transition:color .12s,background .12s;font-family:'Inter',sans-serif;}
+.size-flag-btn:hover{color:#C47800;}
+.size-flag-btn.flagged{color:#C47800;}
 .flag-popover{position:absolute;top:calc(100% + 8px);left:-8px;width:300px;background:var(--white);border:1px solid var(--border);border-radius:9px;box-shadow:0 12px 36px rgba(0,0,0,.15);z-index:500;overflow:hidden;}
 .flag-popover-arrow{position:absolute;top:-6px;left:18px;width:11px;height:11px;background:var(--white);border-left:1px solid var(--border);border-top:1px solid var(--border);transform:rotate(45deg);}
 .flag-pop-hdr{background:#1A1714;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
@@ -2291,15 +2290,15 @@ function App() {
                           const userProf = userProfiles[existingFlag?.flagged_by] || existingFlag?.flagged_by || '';
                           return (
                             <td className="size-flag-cell">
-                              {existingFlag ? (
-                                <span className="size-flagged-pill" onClick={e => { e.stopPropagation(); setFlagPopover(isOpen?null:rowKey); }}>
-                                  {r.size||'750ml'} ⚑
-                                </span>
-                              ) : (
-                                <span className="size-unflagged" onClick={e => { e.stopPropagation(); setFlagPopover(isOpen?null:rowKey); setFlagForm({size:'',note:''}); }}>
-                                  {r.size||'750ml'}<span className="size-flag-hint">⚑</span>
-                                </span>
-                              )}
+                              <div style={{display:'flex',alignItems:'center',gap:5}}>
+                                <span style={{color:'var(--text-muted)',fontSize:11}}>{r.size||'750ml'}</span>
+                                <button
+                                  className={`size-flag-btn${existingFlag?' flagged':''}`}
+                                  title={existingFlag ? 'View flag' : 'Flag size issue'}
+                                  onClick={e => { e.stopPropagation(); setFlagPopover(isOpen?null:rowKey); if(!existingFlag) setFlagForm({size:'',note:''}); }}>
+                                  ⚑
+                                </button>
+                              </div>
                               {(isOpen || isConfirmed) && (
                                 <div className="flag-popover" onClick={e=>e.stopPropagation()}>
                                   <div className="flag-popover-arrow"></div>
