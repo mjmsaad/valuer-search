@@ -2318,8 +2318,6 @@ function App() {
                                   ⚑
                                 </button>
                               </div>
-                              )}
-                            </td> )}
                             </td>
                           );
                         })()}
