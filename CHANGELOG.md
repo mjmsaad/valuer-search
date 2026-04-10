@@ -1,6 +1,20 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest changes listed first.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.4.0**.
+
+---
+
+## [2.4.0] — 10 April 2026 · Size Flags & Text Notes
+
+### New
+- **Size flag feature** — hover any Size cell in the search results to reveal a ⚑ button. Click it to flag the listed size as incorrect, pick the correct size from a quick-tap grid (Half, Magnum, Double Magnum etc.), add an optional note, and submit. Flags are stored in Supabase and immediately visible to all team members
+- **Flagged items panel** — a ⚑ Flagged (n) button in the header slides in a panel showing all active flags across the team. Each entry shows the wine, who flagged it, the size discrepancy and the note. Two actions per flag: Mark resolved or Dismiss
+- **Text notes in paste-from-spreadsheet** — the Reserve, Low and High cells now accept free-text notes (e.g. "Not suitable for auction", "Need more information") when pasting from a spreadsheet. Notes appear in italic grey in My List, the email and the PDF — placed in the correct column, not forced into Reserve
+
+### Fixed
+- **Note appearing in wrong column** — text notes in the Low or High cell were displaying under the Reserve column due to a colspan approach that merged all three price columns. Each column now renders independently so notes sit in the correct column
+- **Text notes not showing in PDF** — the PDF uses a separate row builder (`buildPDFHTML`) with its own price formatter that only understood numbers. Updated to pass text through the same way as the email builder
+- **Mixed Lots note added to NOTES section** — "Lots marked with Mixed Lots means that as they fall under our value threshold, if listing these items, they will be listed unreserved, starting at $10 and/or in mixed lots of 6 starting at $20." added as item 4 in the NOTES section of both email and PDF (after More Information Needed)
 
 ---
 
@@ -367,6 +381,9 @@ All changes to the Valuer Search app are documented here. Newest changes listed 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.4.0 | 10 Apr 2026 | Size flags, text notes in paste-from-spreadsheet, Mixed Lots note |
+| 2.3.3 | 3 Apr 2026  | Mobile feature pack — pagination, My List edit, dark toggle, swipe, logo |
+| 2.3.2 | 1 Apr 2026  | Mobile colour fix — search header unified background |
 | 2.3.1 | 1 Apr 2026  | Mobile polish — pill search, unified colours, device detection, iOS fixes |
 | 2.3.0 | 30 Mar 2026 | Mobile layout — Variant D cards, bottom sheet, bottom nav, 768px breakpoint |
 | 2.2.3 | 30 Mar 2026 | Valuation History — auto-save, left-side panel, re-generate |

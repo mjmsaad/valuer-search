@@ -86,8 +86,19 @@ async function fetchHouses(token) {
 
 function cleanPrice(v) {
   if (!v || v === "#DIV/0!" || v === "#VALUE!") return null;
-  const n = parseFloat(String(v).replace(/[$,\s]/g, ""));
-  return isNaN(n) || n === 0 ? null : n;
+  const s = String(v).trim();
+  const n = parseFloat(s.replace(/[$,\s]/g, ""));
+  if (!isNaN(n) && n !== 0) return n;  // numeric
+  return null;
+}
+// Returns the raw text note if the value is non-numeric, or null if empty/dash
+function priceOrNote(v) {
+  if (!v) return null;
+  const s = String(v).trim();
+  if (!s || s === '—' || s === '-') return null;
+  const n = parseFloat(s.replace(/[$,\s]/g, ""));
+  if (!isNaN(n) && n !== 0) return null;  // it's a number, not a note
+  return s;  // it's a text note
 }
 
 function fmtPrice(n) {
@@ -115,8 +126,10 @@ function AuctionChip({ h }) {
 
 function Price({ v, cls }) {
   const n = cleanPrice(v);
-  if (n === null) return <span className="price-nil">—</span>;
-  return <span className={"price " + (cls || "")}>{fmtPrice(n)}</span>;
+  if (n !== null) return <span className={"price " + (cls || "")}>{fmtPrice(n)}</span>;
+  const note = priceOrNote(v);
+  if (note) return <span style={{fontSize:9,fontStyle:'italic',color:'#8A8278',whiteSpace:'nowrap'}}>{note}</span>;
+  return <span className="price-nil">—</span>;
 }
 
 function Th({ col, label, sortCol, sortDir, onSort }) {
@@ -195,7 +208,7 @@ async function computeAuctions() {
 
 function buildEmailHTML(name, auctions) {
   const rowsHTML = window._listItemsForExport ? (() => {
-      const adjP = (v,m) => { const n = cleanPrice(v); return n ? `$${Math.round(n*(m||1))}` : "—"; };
+      const adjP = (v,m) => { const n = cleanPrice(v); if (n) return `$${Math.round(n*(m||1))}`; const note = priceOrNote(v); return note ? `<em style="font-size:10px;color:#8A8278;">${note}</em>` : "—"; };
       return window._listItemsForExport.map((r,i) => {
         const baseMult = SIZE_MULTIPLIERS.find(s => s.value === (r.baseSize||"750ml"))?.mult || 1;
         const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
@@ -204,14 +217,20 @@ function buildEmailHTML(name, auctions) {
         const bg = i%2===0?'#ffffff':'#F5F2EE';
         const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:10px;color:#B8922A;">(${r.size})</span>` : '';
         const qtyNote = r.qty > 1 ? ` <span style="font-size:10px;color:#8A8278;">×${r.qty}</span>` : '';
+        const resVal = adjP(r.reserve,effM);
+        const lowVal = adjP(r.low,effM);
+        const hiVal  = adjP(r.high,effM);
+        const resIsNum = resVal.startsWith('$');
+        const lowIsNum = lowVal.startsWith('$');
+        const hiIsNum  = hiVal.startsWith('$');
         return `<tr>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;">${r.vintage||""}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;">${r.name||""}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;text-align:right;">${r.qty||1}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#1A1714;">${r.size||"750ml"}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#7B1D1D;font-weight:600;text-align:right;">${adjP(r.reserve,effM)}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:#8A6020;font-weight:500;text-align:right;">${adjP(r.low,effM)}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;background:${bg};color:#1E5C3A;font-weight:600;text-align:right;">${adjP(r.high,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:${resIsNum?'#7B1D1D':'#8A8278'};font-weight:${resIsNum?'600':'400'};text-align:${resIsNum?'right':'left'};">${resVal}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;background:${bg};color:${lowIsNum?'#8A6020':'#8A8278'};font-weight:${lowIsNum?'500':'400'};font-style:${lowIsNum?'normal':'italic'};text-align:${lowIsNum?'right':'left'};">${lowVal}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;background:${bg};color:${hiIsNum?'#1E5C3A':'#8A8278'};font-weight:${hiIsNum?'600':'400'};font-style:${hiIsNum?'normal':'italic'};text-align:${hiIsNum?'right':'left'};">${hiVal}</td>
     </tr>`;}).join("");
     })() : ""
   
@@ -281,7 +300,14 @@ ${auctionHTML}
 }
 
 function buildPDFHTML(name, auctions, listItems) {
-  const ap = (v,m) => { const n = parseFloat(String(v||"").replace(/[$,]/g,"")); return (n && n>0) ? `$${Math.round(n*(m||1))}` : "—"; };
+  const ap = (v,m) => {
+    if (!v && v !== 0) return '—';
+    const s = String(v).trim();
+    const n = parseFloat(s.replace(/[$,]/g,''));
+    if (!isNaN(n) && n > 0) return `$${Math.round(n*(m||1))}`;
+    if (s && s !== '—' && s !== '-') return s;  // text note
+    return '—';
+  };
   const rowsHTML = listItems.map((r,i) => {
     const baseMult = SIZE_MULTIPLIERS.find(s => s.value === (r.baseSize||"750ml"))?.mult || 1;
     const outMult  = SIZE_MULTIPLIERS.find(s => s.value === (r.size||"750ml"))?.mult || 1;
@@ -290,14 +316,21 @@ function buildPDFHTML(name, auctions, listItems) {
     const bg = i%2===0?'background:#ffffff;':'background:#F5F2EE;';
     const szNote = (r.size && r.size !== '750ml') ? ` <span style="font-size:9px;color:#B8922A;">(${r.size})</span>` : '';
     const qtyNote = r.qty > 1 ? ` <span style="font-size:9px;color:#8A8278;">×${r.qty}</span>` : '';
+    const resVal = ap(r.reserve,effM);
+    const lowVal = ap(r.low,effM);
+    const hiVal  = ap(r.high,effM);
+    const resIsNum = resVal.startsWith('$');
+    const lowIsNum = lowVal.startsWith('$');
+    const hiIsNum  = hiVal.startsWith('$');
+    // If reserve is empty/dash and a note exists in low/high, span it across price columns
     return `<tr>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;">${r.vintage||""}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;">${r.name||""}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;text-align:right;">${r.qty||1}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#1A1714;">${r.size||"750ml"}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#7B1D1D;font-weight:600;text-align:right;">${ap(r.reserve,effM)}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:#8A6020;font-weight:500;text-align:right;">${ap(r.low,effM)}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;${bg}color:#1E5C3A;font-weight:600;text-align:right;">${ap(r.high,effM)}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:${resIsNum?'#7B1D1D':'#8A8278'};font-weight:${resIsNum?'600':'400'};font-style:${resIsNum?'normal':'italic'};text-align:${resIsNum?'right':'left'};">${resVal}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;border-right:1px solid #F0EDE9;${bg}color:${lowIsNum?'#8A6020':'#8A8278'};font-weight:${lowIsNum?'500':'400'};font-style:${lowIsNum?'normal':'italic'};text-align:${lowIsNum?'right':'left'};">${lowVal}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #E2DDD6;${bg}color:${hiIsNum?'#1E5C3A':'#8A8278'};font-weight:${hiIsNum?'600':'400'};font-style:${hiIsNum?'normal':'italic'};text-align:${hiIsNum?'right':'left'};">${hiVal}</td>
     </tr>`;}).join("");
 
   const auctionHTML = auctions.map(a => `
