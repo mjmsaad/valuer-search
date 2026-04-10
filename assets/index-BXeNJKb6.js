@@ -42,6 +42,7 @@ Error generating stack: `+a.message+`
     <li style="margin-bottom:4px;">Lots marked as "<u><strong>Not Suitable for Auction</strong></u>" are due to conditional issues and concerns, or their values not meeting our minimum value requirements to be entered into auction.</li>
     <li style="margin-bottom:4px;">Lots marked as "<u><strong>No Data Available</strong></u>" means there is no sales information available. If listing these items, they will be listed unreserved, starting at $10 and/or in mixed lots of 6 starting at $20.</li>
     <li style="margin-bottom:4px;">Lots Marked with "<u><strong>More Information Needed</strong></u>" means that more specific information or photos are required to identify the correct valuation.</li>
+    <li style="margin-bottom:4px;">Lots marked with "<u><strong>Mixed Lots</strong></u>" means that as they fall under our value threshold, if listing these items, they will be listed unreserved, starting at $10 and/or in mixed lots of 6 starting at $20.</li>
   </ol>
 </div>
 <div style="border-left:3px solid #E2DDD6;padding:8px 12px;margin:0 0 18px;line-height:1.6;color:#1A1714;">
@@ -130,6 +131,7 @@ ${f}
     <li>Lots marked as "<u><strong>Not Suitable for Auction</strong></u>" are due to conditional issues and concerns, or their values not meeting our minimum value requirements to be entered into auction.</li>
     <li>Lots marked as "<u><strong>No Data Available</strong></u>" means there is no sales information available. If listing these items, they will be listed unreserved, starting at $10 and/or in mixed lots of 6 starting at $20.</li>
     <li>Lots Marked with "<u><strong>More Information Needed</strong></u>" means that more specific information or photos are required to identify the correct valuation.</li>
+    <li>Lots marked with "<u><strong>Mixed Lots</strong></u>" means that as they fall under our value threshold, if listing these items, they will be listed unreserved, starting at $10 and/or in mixed lots of 6 starting at $20.</li>
   </ol></div>
   <div class="key">
     <p style="margin:0 0 4px;"><em><strong>The above are recorded 'hammer' or net prices paid at auction throughout Australia over the last 6-12 months.</strong></em></p>
