@@ -1,6 +1,14 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.4.2**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.5.0**.
+
+---
+
+## [2.5.0] — 13 April 2026 · Blank Email & Auction Date Tile
+
+### New
+- **Blank valuation email** — a gold "✉ Blank email" button in the header generates the full valuation email template without the table. All sections remain intact (auction dates, notes, getting your wine to us, next steps) — just no data table. Available at all times regardless of whether My List has items. Also appears in the My List footer alongside Email and PDF for in-flow access
+- **Auction date tile** — a collapsible tile below the header shows the next upcoming Wickman's auction. Collapsed state shows the auction date range and SA/VIC cutoff date pills at a glance. Clicking expands to a 4-column grid showing SA closes, VIC closes, Opens, and Closes — each with a colour-coded days-remaining badge (amber for cutoffs, green for auction dates). Pre-loads on login using the same iCal feed as the email/PDF exports. Hidden on mobile
 
 ---
 
@@ -409,6 +417,7 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.5.0 | 13 Apr 2026 | Blank valuation email button, next auction date tile |
 | 2.4.2 | 13 Apr 2026 | Mobile flag feature, double popup fix, panel layout fixes, session refresh |
 | 2.4.1 | 10 Apr 2026 | Panel layout fixes, session refresh, History panel styling restored |
 | 2.4.0 | 10 Apr 2026 | Size flags, text notes in paste-from-spreadsheet, Mixed Lots note |
