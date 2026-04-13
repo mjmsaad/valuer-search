@@ -1692,6 +1692,7 @@ function App() {
   const [emailWindowContent, setEmailWindowContent] = useState('');
   const [emailCopied, setEmailCopied]       = useState(false);
   const debounceRef = useRef(null);
+  const mobViewRef  = useRef(null);
 
   // Effects
   useEffect(() => {
@@ -1797,6 +1798,13 @@ function App() {
       })
       .finally(() => setLoading(false));
   }, [session, dq, house, page, sortCol, sortDir]);
+
+  // Scroll mobile results to top when rows change
+  useEffect(() => {
+    if (isMobile && mobViewRef.current) {
+      mobViewRef.current.scrollTop = 0;
+    }
+  }, [rows, isMobile]);
 
   // Always fetch user_profiles on login so team member names are ready
   useEffect(() => {
@@ -2598,7 +2606,7 @@ function App() {
             )}
 
             {/* ── Mobile card view (≤768px) ── */}
-            <div className="mob-view">
+            <div className="mob-view" ref={mobViewRef}>
               {rows.length === 0 && dq ? (
                 <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
                   No results found for "{dq}"
@@ -2738,7 +2746,7 @@ function App() {
                     <div className="mob-card-r1">
                       <span className="mob-vbadge">{r.vintage||"NV"}</span>
                       <span className="mob-card-name">{r.name}</span>
-                      {r.auction_house && <span className={`mob-src-chip ${(r.auction_house||'').toLowerCase().replace(/[^a-z]/g,'')}`}>{r.auction_house}</span>}
+                      {r.auction_house && <span className={`mob-src-chip ${((h=>(h.includes('langton')?'langtons':h.includes('wickman')||h.includes('mw')?'wickmans':h.includes('awa')?'awa':'other'))((r.auction_house||'').toLowerCase()))`}>{r.auction_house}</span>}
                       <button className={`mob-edit-btn${isEditing?' open':''}`} onClick={() => setMobEditRow(isEditing?null:(r._key||i))}>{isEditing?'Done':'Edit'}</button>
                       <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(prev => prev.filter((_,j)=>j!==i))}>×</button>
                     </div>
