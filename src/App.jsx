@@ -1984,6 +1984,7 @@ function App() {
   };
 
   const isInList = row => listItems.some(r => r._key === row.vintage + row.name + row.last_auction);
+  const srcChipClass = h => { const l = (h||'').toLowerCase(); return l.includes('langton') ? 'langtons' : l.includes('wickman') || l.includes('mw') ? 'wickmans' : l.includes('awa') ? 'awa' : 'other'; };
   const panelAutoCloseRef = useRef(null);
   const normaliseSize = raw => {
     if (!raw) return "750ml";
@@ -2746,7 +2747,7 @@ function App() {
                     <div className="mob-card-r1">
                       <span className="mob-vbadge">{r.vintage||"NV"}</span>
                       <span className="mob-card-name">{r.name}</span>
-                      {r.auction_house && <span className={`mob-src-chip ${((h=>(h.includes('langton')?'langtons':h.includes('wickman')||h.includes('mw')?'wickmans':h.includes('awa')?'awa':'other'))((r.auction_house||'').toLowerCase()))`}>{r.auction_house}</span>}
+                      {r.auction_house && <span className={`mob-src-chip ${srcChipClass(r.auction_house)}`}>{r.auction_house}</span>}
                       <button className={`mob-edit-btn${isEditing?' open':''}`} onClick={() => setMobEditRow(isEditing?null:(r._key||i))}>{isEditing?'Done':'Edit'}</button>
                       <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(prev => prev.filter((_,j)=>j!==i))}>×</button>
                     </div>
