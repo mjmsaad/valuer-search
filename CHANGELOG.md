@@ -1,6 +1,22 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.4.1**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.4.2**.
+
+---
+
+## [2.4.2] — 13 April 2026 · Mobile Flag Feature & Panel Fixes
+
+### New
+- **Size flagging on mobile** — a ⚑ button on every search result card lets you flag an incorrect size directly from mobile. Tapping it slides up a bottom sheet with the wine name, current listed size, a quick-tap size grid (Half, Magnum, Double Magnum etc.), and an optional note field. Submit is greyed until a size is picked. Flagged cards get an amber border and a note showing the suggested size below the price pills
+- **Flag panel on mobile** — an amber ⚑ badge appears in the mobile header top-right when there are active flags. Tapping it opens a bottom sheet listing all active flags across the team with size discrepancy, who flagged it, and Mark resolved / Dismiss actions per entry. Resolved flags shown greyed below
+
+### Fixed
+- **Double "Flag recorded" popup on mobile** — submitting a flag on mobile was triggering both the mobile bottom sheet confirmed state and the desktop fixed popover in the top-left simultaneously. Fixed by snapshotting the form before the async call, explicitly clearing `flagPopover` before submitting, and adding an `isMobile` guard so the desktop popover never renders on mobile
+- **History panel lost all formatting** — the history panel JSX had drifted to use entirely different class names from the CSS (`hist-panel-header` vs `hist-panel-hdr`, `hist-entry` vs `hist-item` etc.). None of the styling was applying. All class names corrected throughout
+- **Flag panel now opens on left side** — the Flagged panel was opening on the right, sitting behind and overlapping the My List tab. Moved to left side alongside History. Opening either left panel now closes the other automatically
+- **My List no longer shrinks the results table** — `paddingRight: 340px` was being added to the main content area when My List opened, physically squishing the table. Removed — My List now overlays the results like all other panels
+- **All panels aligned below header red line** — all three side panels were at `top: 52px`, placing them inside the header. Corrected to `top: 66px` so all panels start flush below the wine-red border line
+- **Random session logouts** — the app had no JWT refresh logic. Added `refreshSession()` to call Supabase's refresh token endpoint before expiry, plus a background refresh every 45 minutes while the app is open
 
 ---
 
@@ -393,6 +409,7 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 | Version | Date | Highlight |
 |---------|------|-----------|
+| 2.4.2 | 13 Apr 2026 | Mobile flag feature, double popup fix, panel layout fixes, session refresh |
 | 2.4.1 | 10 Apr 2026 | Panel layout fixes, session refresh, History panel styling restored |
 | 2.4.0 | 10 Apr 2026 | Size flags, text notes in paste-from-spreadsheet, Mixed Lots note |
 | 2.3.3 | 3 Apr 2026  | Mobile feature pack — pagination, My List edit, dark toggle, swipe, logo |
