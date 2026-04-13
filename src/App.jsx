@@ -578,6 +578,15 @@ body{background:var(--cream);color:var(--text);font-family:'Inter',sans-serif;fo
 .dark-toggle{width:32px;height:32px;background:none;border:1px solid var(--border);border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;color:var(--text-muted);padding:0;}
 .dark-toggle:hover{border-color:var(--wine);color:var(--wine);}
 .signout{font-size:11px;color:var(--text-muted);background:none;border:1px solid var(--border);padding:5px 12px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.15s;border-radius:2px;}
+.hdr-more-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#8A8278;padding:4px 10px;border-radius:4px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;line-height:1;letter-spacing:.05em;}
+.hdr-more-btn:hover,.hdr-more-btn.open{background:rgba(255,255,255,.12);color:#C8BAA8;}
+.hdr-more-menu{position:fixed;right:16px;top:52px;background:var(--white);border:1px solid var(--border);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:9999;min-width:180px;overflow:hidden;padding:4px 0;}
+.hdr-more-item{display:flex;width:100%;text-align:left;padding:8px 14px;font-size:11px;color:var(--text);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;}
+.hdr-more-item:hover{background:var(--cream);}
+.hdr-more-item.active{color:var(--wine);}
+.hdr-more-sep{height:.5px;background:var(--border);margin:3px 0;}
+.hdr-more-user{padding:6px 14px 4px;font-size:9px;color:var(--text-muted);}
+.hdr-more-signout{color:var(--wine)!important;}
 .signout:hover{border-color:var(--wine);color:var(--wine);}
 .main{padding:32px 40px;flex:1;max-width:1400px;width:100%;margin:0 auto;transition:padding-right 0.28s ease;display:flex;flex-direction:column;gap:20px;}
 .search-section{background:var(--white);border:1px solid var(--border);padding:20px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow-sm);}
@@ -955,7 +964,7 @@ html.is-mobile .main{padding:0!important;padding-right:0!important;padding-botto
 html.is-mobile .search-section{display:none!important;}
 html.is-mobile .meta{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
-html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header,html.is-mobile .auction-tile,html.is-mobile .btn-blank-email{display:none!important;}
+html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header,html.is-mobile .auction-tile,html.is-mobile .btn-blank-email,html.is-mobile .hdr-more-btn{display:none!important;}
 html.is-mobile .mob-view{display:flex;}
 html.is-mobile .mob-nav-bar{display:flex;}
 html.is-mobile .mob-search-header{display:flex;}
@@ -974,7 +983,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-chips-row::-webkit-scrollbar{display:none;}
 .mob-chip{background:var(--white);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:9px;font-weight:700;color:var(--text-muted);white-space:nowrap;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.03em;}
 .mob-chip.active{background:var(--wine);border-color:var(--wine);color:white;}
-.mob-count-bar{padding:4px 12px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;}
+.mob-count-bar{padding:4px 12px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
 .mob-count-bar span{font-size:9px;color:var(--text-muted,#8A8278);}
 .mob-view{flex:1;overflow-y:auto;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
 .mob-view::-webkit-scrollbar{width:3px;}
@@ -1035,6 +1044,11 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-card-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:5px;overflow:hidden;}
 .mob-card-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mob-vbadge{font-size:9px;font-weight:700;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:2px 6px;white-space:nowrap;flex-shrink:0;}
+.mob-src-chip{font-size:7px;font-weight:700;border-radius:3px;padding:1px 5px;white-space:nowrap;flex-shrink:0;}
+.mob-src-chip.wickmans{color:#7B1D1D;background:rgba(123,29,29,.07);border:1px solid rgba(123,29,29,.2);}
+.mob-src-chip.awa{color:#1E5C3A;background:rgba(30,92,58,.07);border:1px solid rgba(30,92,58,.2);}
+.mob-src-chip.langtons{color:#5A3A8A;background:rgba(90,58,138,.07);border:1px solid rgba(90,58,138,.2);}
+.mob-src-chip.other{color:var(--text-muted);background:var(--cream);border:1px solid var(--border);}
 .mob-card-btns{display:flex;align-items:center;gap:3px;flex-shrink:0;}
 .mob-add-btn{border:none;color:white;font-size:9px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;background:var(--wine);}
 .mob-add-btn.mob-added{background:var(--green);}
@@ -1054,6 +1068,10 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-list-badge{background:var(--wine);color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 7px;font-family:'Inter',sans-serif;}
 .mob-list-sub{font-size:9px;color:#5A5248;font-style:italic;margin-top:2px;}
 .mob-list-footer{position:fixed;bottom:52px;left:0;right:0;padding:9px 10px;background:var(--white);border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
+.mob-list-empty{padding:32px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.mob-list-empty-msg{font-size:11px;color:var(--text-muted);line-height:1.7;}
+.mob-list-empty-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:8px 16px;font-size:10px;color:var(--text-muted);cursor:pointer;font-family:'Inter',sans-serif;}
+.mob-list-empty-btn:active{border-color:var(--wine);color:var(--wine);}
 .mob-copy-btn{width:100%;background:#1A1714;color:var(--gold);border:none;padding:9px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-send-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .mob-email-btn{background:var(--wine);color:white;border:none;padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
@@ -1591,11 +1609,14 @@ function App() {
   const [mobCalcOpen, setMobCalcOpen]         = useState(false);
   const [isMobile, setIsMobile]               = useState(false);
 
-  // Close flag popover on outside click
+  // Close flag popover and more menu on outside click
   useEffect(() => {
     const handler = (e) => {
       if (!e.target.closest('.flag-popover') && !e.target.closest('.size-flag-btn') && !e.target.closest('.size-flagged-pill')) {
         setFlagPopover(p => p && p.startsWith('confirmed:') ? p : null);
+      }
+      if (!e.target.closest('.hdr-more-menu') && !e.target.closest('.hdr-more-btn')) {
+        setMoreMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handler);
@@ -1663,8 +1684,10 @@ function App() {
   const [auctionDates, setAuctionDates]     = useState([]);
   const [nextAuction, setNextAuction]       = useState(null);
   const [auctionTileOpen, setAuctionTileOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen]       = useState(false);
   const [showEmailWindow, setShowEmailWindow] = useState(false);
   const [showPasteArea, setShowPasteArea]   = useState(false);
+  const [confirmClear, setConfirmClear]     = useState(false);
   const [pasteText, setPasteText]           = useState('');
   const [emailWindowContent, setEmailWindowContent] = useState('');
   const [emailCopied, setEmailCopied]       = useState(false);
@@ -2209,24 +2232,39 @@ function App() {
               <strong>{totalCount.toLocaleString()}</strong> {loading ? "loading…" : "wines"}
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
-            <span className="header-user">{session.user?.email}</span>
             <button className="btn-blank-email" onClick={handleBlankEmail}>
               ✉ Blank email
             </button>
-            <button className={`btn-flag-header${flagPanelOpen?" open":""}`} onClick={() => { setFlagPanelOpen(o=>!o); setHistOpen(false); }}>
+            <button className={`btn-flag-header${flagPanelOpen?" open":""}`} onClick={() => { setFlagPanelOpen(o=>!o); setHistOpen(false); setMoreMenuOpen(false); }}>
               ⚑ Flagged{sizeFlags.filter(f=>!f.resolved).length > 0 && ` (${sizeFlags.filter(f=>!f.resolved).length})`}
             </button>
-            <button className={`btn-hist-header${histOpen?" open":""}`} onClick={() => { setHistOpen(o=>!o); setFlagPanelOpen(false); }}>
-              ⏱ History
-            </button>
-            <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer" className="btn-ident-tool">
-              Sami-Odi Identification Tool <span className="ident-arr">↗</span>
-            </a>
-            <button className={`btn-calc-header${calcOpen?" open":""}`} onClick={() => setCalcOpen(o=>!o)}>
+            <button className={`btn-calc-header${calcOpen?" open":""}`} onClick={() => { setCalcOpen(o=>!o); setMoreMenuOpen(false); }}>
               ⊞ Calculator <span className="calc-caret">▼</span>
             </button>
-            <button className="dark-toggle" onClick={() => setDarkMode(d=>!d)}>{darkMode ? "☀" : "☾"}</button>
-            <button className="signout" onClick={handleSignOut}>Sign Out</button>
+            <div style={{position:'relative'}}>
+              <button className={`hdr-more-btn${moreMenuOpen?' open':''}`} onClick={() => setMoreMenuOpen(o=>!o)}>
+                ⋯
+              </button>
+              {moreMenuOpen && (
+                <div className="hdr-more-menu">
+                  <button className={`hdr-more-item${histOpen?' active':''}`} onClick={() => { setHistOpen(o=>!o); setFlagPanelOpen(false); setMoreMenuOpen(false); }}>
+                    ⏱ History
+                  </button>
+                  <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer" className="hdr-more-item">
+                    Sami-Odi tool ↗
+                  </a>
+                  <div className="hdr-more-sep"></div>
+                  <button className="hdr-more-item" onClick={() => { setDarkMode(d=>!d); setMoreMenuOpen(false); }}>
+                    {darkMode ? "☀ Light mode" : "☾ Dark mode"}
+                  </button>
+                  <div className="hdr-more-sep"></div>
+                  <div className="hdr-more-user">{session.user?.email}</div>
+                  <button className="hdr-more-item hdr-more-signout" onClick={handleSignOut}>
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
@@ -2338,7 +2376,10 @@ function App() {
           </div>
         </div>
         }
-        {isMobile && dq && <div className="mob-count-bar"><span>{totalCount.toLocaleString()} wine{totalCount!==1?"s":""} · page {page} of {totalPages}</span></div>}
+        {isMobile && dq && <div className="mob-count-bar">
+              <span>{totalCount.toLocaleString()} result{totalCount!==1?"s":""}{dq ? ` for "${dq}"` : ""}</span>
+              <span>Page {page} of {totalPages}</span>
+            </div>}
 
         <main className="main">
           {error && <div className="err-banner"><span>⚠</span><span>{error}</span></div>}
@@ -2492,7 +2533,7 @@ function App() {
                       <Th col="vintage" label="Vintage" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                       <Th col="name" label="Wine" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                       <Th col="qty" label="Qty" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
-                      <th>Size</th>
+                      <Th col="size" label="Size ⚑" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                       <Th col="reserve" label="Reserve" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                       <Th col="low" label="Low" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                       <Th col="high" label="High" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
@@ -2685,7 +2726,10 @@ function App() {
           </div>
           <div style={{flex:1,overflowY:'auto',padding:'5px 8px 130px',display:'flex',flexDirection:'column',gap:4}}>
             {listItems.length === 0 ? (
-              <div className="mob-list-empty">No wines added yet.<br/>Search and tap + List to add wines here.</div>
+              <div className="mob-list-empty">
+                <div className="mob-list-empty-msg">No wines added yet.<br/>Search and tap <strong>+ List</strong> to add wines here.</div>
+                <button className="mob-list-empty-btn" onClick={handleBlankEmail}>✉ Send blank email</button>
+              </div>
             ) : listItems.map((r, i) => {
               const isEditing = mobEditRow === (r._key||i);
               return (
@@ -2694,6 +2738,7 @@ function App() {
                     <div className="mob-card-r1">
                       <span className="mob-vbadge">{r.vintage||"NV"}</span>
                       <span className="mob-card-name">{r.name}</span>
+                      {r.auction_house && <span className={`mob-src-chip ${(r.auction_house||'').toLowerCase().replace(/[^a-z]/g,'')}`}>{r.auction_house}</span>}
                       <button className={`mob-edit-btn${isEditing?' open':''}`} onClick={() => setMobEditRow(isEditing?null:(r._key||i))}>{isEditing?'Done':'Edit'}</button>
                       <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(prev => prev.filter((_,j)=>j!==i))}>×</button>
                     </div>
@@ -3244,7 +3289,16 @@ function App() {
               PDF
             </button>
           </div>
-          <button className="slide-panel-clear" onClick={() => setListItems([])}>Clear entire list</button>
+          {confirmClear
+              ? <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:8,gap:6}}>
+                  <span style={{fontSize:10,color:'var(--text-muted)'}}>Clear all {listItems.length} item{listItems.length!==1?'s':''}?</span>
+                  <div style={{display:'flex',gap:5}}>
+                    <button style={{fontSize:9,padding:'4px 10px',borderRadius:3,border:'1px solid var(--border)',background:'none',color:'var(--text-muted)',cursor:'pointer',fontFamily:"'Inter',sans-serif"}} onClick={()=>setConfirmClear(false)}>Cancel</button>
+                    <button style={{fontSize:9,padding:'4px 10px',borderRadius:3,border:'none',background:'var(--wine)',color:'white',cursor:'pointer',fontFamily:"'Inter',sans-serif"}} onClick={()=>{setListItems([]);setConfirmClear(false);}}>Clear</button>
+                  </div>
+                </div>
+              : <button className="slide-panel-clear" onClick={() => setConfirmClear(true)}>Clear entire list</button>
+            }
         </div>
       </div>
 
