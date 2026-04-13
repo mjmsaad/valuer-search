@@ -2800,7 +2800,9 @@ function App() {
                   <button className="mob-flag-submit"
                     disabled={!mobFlagForm.size || flagSubmitting}
                     onClick={async () => {
-                      await submitSizeFlag(mobFlagSheet, mobFlagForm);
+                      const formSnapshot = {...mobFlagForm};
+                      setFlagPopover(null);
+                      await submitSizeFlag(mobFlagSheet, formSnapshot);
                       setMobFlagConfirmed(true);
                       setMobFlagForm({size:'',note:''});
                     }}>
@@ -2894,7 +2896,7 @@ function App() {
       )}
 
       {/* ── Flag Popover (rendered at app level to avoid overflow clipping) ── */}
-      {flagPopover && (() => {
+      {!isMobile && flagPopover && (() => {
         const isConfirmed = flagPopover.startsWith('confirmed:');
         const activeKey = isConfirmed ? flagPopover.replace('confirmed:','') : flagPopover;
         const activeRow = rows.find(r => (r.vintage + r.name + r.auction_house) === activeKey);
