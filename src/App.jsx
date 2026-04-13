@@ -1044,11 +1044,6 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-card-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:5px;overflow:hidden;}
 .mob-card-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mob-vbadge{font-size:9px;font-weight:700;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:2px 6px;white-space:nowrap;flex-shrink:0;}
-.mob-src-chip{font-size:7px;font-weight:700;border-radius:3px;padding:1px 5px;white-space:nowrap;flex-shrink:0;}
-.mob-src-chip.wickmans{color:#7B1D1D;background:rgba(123,29,29,.07);border:1px solid rgba(123,29,29,.2);}
-.mob-src-chip.awa{color:#1E5C3A;background:rgba(30,92,58,.07);border:1px solid rgba(30,92,58,.2);}
-.mob-src-chip.langtons{color:#5A3A8A;background:rgba(90,58,138,.07);border:1px solid rgba(90,58,138,.2);}
-.mob-src-chip.other{color:var(--text-muted);background:var(--cream);border:1px solid var(--border);}
 .mob-card-btns{display:flex;align-items:center;gap:3px;flex-shrink:0;}
 .mob-add-btn{border:none;color:white;font-size:9px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;background:var(--wine);}
 .mob-add-btn.mob-added{background:var(--green);}
@@ -1799,12 +1794,10 @@ function App() {
       .finally(() => setLoading(false));
   }, [session, dq, house, page, sortCol, sortDir]);
 
-  // Scroll mobile results to top when rows change
+  // Scroll mobile results to top on new search or new results
   useEffect(() => {
-    if (isMobile && mobViewRef.current) {
-      mobViewRef.current.scrollTop = 0;
-    }
-  }, [rows, isMobile]);
+    if (mobViewRef.current) mobViewRef.current.scrollTop = 0;
+  }, [dq, page]);
 
   // Always fetch user_profiles on login so team member names are ready
   useEffect(() => {
@@ -1984,7 +1977,6 @@ function App() {
   };
 
   const isInList = row => listItems.some(r => r._key === row.vintage + row.name + row.last_auction);
-  const srcChipClass = h => { const l = (h||'').toLowerCase(); return l.includes('langton') ? 'langtons' : l.includes('wickman') || l.includes('mw') ? 'wickmans' : l.includes('awa') ? 'awa' : 'other'; };
   const panelAutoCloseRef = useRef(null);
   const normaliseSize = raw => {
     if (!raw) return "750ml";
@@ -2747,7 +2739,6 @@ function App() {
                     <div className="mob-card-r1">
                       <span className="mob-vbadge">{r.vintage||"NV"}</span>
                       <span className="mob-card-name">{r.name}</span>
-                      {r.auction_house && <span className={`mob-src-chip ${srcChipClass(r.auction_house)}`}>{r.auction_house}</span>}
                       <button className={`mob-edit-btn${isEditing?' open':''}`} onClick={() => setMobEditRow(isEditing?null:(r._key||i))}>{isEditing?'Done':'Edit'}</button>
                       <button className="mob-info-btn" style={{fontSize:13,color:'var(--wine)'}} onClick={() => setListItems(prev => prev.filter((_,j)=>j!==i))}>×</button>
                     </div>
