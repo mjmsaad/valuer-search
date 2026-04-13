@@ -964,7 +964,7 @@ html.is-mobile .main{padding:0!important;padding-right:0!important;padding-botto
 html.is-mobile .search-section{display:none!important;}
 html.is-mobile .meta{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
-html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header,html.is-mobile .auction-tile,html.is-mobile .btn-blank-email,html.is-mobile .hdr-more-btn{display:none!important;}
+html.is-mobile .table-wrap,html.is-mobile .table-card,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header,html.is-mobile .auction-tile,html.is-mobile .btn-blank-email,html.is-mobile .hdr-more-btn{display:none!important;}
 html.is-mobile .mob-view{display:flex;}
 html.is-mobile .mob-nav-bar{display:flex;}
 html.is-mobile .mob-search-header{display:flex;}
@@ -2595,7 +2595,7 @@ function App() {
             )}
 
             {/* ── Mobile card view (≤768px) ── */}
-            <div className="mob-view" key={`mv-${dq}-${page}`}>
+            <div className="mob-view">
               {rows.length === 0 && dq ? (
                 <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
                   No results found for "{dq}"
