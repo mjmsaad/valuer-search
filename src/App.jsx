@@ -988,6 +988,49 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-pip{background:var(--wine);border-radius:20px;font-size:7px;font-weight:700;color:white;padding:1px 4px;display:inline-block;margin-left:2px;}
 .mob-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;padding:8px 10px;flex-shrink:0;}
 .mob-card.mob-card-added{border-color:rgba(30,92,58,.35);background:rgba(30,92,58,.02);}
+.mob-card.mob-card-flagged{border-color:rgba(196,120,0,.4);background:rgba(196,120,0,.02);}
+.mob-flag-card-btn{width:26px;height:26px;background:none;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tm);flex-shrink:0;cursor:pointer;font-family:'Inter',sans-serif;}
+.mob-flag-card-btn.mob-flagged{background:rgba(196,120,0,.1);border-color:rgba(196,120,0,.35);color:#C47800;}
+.mob-flag-card-note{font-size:8px;color:#C47800;background:rgba(196,120,0,.07);border:1px solid rgba(196,120,0,.2);border-radius:3px;padding:3px 7px;margin-top:4px;display:flex;align-items:center;gap:4px;}
+.mob-flag-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);position:absolute;bottom:0;left:0;right:0;z-index:400;}
+.mob-flag-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;}
+.mob-flag-sheet-hdr{background:#1A1714;margin-top:8px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;}
+.mob-flag-sheet-ttl{font-size:9px;font-weight:700;color:#E8C97A;letter-spacing:.06em;text-transform:uppercase;}
+.mob-flag-sheet-x{background:none;border:none;color:#5A5248;font-size:18px;cursor:pointer;line-height:1;font-family:'Inter',sans-serif;}
+.mob-flag-sheet-body{padding:12px;max-height:70vh;overflow-y:auto;}
+.mob-flag-sheet-wine{font-size:12px;font-weight:500;color:var(--text);margin-bottom:1px;}
+.mob-flag-sheet-sub{font-size:9px;color:var(--tm);margin-bottom:10px;}
+.mob-flag-preview{display:flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 9px;background:var(--cream);border:1px solid var(--border);border-radius:5px;}
+.mob-flag-from{font-size:10px;font-weight:500;color:var(--text);}
+.mob-flag-arrow{font-size:11px;color:var(--tm);}
+.mob-flag-to{font-size:10px;font-weight:600;color:#C47800;}
+.mob-flag-to.empty{color:var(--border);font-weight:400;font-style:italic;}
+.mob-flag-lbl{font-size:8px;font-weight:700;color:var(--tm);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;display:block;}
+.mob-flag-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px;}
+.mob-flag-opt{background:var(--cream);border:1px solid var(--border);border-radius:5px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .12s;}
+.mob-flag-opt.sel{border-color:#C47800;background:rgba(196,120,0,.1);}
+.mob-flag-opt-val{font-size:10px;font-weight:600;color:var(--text);}
+.mob-flag-opt.sel .mob-flag-opt-val{color:#C47800;}
+.mob-flag-opt-lbl{font-size:7px;color:var(--tm);}
+.mob-flag-ta{width:100%;height:64px;border:1px solid var(--border);background:var(--cream);border-radius:5px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);padding:7px 9px;resize:none;outline:none;margin-bottom:10px;}
+.mob-flag-ta:focus{border-color:#C47800;}
+.mob-flag-submit{width:100%;background:#C47800;color:white;border:none;padding:11px;border-radius:5px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;}
+.mob-flag-submit:disabled{background:var(--border);color:var(--tm);cursor:default;}
+.mob-flag-cancel{width:100%;background:none;border:1px solid var(--border);color:var(--tm);padding:9px;border-radius:5px;font-family:'Inter',sans-serif;font-size:10px;cursor:pointer;margin-top:6px;}
+.mob-flag-sz-row{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.mob-flag-sz-from{font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:2px 8px;}
+.mob-flag-sz-arrow{font-size:12px;color:var(--tm);}
+.mob-flag-sz-to{font-size:11px;font-weight:600;color:#C47800;background:rgba(196,120,0,.08);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 8px;}
+.mob-flag-note-box{font-size:9px;color:#6A5020;font-style:italic;background:#FDF8F0;border:1px solid rgba(196,120,0,.15);border-radius:4px;padding:5px 8px;margin-bottom:7px;}
+.mob-flag-meta{font-size:8px;color:var(--tm);margin-bottom:10px;}
+.mob-flag-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.mob-flag-resolve{background:#1A1714;color:#E8C97A;border:none;padding:10px;border-radius:5px;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;cursor:pointer;}
+.mob-flag-dismiss{background:none;border:1px solid var(--border);color:var(--tm);padding:10px;border-radius:5px;font-family:'Inter',sans-serif;font-size:9px;cursor:pointer;}
+.mob-flag-confirmed{padding:20px 16px;text-align:center;}
+.mob-flag-tick{font-size:32px;margin-bottom:8px;}
+.mob-flag-conf-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.mob-flag-conf-sub{font-size:10px;color:var(--tm);margin-bottom:12px;}
+.mob-flag-conf-done{width:100%;background:#1A1714;color:#E8C97A;border:none;padding:10px;border-radius:5px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;cursor:pointer;}
 .mob-card-r1{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .mob-card-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:5px;overflow:hidden;}
 .mob-card-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -1516,6 +1559,9 @@ function App() {
   const [flagPopoverPos, setFlagPopoverPos]   = useState({top:0,left:0}); // fixed coords for popover
   const [flagForm, setFlagForm]               = useState({size:'',note:''});
   const [flagSubmitting, setFlagSubmitting]   = useState(false);
+  const [mobFlagSheet, setMobFlagSheet]       = useState(null);  // row being flagged on mobile
+  const [mobFlagForm, setMobFlagForm]         = useState({size:'',note:''});
+  const [mobFlagConfirmed, setMobFlagConfirmed] = useState(false);
   const [mobSheet, setMobSheet]               = useState(null);
   const [mobEditRow, setMobEditRow]           = useState(null);   // _key of expanded list row
   const [swipeState, setSwipeState]           = useState({});     // {key: 'add'|'dismiss'|null}
@@ -1727,8 +1773,9 @@ function App() {
     } catch(e) { console.error('[SizeFlags] fetch failed', e); }
   };
 
-  const submitSizeFlag = async (r) => {
-    if (!session || !flagForm.size) return;
+  const submitSizeFlag = async (r, formOverride) => {
+    const form = formOverride || flagForm;
+    if (!session || !form.size) return;
     setFlagSubmitting(true);
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/size_flags`, {
@@ -1744,8 +1791,8 @@ function App() {
           vintage: r.vintage,
           auction_house: r.auction_house,
           listed_size: r.size || '750ml',
-          suggested_size: flagForm.size,
-          note: flagForm.note || null,
+          suggested_size: form.size,
+          note: form.note || null,
           flagged_by: session.user.id,
           resolved: false
         })
@@ -2446,13 +2493,18 @@ function App() {
                     </div>
                     <div className="mob-swipe-inner"
                       style={{transform:`translateX(${sw}px)`,transition:sw===0?'transform .25s ease':'none'}}>
-                      <div className={`mob-card${isInList(r)?' mob-card-added':''}`}>
+                      <div className={`mob-card${isInList(r)?' mob-card-added':''}${getFlagForRow(r)?' mob-card-flagged':''}`}>
                         <div className="mob-card-r1">
                           <div className="mob-card-info">
                             <span className="mob-vbadge">{r.vintage||"NV"}</span>
                             <span className="mob-card-name">{r.name}</span>
                           </div>
                           <div className="mob-card-btns">
+                            <button
+                              className={`mob-flag-card-btn${getFlagForRow(r)?' mob-flagged':''}`}
+                              onClick={e => { e.stopPropagation(); setMobFlagSheet(r); setMobFlagConfirmed(false); setMobFlagForm({size:'',note:''}); }}>
+                              ⚑
+                            </button>
                             <button className={`mob-add-btn${isInList(r)?" mob-added":""}`}
                               onClick={() => toggleListItem(r)}>
                               {isInList(r) ? "✓" : "+ List"}
@@ -2465,6 +2517,9 @@ function App() {
                           <div className="mob-pill low"><span className="mob-pill-lbl">Low</span><span className="mob-pill-val">{r.low && cleanPrice(r.low) ? `$${Math.round(cleanPrice(r.low))}` : "—"}</span></div>
                           <div className="mob-pill hi"><span className="mob-pill-lbl">High</span><span className="mob-pill-val">{r.high && cleanPrice(r.high) ? `$${Math.round(cleanPrice(r.high))}` : "—"}</span></div>
                         </div>
+                        {getFlagForRow(r) && (
+                          <div className="mob-flag-card-note">⚑ Size flagged — may be {getFlagForRow(r).suggested_size}</div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -2618,6 +2673,84 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* ── Mobile Flag Sheet ── */}
+      {mobFlagSheet && (() => {
+        const existingFlag = getFlagForRow(mobFlagSheet);
+        const userProf = userProfiles[existingFlag?.flagged_by] || existingFlag?.flagged_by || '';
+        return (
+          <div className="mob-sheet-overlay" onClick={() => { setMobFlagSheet(null); setMobFlagConfirmed(false); }}>
+            <div className="mob-flag-sheet" onClick={e => e.stopPropagation()}>
+              <div className="mob-flag-sheet-handle"></div>
+              <div className="mob-flag-sheet-hdr">
+                <span className="mob-flag-sheet-ttl">
+                  {mobFlagConfirmed ? '⚑ Flag submitted' : existingFlag ? '⚑ Size Flag' : '⚑ Flag size issue'}
+                </span>
+                <button className="mob-flag-sheet-x" onClick={() => { setMobFlagSheet(null); setMobFlagConfirmed(false); }}>×</button>
+              </div>
+              {mobFlagConfirmed ? (
+                <div className="mob-flag-confirmed">
+                  <div className="mob-flag-tick">✓</div>
+                  <div className="mob-flag-conf-title">Flag recorded</div>
+                  <div className="mob-flag-conf-sub">Visible to all team members.<br/>The card now shows an amber flag.</div>
+                  <button className="mob-flag-conf-done" onClick={() => { setMobFlagSheet(null); setMobFlagConfirmed(false); }}>Done</button>
+                </div>
+              ) : existingFlag ? (
+                <div className="mob-flag-sheet-body">
+                  <div className="mob-flag-sheet-wine">{mobFlagSheet.name}</div>
+                  <div className="mob-flag-sheet-sub">{mobFlagSheet.vintage} · {mobFlagSheet.auction_house}</div>
+                  <div className="mob-flag-sz-row">
+                    <span className="mob-flag-sz-from">{existingFlag.listed_size}</span>
+                    <span className="mob-flag-sz-arrow">→</span>
+                    <span className="mob-flag-sz-to">{existingFlag.suggested_size}</span>
+                  </div>
+                  {existingFlag.note && <div className="mob-flag-note-box">"{existingFlag.note}"</div>}
+                  <div className="mob-flag-meta">⚑ {userProf} · {new Date(existingFlag.created_at).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}</div>
+                  <div className="mob-flag-actions">
+                    <button className="mob-flag-resolve" onClick={() => { resolveFlag(existingFlag.id); setMobFlagSheet(null); }}>✓ Mark resolved</button>
+                    <button className="mob-flag-dismiss" onClick={() => { dismissFlag(existingFlag.id); setMobFlagSheet(null); }}>Dismiss</button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mob-flag-sheet-body">
+                  <div className="mob-flag-sheet-wine">{mobFlagSheet.name}</div>
+                  <div className="mob-flag-sheet-sub">{mobFlagSheet.vintage} · {mobFlagSheet.auction_house} · Listed: {mobFlagSheet.size||'750ml'}</div>
+                  <div className="mob-flag-preview">
+                    <span className="mob-flag-from">{mobFlagSheet.size||'750ml'}</span>
+                    <span className="mob-flag-arrow">→</span>
+                    <span className={`mob-flag-to${mobFlagForm.size?'':' empty'}`}>{mobFlagForm.size||'select below…'}</span>
+                  </div>
+                  <label className="mob-flag-lbl">What size should it be?</label>
+                  <div className="mob-flag-grid">
+                    {[['375ml','Half'],['700ml','Spirits'],['1500ml','Magnum'],['3000ml','Dbl Mag'],['4500ml','Jeroboam'],['6000ml','Imperial']].map(([val,lbl])=>(
+                      <div key={val} className={`mob-flag-opt${mobFlagForm.size===val?' sel':''}`}
+                        onClick={() => setMobFlagForm(f=>({...f,size:val}))}>
+                        <div className="mob-flag-opt-val">{val}</div>
+                        <div className="mob-flag-opt-lbl">{lbl}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <label className="mob-flag-lbl">Note <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--border)'}}>optional</span></label>
+                  <textarea className="mob-flag-ta" maxLength={200}
+                    placeholder="e.g. confirmed with client, lot photos show magnum…"
+                    value={mobFlagForm.note}
+                    onChange={e => setMobFlagForm(f=>({...f,note:e.target.value}))} />
+                  <button className="mob-flag-submit"
+                    disabled={!mobFlagForm.size || flagSubmitting}
+                    onClick={async () => {
+                      await submitSizeFlag(mobFlagSheet, mobFlagForm);
+                      setMobFlagConfirmed(true);
+                      setMobFlagForm({size:'',note:''});
+                    }}>
+                    {flagSubmitting ? 'Submitting…' : 'Submit flag'}
+                  </button>
+                  <button className="mob-flag-cancel" onClick={() => setMobFlagSheet(null)}>Cancel</button>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Mobile Calculator Sheet ── */}
       {mobCalcOpen && (
