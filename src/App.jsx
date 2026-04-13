@@ -985,7 +985,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-chip.active{background:var(--wine);border-color:var(--wine);color:white;}
 .mob-count-bar{padding:4px 12px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
 .mob-count-bar span{font-size:9px;color:var(--text-muted,#8A8278);}
-.mob-view{flex:1;overflow-y:auto;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
+.mob-view{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
 .mob-view::-webkit-scrollbar{width:3px;}
 .mob-view::-webkit-scrollbar-thumb{background:#D8D0C8;border-radius:3px;}
 .mob-nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--text);border-top:1px solid var(--border);z-index:200;}
@@ -1793,10 +1793,7 @@ function App() {
       .finally(() => setLoading(false));
   }, [session, dq, house, page, sortCol, sortDir]);
 
-  // Scroll to top on mobile when search or page changes
-  useEffect(() => {
-    if (isMobile) window.scrollTo(0, 0);
-  }, [dq, page, isMobile]);
+
 
   // Always fetch user_profiles on login so team member names are ready
   useEffect(() => {
@@ -2598,7 +2595,7 @@ function App() {
             )}
 
             {/* ── Mobile card view (≤768px) ── */}
-            <div className="mob-view">
+            <div className="mob-view" key={`mv-${dq}-${page}`}>
               {rows.length === 0 && dq ? (
                 <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
                   No results found for "{dq}"
