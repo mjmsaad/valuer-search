@@ -2215,6 +2215,11 @@ function App() {
                 <div style={{width:7,height:7,background:"#4CAF50",borderRadius:"50%"}}></div>
                 <span style={{fontSize:9,color:"#5A5248"}}>{onlineCount} online</span>
               </div>
+              {sizeFlags.filter(f=>!f.resolved).length > 0 && (
+                <button onClick={() => setMobFlagSheet('panel')} style={{background:"rgba(196,120,0,.12)",border:"1px solid rgba(196,120,0,.35)",borderRadius:4,padding:"3px 7px",fontSize:9,fontWeight:700,color:"#C47800",cursor:"pointer",fontFamily:"'Inter',sans-serif",display:"flex",alignItems:"center",gap:3}}>
+                  ⚑ {sizeFlags.filter(f=>!f.resolved).length}
+                </button>
+              )}
               <div className="mob-dm-pill" onClick={() => setDarkMode(d=>!d)}>
                   <span className="mob-dm-lbl">{darkMode?"Dark":"Light"}</span>
                   <div className={`mob-dm-track${darkMode?" on":""}`}><div className="mob-dm-thumb"></div></div>
@@ -2676,6 +2681,63 @@ function App() {
 
       {/* ── Mobile Flag Sheet ── */}
       {mobFlagSheet && (() => {
+        // Panel mode — show all flags list
+        if (mobFlagSheet === 'panel') {
+          const activeFlags = sizeFlags.filter(f => !f.resolved);
+          const resolvedFlags = sizeFlags.filter(f => f.resolved);
+          return (
+            <div className="mob-sheet-overlay" onClick={() => setMobFlagSheet(null)}>
+              <div className="mob-flag-sheet" onClick={e => e.stopPropagation()}>
+                <div className="mob-flag-sheet-handle"></div>
+                <div className="mob-flag-sheet-hdr">
+                  <span className="mob-flag-sheet-ttl">⚑ Size Flags ({activeFlags.length} active)</span>
+                  <button className="mob-flag-sheet-x" onClick={() => setMobFlagSheet(null)}>×</button>
+                </div>
+                <div className="mob-flag-sheet-body">
+                  {sizeFlags.length === 0 && (
+                    <div style={{textAlign:'center',padding:'24px 0',fontSize:11,color:'var(--tm)'}}>No flags yet</div>
+                  )}
+                  {activeFlags.map(f => (
+                    <div key={f.id} style={{background:'var(--cream)',border:'1px solid var(--border)',borderRadius:6,padding:'9px 11px',marginBottom:6}}>
+                      <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:5,flexWrap:'wrap'}}>
+                        <span style={{fontSize:8,fontWeight:700,color:'var(--gold)',background:'var(--gold-pale)',border:'1px solid rgba(184,146,42,.25)',borderRadius:3,padding:'1px 5px'}}>{f.vintage||'NV'}</span>
+                        <span style={{fontSize:10,fontWeight:500,color:'var(--text)',flex:1,minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{f.wine_name}</span>
+                      </div>
+                      <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:5}}>
+                        <span style={{fontSize:10,background:'var(--white)',border:'1px solid var(--border)',borderRadius:3,padding:'2px 7px'}}>{f.listed_size}</span>
+                        <span style={{fontSize:10,color:'var(--tm)'}}>→</span>
+                        <span style={{fontSize:10,fontWeight:600,color:'#C47800',background:'rgba(196,120,0,.08)',border:'1px solid rgba(196,120,0,.3)',borderRadius:3,padding:'2px 7px'}}>{f.suggested_size}</span>
+                      </div>
+                      {f.note && <div style={{fontSize:9,color:'#6A5020',fontStyle:'italic',background:'#FDF8F0',border:'1px solid rgba(196,120,0,.15)',borderRadius:3,padding:'4px 7px',marginBottom:5}}>"{f.note}"</div>}
+                      <div style={{fontSize:8,color:'var(--tm)',marginBottom:6}}>⚑ {userProfiles[f.flagged_by]||f.flagged_by} · {new Date(f.created_at).toLocaleDateString('en-AU',{day:'numeric',month:'short'})}</div>
+                      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:5}}>
+                        <button style={{background:'#1A1714',color:'#E8C97A',border:'none',padding:'7px',borderRadius:4,fontFamily:"'Inter',sans-serif",fontSize:8,fontWeight:700,cursor:'pointer'}} onClick={() => { resolveFlag(f.id); }}>✓ Mark resolved</button>
+                        <button style={{background:'none',border:'1px solid var(--border)',color:'var(--tm)',padding:'7px',borderRadius:4,fontFamily:"'Inter',sans-serif",fontSize:8,cursor:'pointer'}} onClick={() => { dismissFlag(f.id); }}>Dismiss</button>
+                      </div>
+                    </div>
+                  ))}
+                  {resolvedFlags.length > 0 && (
+                    <div style={{fontSize:8,fontWeight:700,color:'var(--tm)',letterSpacing:'.07em',textTransform:'uppercase',margin:'10px 0 5px'}}>Resolved</div>
+                  )}
+                  {resolvedFlags.map(f => (
+                    <div key={f.id} style={{opacity:.45,background:'var(--cream)',border:'1px solid var(--border)',borderRadius:6,padding:'9px 11px',marginBottom:6}}>
+                      <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:4,flexWrap:'wrap'}}>
+                        <span style={{fontSize:8,fontWeight:700,color:'var(--gold)',background:'var(--gold-pale)',border:'1px solid rgba(184,146,42,.25)',borderRadius:3,padding:'1px 5px'}}>{f.vintage||'NV'}</span>
+                        <span style={{fontSize:10,fontWeight:500,color:'var(--text)',flex:1}}>{f.wine_name}</span>
+                        <span style={{fontSize:8,fontWeight:700,color:'var(--green)',background:'var(--green-pale)',border:'1px solid rgba(30,92,58,.2)',borderRadius:3,padding:'1px 6px'}}>✓ Resolved</span>
+                      </div>
+                      <div style={{display:'flex',alignItems:'center',gap:6}}>
+                        <span style={{fontSize:10,background:'var(--white)',border:'1px solid var(--border)',borderRadius:3,padding:'2px 7px'}}>{f.listed_size}</span>
+                        <span style={{fontSize:10,color:'var(--tm)'}}>→</span>
+                        <span style={{fontSize:10,color:'var(--tm)',padding:'2px 7px'}}>{f.suggested_size}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        }
         const existingFlag = getFlagForRow(mobFlagSheet);
         const userProf = userProfiles[existingFlag?.flagged_by] || existingFlag?.flagged_by || '';
         return (
