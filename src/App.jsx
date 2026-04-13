@@ -1687,7 +1687,6 @@ function App() {
   const [emailWindowContent, setEmailWindowContent] = useState('');
   const [emailCopied, setEmailCopied]       = useState(false);
   const debounceRef = useRef(null);
-  const mobViewRef  = useRef(null);
 
   // Effects
   useEffect(() => {
@@ -1794,10 +1793,10 @@ function App() {
       .finally(() => setLoading(false));
   }, [session, dq, house, page, sortCol, sortDir]);
 
-  // Scroll mobile results to top on new search or new results
+  // Scroll to top on mobile when search or page changes
   useEffect(() => {
-    if (mobViewRef.current) mobViewRef.current.scrollTop = 0;
-  }, [dq, page]);
+    if (isMobile) window.scrollTo(0, 0);
+  }, [dq, page, isMobile]);
 
   // Always fetch user_profiles on login so team member names are ready
   useEffect(() => {
@@ -2599,7 +2598,7 @@ function App() {
             )}
 
             {/* ── Mobile card view (≤768px) ── */}
-            <div className="mob-view" ref={mobViewRef}>
+            <div className="mob-view">
               {rows.length === 0 && dq ? (
                 <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
                   No results found for "{dq}"
