@@ -235,7 +235,7 @@ async function computeAuctions() {
 }
 
 
-function buildEmailHTML(name, auctions) {
+function buildEmailHTML(name, auctions, blankMode=false) {
   const rowsHTML = window._listItemsForExport ? (() => {
       const adjP = (v,m) => { const n = cleanPrice(v); if (n) return `$${Math.round(n*(m||1))}`; const note = priceOrNote(v); return note ? `<em style="font-size:10px;color:#8A8278;">${note}</em>` : "—"; };
       return window._listItemsForExport.map((r,i) => {
@@ -274,7 +274,7 @@ function buildEmailHTML(name, auctions) {
 <p style="margin-bottom:12px;">Dear ${name||""},</p>
 <p style="margin-bottom:12px;">Thank you for choosing Wickman's Fine Wine Auctions. We appreciate the opportunity to provide you with a valuation for your wine.</p>
 <p style="margin-bottom:18px;">Using the most up to date auction data and trends we suggest the following values.</p>
-<h2 style="font-size:16px;font-weight:700;color:#7B1D1D;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid #E2DDD6;font-family:Arial,sans-serif;">Your Valuation</h2>
+${blankMode ? '' : `<h2 style="font-size:16px;font-weight:700;color:#7B1D1D;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid #E2DDD6;font-family:Arial,sans-serif;">Your Valuation</h2>
 <table style="border-collapse:collapse;margin:0 0 18px;table-layout:auto;">
   <thead><tr>
     <th style="background:#1A1714;color:white;padding:7px 12px;text-align:left;white-space:nowrap;border-right:1px solid #2A2724;">Vintage</th>
@@ -286,7 +286,7 @@ function buildEmailHTML(name, auctions) {
     <th style="background:#1A1714;color:#90C4A8;padding:7px 12px;text-align:right;white-space:nowrap;">High&nbsp;(H)</th>
   </tr></thead>
   <tbody>${rowsHTML}</tbody>
-</table>
+</table>`}
 <div style="background:#FAF8F4;border-left:3px solid #7B1D1D;padding:10px 14px;margin:0 0 14px;line-height:1.65;color:#1A1714;">
   <strong>NOTES:</strong>
   <ol style="padding-left:18px;margin-top:6px;">
@@ -955,7 +955,7 @@ html.is-mobile .main{padding:0!important;padding-right:0!important;padding-botto
 html.is-mobile .search-section{display:none!important;}
 html.is-mobile .meta{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
-html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header{display:none!important;}
+html.is-mobile .table-wrap,html.is-mobile .slide-panel,html.is-mobile .panel-tab,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .btn-flag-header,html.is-mobile .auction-tile,html.is-mobile .btn-blank-email{display:none!important;}
 html.is-mobile .mob-view{display:flex;}
 html.is-mobile .mob-nav-bar{display:flex;}
 html.is-mobile .mob-search-header{display:flex;}
@@ -1153,6 +1153,28 @@ tr.row-flagged:hover{background:rgba(196,120,0,.07)!important;}
 .fe-resolve{background:#1A1714;color:#E8C97A;border:none;padding:4px 10px;border-radius:3px;font-family:'Inter',sans-serif;font-size:8px;font-weight:700;cursor:pointer;}
 .fe-dismiss{background:none;border:1px solid var(--border);color:var(--text-muted);padding:4px 10px;border-radius:3px;font-family:'Inter',sans-serif;font-size:8px;cursor:pointer;}
 .btn-flag-header{background:rgba(196,120,0,.08);border:1px solid rgba(196,120,0,.3);color:#C47800;padding:4px 10px;border-radius:4px;font-family:'Inter',sans-serif;font-size:9px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-blank-email{background:rgba(232,201,122,.07);border:1px solid rgba(232,201,122,.3);color:#E8C97A;padding:4px 10px;border-radius:4px;font-family:'Inter',sans-serif;font-size:9px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-blank-email:hover{background:rgba(232,201,122,.14);}
+.auction-tile{border-bottom:.5px solid var(--border);background:var(--cream);flex-shrink:0;}
+.auction-tile-hdr{padding:10px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;gap:16px;}
+.auction-tile-hdr:hover{background:var(--border);}
+.at-left{display:flex;align-items:center;gap:8px;}
+.at-badge{font-size:8px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);background:var(--white);border:.5px solid var(--border);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;}
+.at-title{font-size:11px;font-weight:500;color:var(--text);}
+.at-dates{display:flex;align-items:center;gap:16px;}
+.at-cut{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+.at-cut-lbl{font-size:8px;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;}
+.at-cut-val{font-size:13px;font-weight:500;color:var(--text);}
+.at-cut-val.amber{color:#B87000;}
+.at-sep{width:.5px;height:28px;background:var(--border);}
+.at-caret{font-size:9px;color:var(--text-muted);margin-left:4px;transition:transform .2s;}
+.at-caret.open{transform:rotate(180deg);}
+.auction-tile-body{border-top:.5px solid var(--border);background:var(--white);padding:8px 20px 10px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}
+.at-col{display:flex;flex-direction:column;gap:2px;}
+.at-col-label{font-size:8px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);}
+.at-col-val{font-size:10px;font-weight:500;color:var(--text);}
+.at-days-amber{font-size:8px;color:#B87000;background:rgba(184,112,0,.08);border:.5px solid rgba(184,112,0,.3);border-radius:3px;padding:1px 5px;display:inline-block;margin-top:2px;}
+.at-days-green{font-size:8px;color:var(--green);background:var(--green-pale);border:.5px solid rgba(30,92,58,.2);border-radius:3px;padding:1px 5px;display:inline-block;margin-top:2px;}
 .btn-flag-header.open{background:#C47800;color:white;}
 /* Pagination */
 .mob-pag{padding:7px 10px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -1639,6 +1661,8 @@ function App() {
   const [exportType, setExportType]         = useState(null);
   const [recipientName, setRecipientName]   = useState('');
   const [auctionDates, setAuctionDates]     = useState([]);
+  const [nextAuction, setNextAuction]       = useState(null);
+  const [auctionTileOpen, setAuctionTileOpen] = useState(false);
   const [showEmailWindow, setShowEmailWindow] = useState(false);
   const [showPasteArea, setShowPasteArea]   = useState(false);
   const [pasteText, setPasteText]           = useState('');
@@ -1713,6 +1737,7 @@ function App() {
 
   useEffect(() => {
     getSession().then(s => { setSession(s); setChecking(false); });
+    computeAuctions().then(a => { if (a && a[0]) setNextAuction(a[0]); });
     // Silently refresh the token every 45 minutes while the app is open
     const refreshInterval = setInterval(async () => {
       const s = await getSession();
@@ -2125,6 +2150,18 @@ function App() {
     saveValuationHistory(recipientName, 'Email', listItems);
   };
 
+  const handleBlankEmail = async () => {
+    const auctions = await computeAuctions();
+    const name = recipientName || '';
+    window._listItemsForExport = [];
+    const html = buildEmailHTML(name, auctions, true);
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (!w) alert('Please allow popups for this site');
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  };
+
   const handlePDF = (w) => {
     saveValuationHistory(recipientName, 'PDF', listItems);
     window._listItemsForExport = listItems;
@@ -2173,6 +2210,9 @@ function App() {
               {onlineCount > 0 && <span className="online-count"><span className="online-dot" />{onlineCount} online</span>}
             </div>
             <span className="header-user">{session.user?.email}</span>
+            <button className="btn-blank-email" onClick={handleBlankEmail}>
+              ✉ Blank email
+            </button>
             <button className={`btn-flag-header${flagPanelOpen?" open":""}`} onClick={() => { setFlagPanelOpen(o=>!o); setHistOpen(false); }}>
               ⚑ Flagged{sizeFlags.filter(f=>!f.resolved).length > 0 && ` (${sizeFlags.filter(f=>!f.resolved).length})`}
             </button>
@@ -2189,6 +2229,64 @@ function App() {
             <button className="signout" onClick={handleSignOut}>Sign Out</button>
           </div>
         </header>
+
+        {/* ── Auction Date Tile ── */}
+        {nextAuction && (() => {
+          const today = new Date();
+          const daysUntil = d => {
+            const t = new Date(d); t.setHours(0,0,0,0);
+            const n = new Date(); n.setHours(0,0,0,0);
+            return Math.round((t - n) / 86400000);
+          };
+          // Parse the formatted date strings back to Date objects for days calculation
+          // Use raw dates stored separately
+          return (
+            <div className="auction-tile">
+              <div className="auction-tile-hdr" onClick={() => setAuctionTileOpen(o=>!o)}>
+                <div className="at-left">
+                  <span className="at-badge">Next auction</span>
+                  <span className="at-title">Wickman's · {nextAuction.start.split(' ').slice(1).join(' ')} – {nextAuction.end.split(' ').slice(1).join(' ')}</span>
+                </div>
+                <div className="at-dates">
+                  <div className="at-cut">
+                    <span className="at-cut-lbl">SA closes</span>
+                    <span className="at-cut-val amber">{nextAuction.adelaide.split(' ').slice(0,3).join(' ')}</span>
+                  </div>
+                  <div className="at-sep"></div>
+                  <div className="at-cut">
+                    <span className="at-cut-lbl">VIC closes</span>
+                    <span className="at-cut-val">{nextAuction.melbourne.split(' ').slice(0,3).join(' ')}</span>
+                  </div>
+                  <span className={`at-caret${auctionTileOpen?' open':''}`}>▾</span>
+                </div>
+              </div>
+              {auctionTileOpen && (
+                <div className="auction-tile-body">
+                  <div className="at-col">
+                    <span className="at-col-label">SA (Adelaide) closes</span>
+                    <span className="at-col-val">{nextAuction.adelaide}</span>
+                    <span className="at-days-amber">{(() => { const parts = nextAuction.adelaide.split(' '); const d = new Date(`${parts[2]} ${parseInt(parts[1])} ${new Date().getFullYear()}`); const diff = Math.round((d - new Date()) / 86400000); return diff > 0 ? `${diff} day${diff===1?'':'s'} away` : diff === 0 ? 'today' : 'passed'; })()}</span>
+                  </div>
+                  <div className="at-col">
+                    <span className="at-col-label">VIC (Melbourne) closes</span>
+                    <span className="at-col-val">{nextAuction.melbourne}</span>
+                    <span className="at-days-amber">{(() => { const parts = nextAuction.melbourne.split(' '); const d = new Date(`${parts[2]} ${parseInt(parts[1])} ${new Date().getFullYear()}`); const diff = Math.round((d - new Date()) / 86400000); return diff > 0 ? `${diff} day${diff===1?'':'s'} away` : diff === 0 ? 'today' : 'passed'; })()}</span>
+                  </div>
+                  <div className="at-col">
+                    <span className="at-col-label">Auction opens</span>
+                    <span className="at-col-val">{nextAuction.start}</span>
+                    <span className="at-days-green">{(() => { const parts = nextAuction.start.split(' '); const d = new Date(`${parts[2]} ${parseInt(parts[1])} ${new Date().getFullYear()}`); const diff = Math.round((d - new Date()) / 86400000); return diff > 0 ? `${diff} day${diff===1?'':'s'} away` : diff === 0 ? 'today' : 'passed'; })()}</span>
+                  </div>
+                  <div className="at-col">
+                    <span className="at-col-label">Auction closes</span>
+                    <span className="at-col-val">{nextAuction.end}</span>
+                    <span className="at-days-green">{(() => { const parts = nextAuction.end.split(' '); const d = new Date(`${parts[2]} ${parseInt(parts[1])} ${new Date().getFullYear()}`); const diff = Math.round((d - new Date()) / 86400000); return diff > 0 ? `${diff} day${diff===1?'':'s'} away` : diff === 0 ? 'today' : 'passed'; })()}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* ── Calculator Drawer ── */}
         <div className={`calc-drawer-wrap${calcOpen?" open":""}`}>
