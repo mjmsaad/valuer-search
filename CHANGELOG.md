@@ -1,6 +1,34 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v2.5.0**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.0.0**.
+
+## [3.0.0] — 14 April 2026 · Full UI Redesign — Dark Theme & Sidebar Navigation
+
+### New
+- **Burgundy icon-only sidebar** — replaces the top header navigation. A 52px fixed sidebar sits on the left at all times, showing icon + label for every section. Active item highlighted with a white left border and brighter icon. Tooltips appear on hover. Corkscrew logo sits at the top of the sidebar
+- **All panels now slide from the right** — My List, History, Flagged, and Calculator all animate in from the right edge. The sidebar remains fully accessible regardless of which panel is open. Panels are mutually exclusive and each has a × close button
+- **Sidebar navigation order** — Search · My List · Flagged · History · Calculator · (divider) · Blank Email · Sami-Odi · Sign out
+- **Calculator as centred modal** — clicking ⊞ Calc opens a full modal overlay with three columns: Retail calculator, Auction calculator, and a live scrolling team history feed. Each column scrolls independently. History is searchable. Backdrop click or × closes it
+- **Auction date header bar** — the topbar now shows only auction information: wine count, Next Auction pill, date range in 17px Cormorant Garamond serif, and SA/VIC cutoff date pills with a days-remaining badge. SA pill has an amber tint and gold text; VIC is clearly secondary
+- **Dark slate theme** — the entire main content area is now dark (`#111210` background). Table rows, search section, panels, and all UI elements updated to the dark palette. Price colours (rose reserve, amber low, sage green high) read clearly on dark
+- **Corkscrew logo in sidebar** — the Wickman's corkscrew mark replaces the W letterform at the top of the sidebar, embedded as a transparent PNG on the burgundy background
+
+### Improved
+- **Header simplified** — the sticky header is now purely an auction status bar. Calculator, Blank Email, History, Flagged and all navigation have moved to the sidebar
+- **My List tab removed** — the vertical slide-out tab on the right edge is gone. My List is accessed exclusively via the sidebar, eliminating the redundant duplicate entry point
+- **Panel animations unified** — all four panels (My List, History, Flagged, Calculator) use identical `right` transition animations (`0.28s ease`). Previously Flagged used a `left` axis transition and Calculator popped in without animation
+- **Calculator scroll fixed** — switching Calculator to a modal with defined height and `height:100%` on grid columns means each column scrolls independently within the modal frame. Overscroll contains to the modal — the results table behind it no longer scrolls
+- **Sidebar icons** — icons at 17px with 55% opacity at rest, 85% on hover, 100% active. Labels at 7px. Significantly more readable than the earlier faded 14px icons
+- **Cutoff date pills** — both SA and VIC dates are now 17px, matching the auction range date for visual consistency. SA is gold (#FFD580), VIC is 75% white. Days badges are visible on both
+- **VIC closes label** — lifted from near-invisible `#2A2820` to 40% white, matching the SA label treatment
+
+### Fixed
+- **My List tab overlapping results** — the vertical panel-tab that remained after the sidebar redesign has been removed
+- **Calc modal scroll springing back** — fixed by changing `max-height` to a defined `height` on the modal, propagating `height:100%` to grid columns so they have a real constraint to overflow against
+- **Hook order violation (white screen)** — a `useEffect` scroll-lock was inserted after conditional early returns in App, violating React's Rules of Hooks. The hook ran on some renders and not others, causing React to crash with "Rendered more hooks than during the previous render"
+- **Duplicate function declarations** — multiple rounds of JSX manipulation caused the entire RowCalc through App block (~135,000 chars) to be duplicated in the file, causing Babel "already declared" errors. Duplicate removed
+- **JSX structural corruption** — several panel-tab removal operations incorrectly cut into adjacent JSX blocks, orphaning the LoginScreen login-card form and leaving it either inside App's return or after `export default App`. Corrected with targeted reconstruction
+- **History and Flag panels** — converted from left-side slide panels to right-side, matching all other panels. Close buttons added to all panel headers
 
 ---
 
