@@ -239,7 +239,7 @@ ${Y}
 [data-theme="light"] .calc-hist-item-prices .chp-res{color:#7B1D1D;}
 [data-theme="light"] .calc-hist-item-prices .chp-low{color:#8A6020;}
 [data-theme="light"] .calc-hist-item-prices .chp-hi{color:#1E5C3A;}
-[data-theme="light"] 
+
 [data-theme="light"] .calc-hist-empty{color:#8A8278;}
 [data-theme="light"] .calc-hist-search{background:#FAF8F4;border-color:#E2DDD6;color:#1A1714;}
 [data-theme="light"] .calc-col-title{color:#1A1714;}
