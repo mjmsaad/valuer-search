@@ -1337,19 +1337,19 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .mob-pill.res .mob-pill-lbl{color:var(--wine);} .mob-pill.res .mob-pill-val{color:var(--wine);}
 .mob-pill.low .mob-pill-lbl{color:var(--gold);} .mob-pill.low .mob-pill-val{color:var(--gold);}
 .mob-pill.hi .mob-pill-lbl{color:var(--green);} .mob-pill.hi .mob-pill-val{color:var(--green);}
-.mob-list-hdr{background:var(--text);padding:10px 13px;flex-shrink:0;}
-.mob-list-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold);display:flex;align-items:baseline;justify-content:space-between;}
+.mob-list-hdr{background:#5A0E0E;padding:10px 13px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.mob-list-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:#E8C97A;display:flex;align-items:center;gap:8px;}
 .mob-list-badge{background:var(--wine);color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 7px;font-family:'Inter',sans-serif;}
-.mob-list-sub{font-size:9px;color:#5A5248;font-style:italic;margin-top:2px;}
-.mob-list-footer{position:fixed;bottom:0;left:0;right:0;padding:9px 10px;background:var(--white);border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
+.mob-list-sub{font-size:9px;color:rgba(255,255,255,.5);font-style:italic;margin-top:2px;}
+.mob-list-footer{position:fixed;bottom:0;left:0;right:0;padding:9px 10px;background:#0D0B09;border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
 .mob-list-empty{padding:32px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .mob-list-empty-msg{font-size:11px;color:var(--text-muted);line-height:1.7;}
 .mob-list-empty-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:8px 16px;font-size:10px;color:var(--text-muted);cursor:pointer;font-family:'Inter',sans-serif;}
 .mob-list-empty-btn:active{border-color:var(--wine);color:var(--wine);}
 .mob-copy-btn{width:100%;background:#1A1714;color:var(--gold);border:none;padding:9px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-send-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.mob-email-btn{background:var(--wine);color:white;border:none;padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
-.mob-pdf-btn{background:none;color:var(--wine);border:1px solid rgba(123,29,29,.35);padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
+.mob-email-btn{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:.5px solid rgba(255,255,255,.2);padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
+.mob-pdf-btn{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:.5px solid rgba(255,255,255,.2);padding:8px;font-size:9px;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;}
 .mob-sheet-overlay{position:fixed;inset:0;background:rgba(26,23,20,.5);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;}
 .mob-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);overscroll-behavior:contain;}
 .mob-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 6px;}
@@ -3054,9 +3054,9 @@ function App() {
 
       {/* ── Mobile My List view ── */}
       {mobNav === 'list' && (
-        <div style={{position:'fixed',inset:0,top:0,bottom:0,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
+        <div style={{position:'fixed',inset:0,top:0,bottom:0,background:'#111210',zIndex:190,display:'flex',flexDirection:'column'}}>
           <div className="mob-list-hdr">
-            <div className="mob-list-title">My List <span className="mob-list-badge">{listItems.length}</span></div>
+            <div className="mob-list-title">My List <span style={{background:"rgba(255,255,255,.15)",color:"rgba(255,255,255,.8)",borderRadius:20,fontSize:9,fontWeight:700,padding:"2px 8px",fontFamily:"'Inter',sans-serif"}}>{listItems.length}</span></div>
             <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottle${listItems.reduce((a,r)=>a+(r.qty||1),0)!==1?'s':''}`}</div>
           </div>
           <div style={{flex:1,overflowY:'auto',padding:'5px 8px 130px',display:'flex',flexDirection:'column',gap:4}}>
@@ -3133,20 +3133,20 @@ function App() {
             <button onClick={() => setMobNav('search')} style={{background:'none',border:'none',fontSize:20,color:'var(--text-muted)',cursor:'pointer'}}>×</button>
           </div>
           <div style={{flex:1,overflowY:'auto',padding:'8px 10px',display:'flex',flexDirection:'column',gap:6}}>
-            {histLoading ? (
+            {histLoading ?  (
               <div style={{textAlign:'center',padding:24,fontSize:11,color:'var(--text-muted)'}}>Loading…</div>
-            ) : history.length === 0 ? (
+            ) : valuationHistory.length === 0 ? (
               <div style={{textAlign:'center',padding:24,fontSize:11,color:'var(--text-muted)'}}>No exports yet.</div>
-            ) : history.map(h => {
+            ) : valuationHistory.map(h => {
               const d = new Date(h.created_at);
               return (
-                <div key={h.id} style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 12px'}}>
+                <div key={h.id} style={{background:'#161412',border:'.5px solid #252420',borderRadius:8,padding:'10px 12px'}}>
                   <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:4}}>
-                    <div style={{fontSize:11,fontWeight:600,color:'var(--text)'}}>{userProfiles[h.exported_by]||h.exported_by}</div>
+                    <div style={{fontSize:11,fontWeight:600,color:'#D4CFC9'}}>{userProfiles[h.exported_by]||h.exported_by}</div>
                     <span style={{fontSize:9,background:h.export_type==='pdf'?'rgba(144,196,168,.15)':'rgba(196,130,122,.15)',color:h.export_type==='pdf'?'#90C4A8':'#C4827A',padding:'2px 7px',borderRadius:3,fontWeight:700}}>{(h.export_type||'email').toUpperCase()}</span>
                   </div>
-                  <div style={{fontSize:10,color:'var(--text-muted)',marginBottom:6}}>{d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})} · {(h.items||[]).length} item{(h.items||[]).length!==1?'s':''}{h.recipient_name?' · '+h.recipient_name:''}</div>
-                  <button onClick={() => { setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setMobNav('list'); }} style={{width:'100%',background:'var(--wine)',color:'white',border:'none',padding:'6px 0',fontSize:9,fontWeight:700,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Load to My List</button>
+                  <div style={{fontSize:10,color:'#8A8278',marginBottom:6}}>{d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})} · {(h.items||[]).length} item{(h.items||[]).length!==1?'s':''}{h.recipient_name?' · '+h.recipient_name:''}</div>
+                  <button onClick={() => { setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setMobNav('list'); }} style={{width:'100%',background:'rgba(255,255,255,.07)',color:'rgba(255,255,255,.75)',border:'.5px solid rgba(255,255,255,.2)',padding:'6px 0',fontSize:9,fontWeight:600,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Load to My List</button>
                 </div>
               );
             })}
@@ -3176,8 +3176,8 @@ function App() {
                   <span style={{background:'rgba(196,120,0,.1)',border:'1px solid rgba(196,120,0,.25)',borderRadius:3,padding:'2px 7px',color:'#C47800',fontWeight:600}}>{f.suggested_size}</span>
                 </div>
                 <div style={{display:'flex',gap:6}}>
-                  <button onClick={() => resolveFlag(f.id)} style={{flex:1,background:'#5A0E0E',color:'white',border:'none',padding:'6px 0',fontSize:9,fontWeight:700,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Resolved</button>
-                  <button onClick={() => dismissFlag(f.id)} style={{flex:1,background:'none',border:'1px solid var(--border)',color:'var(--text-muted)',padding:'6px 0',fontSize:9,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Dismiss</button>
+                  <button onClick={() => resolveFlag(f.id)} style={{flex:1,background:'rgba(255,255,255,.07)',color:'rgba(255,255,255,.75)',border:'.5px solid rgba(255,255,255,.2)',padding:'6px 0',fontSize:9,fontWeight:600,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>✓ Resolved</button>
+                  <button onClick={() => dismissFlag(f.id)} style={{flex:1,background:'rgba(255,255,255,.04)',border:'.5px solid rgba(255,255,255,.12)',color:'rgba(255,255,255,.4)',padding:'6px 0',fontSize:9,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Dismiss</button>
                 </div>
               </div>
             ))}
