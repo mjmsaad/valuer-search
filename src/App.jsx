@@ -1324,8 +1324,8 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .mob-card-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mob-vbadge{font-size:9px;font-weight:700;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:2px 6px;white-space:nowrap;flex-shrink:0;}
 .mob-card-btns{display:flex;align-items:center;gap:3px;flex-shrink:0;}
-.mob-add-btn{border:none;color:white;font-size:9px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;background:var(--wine);}
-.mob-add-btn.mob-added{background:var(--green);}
+.mob-add-btn{border:.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.65);font-size:9px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;background:rgba(255,255,255,.07);}
+.mob-add-btn.mob-added{background:rgba(232,201,122,.15);border-color:rgba(232,201,122,.4);color:#E8C97A;}
 .mob-info-btn{width:26px;height:26px;background:var(--cream);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;color:var(--text-muted);}
 .mob-card-r2{display:flex;gap:4px;}
 .mob-pill{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid var(--border);border-radius:4px;padding:4px 7px;flex:1;}
@@ -1368,8 +1368,8 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .mss{background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:7px 9px;}
 .mss-l{font-size:8px;color:var(--text-muted);margin-bottom:1px;}
 .mss-v{font-size:11px;font-weight:500;color:var(--text);}
-.mob-sheet-add{width:100%;background:var(--wine);color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
-.mob-sheet-add.mob-added{background:var(--green);}
+.mob-sheet-add{width:100%;background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:.5px solid rgba(255,255,255,.2);padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
+.mob-sheet-add.mob-added{background:rgba(232,201,122,.15);border-color:rgba(232,201,122,.4);color:#E8C97A;}
 /* ── Size flag styles ── */
 .size-flag-cell{position:relative;}
 .size-flagged-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(196,120,0,.09);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 7px;cursor:pointer;color:#C47800;font-size:10px;font-weight:600;}
@@ -2707,10 +2707,7 @@ function App() {
               <div className="mob-nav-tab-icon"></div>
               <span className="mob-nav-tab-lbl">Calc</span>
             </button>
-            <button className={`mob-nav-tab${mobNav==='history'?' mob-nav-active':''}`} onClick={() => setMobNav('history')}>
-              <div className="mob-nav-tab-icon"></div>
-              <span className="mob-nav-tab-lbl">History</span>
-            </button>
+
             <button className={`mob-nav-tab${mobNav==='flags'?' mob-nav-active':''}`} onClick={() => setMobNav('flags')} style={{position:'relative'}}>
               <div className="mob-nav-tab-icon"></div>
               <span className="mob-nav-tab-lbl">Flags</span>
@@ -3056,8 +3053,11 @@ function App() {
       {mobNav === 'list' && (
         <div style={{position:'fixed',inset:0,top:0,bottom:0,background:'#111210',zIndex:190,display:'flex',flexDirection:'column'}}>
           <div className="mob-list-hdr">
-            <div className="mob-list-title">My List <span style={{background:"rgba(255,255,255,.15)",color:"rgba(255,255,255,.8)",borderRadius:20,fontSize:9,fontWeight:700,padding:"2px 8px",fontFamily:"'Inter',sans-serif"}}>{listItems.length}</span></div>
-            <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottle${listItems.reduce((a,r)=>a+(r.qty||1),0)!==1?'s':''}`}</div>
+            <div>
+              <div className="mob-list-title">My List <span style={{background:"rgba(255,255,255,.15)",color:"rgba(255,255,255,.8)",borderRadius:20,fontSize:9,fontWeight:700,padding:"2px 8px",fontFamily:"'Inter',sans-serif"}}>{listItems.length}</span></div>
+              <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottle${listItems.reduce((a,r)=>a+(r.qty||1),0)!==1?'s':''}`}</div>
+            </div>
+            <button onClick={() => setMobNav('search')} style={{background:'none',border:'none',fontSize:24,color:'rgba(255,255,255,.5)',cursor:'pointer',padding:0,lineHeight:1,fontFamily:'sans-serif'}}>×</button>
           </div>
           <div style={{flex:1,overflowY:'auto',padding:'5px 8px 130px',display:'flex',flexDirection:'column',gap:4}}>
             {listItems.length === 0 ? (
@@ -3068,7 +3068,7 @@ function App() {
             ) : listItems.map((r, i) => {
               const isEditing = mobEditRow === (r._key||i);
               return (
-                <div key={r._key||i} style={{background:'var(--white)',border:`1px solid ${isEditing?'rgba(123,29,29,.35)':'var(--border)'}`,borderRadius:8,overflow:'hidden',flexShrink:0}}>
+                <div key={r._key||i} style={{background:'#161412',border:`.5px solid ${isEditing?'rgba(232,201,122,.35)':'#252420'}`,borderRadius:8,overflow:'hidden',flexShrink:0}}>
                   <div style={{padding:'8px 10px'}}>
                     <div className="mob-card-r1">
                       <span className="mob-vbadge">{r.vintage||"NV"}</span>
