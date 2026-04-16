@@ -1254,6 +1254,20 @@ html.is-mobile .mob-search-header{display:flex;}
 .mob-nav-tab.mob-nav-active .mob-nav-tab-icon{background:#E8C97A;}
 .mob-nav-tab.mob-nav-active .mob-nav-tab-lbl{color:#E8C97A;}
 .mob-nav-pip{position:absolute;top:3px;right:6px;background:var(--wine);color:white;border-radius:8px;font-size:6px;font-family:'Inter',sans-serif;padding:1px 4px;font-weight:700;}
+
+[data-theme="light"] .mob-list-hdr{background:#5A0E0E;}
+[data-theme="light"] .mob-add-btn{background:#5A0E0E;color:white;border:none;}
+[data-theme="light"] .mob-add-btn.mob-added{background:#2E7D52;color:white;border:none;}
+[data-theme="light"] .mob-sheet-add{background:#5A0E0E;color:white;}
+[data-theme="light"] .mob-sheet-add.mob-added{background:#2E7D52;color:white;}
+[data-theme="light"] .mob-chip.active{background:#5A0E0E;border-color:#5A0E0E;color:white;}
+[data-theme="light"] .mob-nav-strip{background:#5A0E0E;}
+[data-theme="light"] .mob-flag-btn{border-color:rgba(90,14,14,.3);color:#5A0E0E;}
+
+.mob-flag-resolve-btn{flex:1;background:#5A0E0E;color:white;border:none;padding:6px 0;font-size:9px;font-weight:600;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;}
+.mob-flag-dismiss-btn{flex:1;background:rgba(255,255,255,.06);color:rgba(255,255,255,.55);border:.5px solid rgba(255,255,255,.15);padding:6px 0;font-size:9px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;}
+[data-theme="light"] .mob-flag-resolve-btn{background:#5A0E0E;}
+[data-theme="light"] .mob-flag-dismiss-btn{background:#F5F2EE;color:#8A8278;border:.5px solid #D4CFC9;}
 html.is-mobile .err-banner{margin:0;}
 html:not(.is-mobile) .mob-search-header{display:none!important;}
 html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html:not(.is-mobile) .mob-sheet-overlay{display:none!important;}html:not(.is-mobile) .mob-calc-overlay{display:none!important;}
@@ -1267,7 +1281,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .mob-chips-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none;}
 .mob-chips-row::-webkit-scrollbar{display:none;}
 .mob-chip{background:var(--white);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:9px;font-weight:700;color:var(--text-muted);white-space:nowrap;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.03em;}
-.mob-chip.active{background:var(--wine);border-color:var(--wine);color:white;}
+.mob-chip.active{background:#5A0E0E;border-color:#5A0E0E;color:white;}
 .mob-count-bar{padding:4px 12px 5px;background:var(--cream);border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
 .mob-count-bar span{font-size:9px;color:var(--text-muted,#8A8278);}
 .mob-view{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
@@ -1324,8 +1338,8 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .mob-card-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mob-vbadge{font-size:9px;font-weight:700;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(184,146,42,.25);border-radius:3px;padding:2px 6px;white-space:nowrap;flex-shrink:0;}
 .mob-card-btns{display:flex;align-items:center;gap:3px;flex-shrink:0;}
-.mob-add-btn{border:.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.65);font-size:9px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;background:rgba(255,255,255,.07);}
-.mob-add-btn.mob-added{background:rgba(232,201,122,.15);border-color:rgba(232,201,122,.4);color:#E8C97A;}
+.mob-add-btn{border:none;color:white;font-size:9px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif;background:#5A0E0E;}
+.mob-add-btn.mob-added{background:#2E7D52;border:none;color:white;}
 .mob-info-btn{width:26px;height:26px;background:var(--cream);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;color:var(--text-muted);}
 .mob-card-r2{display:flex;gap:4px;}
 .mob-pill{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid var(--border);border-radius:4px;padding:4px 7px;flex:1;}
@@ -1368,8 +1382,8 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .mss{background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:7px 9px;}
 .mss-l{font-size:8px;color:var(--text-muted);margin-bottom:1px;}
 .mss-v{font-size:11px;font-weight:500;color:var(--text);}
-.mob-sheet-add{width:100%;background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:.5px solid rgba(255,255,255,.2);padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
-.mob-sheet-add.mob-added{background:rgba(232,201,122,.15);border-color:rgba(232,201,122,.4);color:#E8C97A;}
+.mob-sheet-add{width:100%;background:#5A0E0E;color:white;border:none;padding:10px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:5px;font-family:'Inter',sans-serif;}
+.mob-sheet-add.mob-added{background:#2E7D52;color:white;}
 /* ── Size flag styles ── */
 .size-flag-cell{position:relative;}
 .size-flagged-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(196,120,0,.09);border:1px solid rgba(196,120,0,.3);border-radius:3px;padding:2px 7px;cursor:pointer;color:#C47800;font-size:10px;font-weight:600;}
@@ -2951,7 +2965,27 @@ function App() {
 
             {/* ── Mobile card view (≤768px) ── */}
             <div className="mob-view">
-              {rows.length === 0 && dq ? (
+{/* Mobile pagination — top */}
+              {totalPages > 1 && page > 1 && (
+                <div className="mob-pag" style={{marginBottom:4}}>
+                  <button className="mob-pag-btn" disabled={page<=1} onClick={() => { setPage(p=>p-1); window.scrollTo(0,0); }}>‹</button>
+                  <div className="mob-pag-pages">
+                    {(() => {
+                      const pages = [];
+                      if (totalPages <= 5) { for (let i=1;i<=totalPages;i++) pages.push(i); }
+                      else if (page <= 3) { pages.push(1,2,3,4,'…',totalPages); }
+                      else if (page >= totalPages-2) { pages.push(1,'…',totalPages-3,totalPages-2,totalPages-1,totalPages); }
+                      else { pages.push(1,'…',page-1,page,page+1,'…',totalPages); }
+                      return pages.map((p,idx) => p === '…'
+                        ? <span key={`dt${idx}`} className="mob-pag-dots">…</span>
+                        : <button key={p} className={`mob-pag-page${p===page?' on':''}`} onClick={() => { setPage(p); window.scrollTo(0,0); }}>{p}</button>
+                      );
+                    })()}
+                  </div>
+                  <button className="mob-pag-btn" disabled={page>=totalPages} onClick={() => { setPage(p=>p+1); window.scrollTo(0,0); }}>›</button>
+                </div>
+              )}
+                            {rows.length === 0 && dq ? (
                 <div style={{padding:"40px 20px",textAlign:"center",fontSize:11,color:"var(--border-dark,#C8C0B8)",lineHeight:1.7}}>
                   No results found for "{dq}"
                 </div>
@@ -3051,7 +3085,7 @@ function App() {
 
       {/* ── Mobile My List view ── */}
       {mobNav === 'list' && (
-        <div style={{position:'fixed',inset:0,top:0,bottom:0,background:'#111210',zIndex:190,display:'flex',flexDirection:'column'}}>
+        <div style={{position:'fixed',inset:0,top:0,bottom:0,background:'var(--dk-bg)',zIndex:190,display:'flex',flexDirection:'column'}}>
           <div className="mob-list-hdr">
             <div>
               <div className="mob-list-title">My List <span style={{background:"rgba(255,255,255,.15)",color:"rgba(255,255,255,.8)",borderRadius:20,fontSize:9,fontWeight:700,padding:"2px 8px",fontFamily:"'Inter',sans-serif"}}>{listItems.length}</span></div>
@@ -3068,7 +3102,7 @@ function App() {
             ) : listItems.map((r, i) => {
               const isEditing = mobEditRow === (r._key||i);
               return (
-                <div key={r._key||i} style={{background:'#161412',border:`.5px solid ${isEditing?'rgba(232,201,122,.35)':'#252420'}`,borderRadius:8,overflow:'hidden',flexShrink:0}}>
+                <div key={r._key||i} style={{background:'var(--dk-surf)',border:`.5px solid ${isEditing?'rgba(90,14,14,.4)':'var(--dk-border)'}`,borderRadius:8,overflow:'hidden',flexShrink:0}}>
                   <div style={{padding:'8px 10px'}}>
                     <div className="mob-card-r1">
                       <span className="mob-vbadge">{r.vintage||"NV"}</span>
@@ -3176,8 +3210,8 @@ function App() {
                   <span style={{background:'rgba(196,120,0,.1)',border:'1px solid rgba(196,120,0,.25)',borderRadius:3,padding:'2px 7px',color:'#C47800',fontWeight:600}}>{f.suggested_size}</span>
                 </div>
                 <div style={{display:'flex',gap:6}}>
-                  <button onClick={() => resolveFlag(f.id)} style={{flex:1,background:'rgba(255,255,255,.07)',color:'rgba(255,255,255,.75)',border:'.5px solid rgba(255,255,255,.2)',padding:'6px 0',fontSize:9,fontWeight:600,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>✓ Resolved</button>
-                  <button onClick={() => dismissFlag(f.id)} style={{flex:1,background:'rgba(255,255,255,.04)',border:'.5px solid rgba(255,255,255,.12)',color:'rgba(255,255,255,.4)',padding:'6px 0',fontSize:9,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Dismiss</button>
+                  <button onClick={() => resolveFlag(f.id)} className="mob-flag-resolve-btn">✓ Resolved</button>
+                  <button onClick={() => dismissFlag(f.id)} className="mob-flag-dismiss-btn">Dismiss</button>
                 </div>
               </div>
             ))}
