@@ -590,22 +590,6 @@ const css = `
    Panels stay dark in light mode (hardcoded #0E0C0B bg),
    so all text inside them must stay light */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 [data-theme="light"] .calc-hist-item-name{color:#1A1714;}
 [data-theme="light"] .calc-hist-item-meta{color:#8A8278;}
 [data-theme="light"] .calc-hist-item-prices .chp-res{color:#7B1D1D;}
@@ -623,39 +607,6 @@ const css = `
 [data-theme="light"] .calc-dollar{color:#8A8278;}
 [data-theme="light"] .calc-actions .calc-clr-btn{border-color:#E2DDD6;color:#8A8278;}
 [data-theme="light"] .calc-flash{color:#1E5C3A;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 body{background:var(--dk-bg);color:var(--dk-text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh;-webkit-font-smoothing:antialiased;transition:background .25s ease,color .25s ease;}
 .login-page{min-height:100vh;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
@@ -889,7 +840,6 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .calc-hist-table td.chm{font-size:9px;color:var(--text-muted);}
 .calc-hist-table td.chby{font-size:9px;color:var(--text-muted);}
 .calc-hist-table td.chact{text-align:right;white-space:nowrap;}
-
 
 .calc-hist-add{font-size:9px;background:none;border:1px solid var(--border);color:var(--text-muted);padding:2px 7px;cursor:pointer;border-radius:2px;font-family:'Inter',sans-serif;margin-left:4px;}
 .calc-hist-add:hover{border-color:var(--wine);color:var(--wine);}
@@ -1150,6 +1100,8 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 [data-theme="light"] .btn-pdf:hover{background:#EDE8E2;}
 [data-theme="light"] .btn-pdf:disabled{background:#F5F2EE;color:#C8C0B4;border-color:#E2DDD6;}
 
+html.is-mobile .sidebar{display:none!important;}
+html.is-mobile .app-content{margin-left:0!important;}
 html.is-mobile .header{padding:0 12px;height:46px;}
 html.is-mobile .header-sub,html.is-mobile .header-sep,html.is-mobile .header-user,html.is-mobile .btn-hist-header,html.is-mobile .btn-ident-tool,html.is-mobile .btn-calc-header,html.is-mobile .calc-drawer,html.is-mobile .dark-toggle,html.is-mobile .header-count,html.is-mobile .header-right,html.is-mobile .signout,html.is-mobile .header-brand{display:none!important;}
 html.is-mobile .header{height:0!important;overflow:hidden!important;padding:0!important;min-height:0!important;}
@@ -1159,7 +1111,7 @@ html.is-mobile .meta{display:none!important;}
 html.is-mobile .trend-toggle-bar,html.is-mobile .trend-strip{display:none;}
 html.is-mobile .table-wrap,html.is-mobile .hist-panel,html.is-mobile .flag-panel,html.is-mobile .auction-tile,html.is-mobile .loading-state,html.is-mobile .empty-state{display:none!important;}
 html.is-mobile .mob-view{display:flex;}
-html.is-mobile .mob-nav-bar{display:flex;}
+html.is-mobile 
 html.is-mobile .mob-search-header{display:flex;}
 .mob-search-header{position:sticky;top:0;z-index:10;}
 .rp-tab-hdr{background:#111210;border-bottom:.5px solid #1E1A16;display:flex;align-items:center;padding:0 14px;height:48px;flex-shrink:0;justify-content:space-between;}
@@ -1173,56 +1125,11 @@ html.is-mobile .mob-search-header{display:flex;}
 .rp-close{background:none;border:none;color:#3A3530;font-size:22px;cursor:pointer;line-height:1;padding:0;font-family:'Inter',sans-serif;transition:color .1s;}
 .rp-close:hover{color:#8A8278;}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ── Light mode: panel text & component colours ── */
-
-
-
-
-
 
 /* Dismiss button in flags panel */
 
-
-
-
-
-
 /* History expanded detail */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ── Light mode: panels ── */
 [data-theme="light"] .slide-panel,
@@ -1337,9 +1244,19 @@ html.is-mobile .mob-search-header{display:flex;}
 /* ── Light mode: sidebar tooltip ── */
 [data-theme="light"] .sb-tooltip{background:#1A1714;border-color:#3A3530;color:#FAF8F4;}
 
+
+.mob-nav-strip{display:flex;border-top:.5px solid rgba(255,255,255,.12);background:#5A0E0E;}
+.mob-nav-tab{flex:1;padding:5px 0 4px;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;cursor:pointer;position:relative;}
+.mob-nav-tab-icon{width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,.25);flex-shrink:0;}
+.mob-nav-tab-lbl{font-size:6.5px;color:rgba(255,255,255,.35);font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.mob-nav-tab.mob-nav-active{background:rgba(232,201,122,.1);}
+.mob-nav-tab.mob-nav-active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:#E8C97A;border-radius:1px 1px 0 0;}
+.mob-nav-tab.mob-nav-active .mob-nav-tab-icon{background:#E8C97A;}
+.mob-nav-tab.mob-nav-active .mob-nav-tab-lbl{color:#E8C97A;}
+.mob-nav-pip{position:absolute;top:3px;right:6px;background:var(--wine);color:white;border-radius:8px;font-size:6px;font-family:'Inter',sans-serif;padding:1px 4px;font-weight:700;}
 html.is-mobile .err-banner{margin:0;}
 html:not(.is-mobile) .mob-search-header{display:none!important;}
-html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob-nav-bar{display:none!important;}html:not(.is-mobile) .mob-sheet-overlay{display:none!important;}html:not(.is-mobile) .mob-calc-overlay{display:none!important;}
+html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html:not(.is-mobile) .mob-sheet-overlay{display:none!important;}html:not(.is-mobile) .mob-calc-overlay{display:none!important;}
 .mob-search-header{flex-direction:column;background:var(--cream);padding:9px 12px 0;flex-shrink:0;border-bottom:1px solid var(--border);}
 .mob-search-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .mob-search-pill-wrap{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:100px;padding:7px 14px;margin-bottom:8px;}
@@ -1356,13 +1273,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-view{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:5px 8px 60px;flex-direction:column;gap:4px;background:var(--cream);}
 .mob-view::-webkit-scrollbar{width:3px;}
 .mob-view::-webkit-scrollbar-thumb{background:#D8D0C8;border-radius:3px;}
-.mob-nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--text);border-top:1px solid var(--border);z-index:200;}
-.mob-nav-bar-inner{display:flex;width:100%;}
-.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px 10px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
-.mob-nav-icon-wrap{font-size:18px;line-height:1;}
-.mob-nav-lbl{font-size:7px;font-weight:600;color:#5A5248;letter-spacing:.04em;text-transform:uppercase;}
-.mob-nav-btn.mob-active .mob-nav-lbl{color:var(--gold);}
-.mob-pip{background:var(--wine);border-radius:20px;font-size:7px;font-weight:700;color:white;padding:1px 4px;display:inline-block;margin-left:2px;}
+
 .mob-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;padding:8px 10px;flex-shrink:0;}
 .mob-card.mob-card-added{border-color:rgba(30,92,58,.35);background:rgba(30,92,58,.02);}
 .mob-card.mob-card-flagged{border-color:rgba(196,120,0,.4);background:rgba(196,120,0,.02);}
@@ -1430,7 +1341,7 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) .mob
 .mob-list-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold);display:flex;align-items:baseline;justify-content:space-between;}
 .mob-list-badge{background:var(--wine);color:white;border-radius:20px;font-size:8px;font-weight:700;padding:2px 7px;font-family:'Inter',sans-serif;}
 .mob-list-sub{font-size:9px;color:#5A5248;font-style:italic;margin-top:2px;}
-.mob-list-footer{position:fixed;bottom:52px;left:0;right:0;padding:9px 10px;background:var(--white);border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
+.mob-list-footer{position:fixed;bottom:0;left:0;right:0;padding:9px 10px;background:var(--white);border-top:2px solid var(--border);display:flex;flex-direction:column;gap:6px;z-index:150;}
 .mob-list-empty{padding:32px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .mob-list-empty-msg{font-size:11px;color:var(--text-muted);line-height:1.7;}
 .mob-list-empty-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:8px 16px;font-size:10px;color:var(--text-muted);cursor:pointer;font-family:'Inter',sans-serif;}
@@ -2782,6 +2693,30 @@ function App() {
                 </div>
             </div>
           </div>
+          <div className="mob-nav-strip">
+            <button className={`mob-nav-tab${mobNav==='search'?' mob-nav-active':''}`} onClick={() => setMobNav('search')}>
+              <div className="mob-nav-tab-icon"></div>
+              <span className="mob-nav-tab-lbl">Search</span>
+            </button>
+            <button className={`mob-nav-tab${mobNav==='list'?' mob-nav-active':''}`} onClick={() => setMobNav('list')} style={{position:'relative'}}>
+              <div className="mob-nav-tab-icon"></div>
+              <span className="mob-nav-tab-lbl">My List</span>
+              {listItems.length > 0 && <span className="mob-nav-pip">{listItems.length}</span>}
+            </button>
+            <button className={`mob-nav-tab${mobNav==='calc'?' mob-nav-active':''}`} onClick={() => setMobCalcOpen(o => !o)}>
+              <div className="mob-nav-tab-icon"></div>
+              <span className="mob-nav-tab-lbl">Calc</span>
+            </button>
+            <button className={`mob-nav-tab${mobNav==='history'?' mob-nav-active':''}`} onClick={() => setMobNav('history')}>
+              <div className="mob-nav-tab-icon"></div>
+              <span className="mob-nav-tab-lbl">History</span>
+            </button>
+            <button className={`mob-nav-tab${mobNav==='flags'?' mob-nav-active':''}`} onClick={() => setMobNav('flags')} style={{position:'relative'}}>
+              <div className="mob-nav-tab-icon"></div>
+              <span className="mob-nav-tab-lbl">Flags</span>
+              {sizeFlags.filter(f=>!f.resolved).length > 0 && <span className="mob-nav-pip" style={{background:'#C47800'}}>{sizeFlags.filter(f=>!f.resolved).length}</span>}
+            </button>
+          </div>
           <div className="mob-search-pill-wrap">
             <span className="mob-search-pill-icon">⌕</span>
             <input className="mob-search-pill-input" placeholder="Search wines…"
@@ -3116,30 +3051,10 @@ function App() {
       </div>
 
       {/* ── Mobile bottom nav ── */}
-      <div className="mob-nav-bar">
-        <div className="mob-nav-bar-inner">
-          <button className={`mob-nav-btn${mobNav==='search'?' mob-active':''}`} onClick={() => setMobNav('search')}>
-            <div className="mob-nav-icon-wrap">🔍</div>
-            <div className="mob-nav-lbl">Search</div>
-          </button>
-          <button className={`mob-nav-btn${mobNav==='list'?' mob-active':''}`} onClick={() => setMobNav('list')}>
-            <div className="mob-nav-icon-wrap">📋</div>
-            <div className="mob-nav-lbl">My List{listItems.length > 0 && <span className="mob-pip">{listItems.length}</span>}</div>
-          </button>
-          <button className={`mob-nav-btn${mobNav==='calc'?' mob-active':''}`} onClick={() => setMobCalcOpen(o => !o)}>
-            <div className="mob-nav-icon-wrap">⊞</div>
-            <div className="mob-nav-lbl">Calc</div>
-          </button>
-          <button className="mob-nav-btn" onClick={() => window.open('https://mjmsaad.github.io/Sami-Odi-Identification-Tool/','_blank')}>
-            <div className="mob-nav-icon-wrap">↗</div>
-            <div className="mob-nav-lbl">Tools</div>
-          </button>
-        </div>
-      </div>
 
       {/* ── Mobile My List view ── */}
       {mobNav === 'list' && (
-        <div style={{position:'fixed',inset:0,top:0,bottom:52,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
+        <div style={{position:'fixed',inset:0,top:0,bottom:0,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
           <div className="mob-list-hdr">
             <div className="mob-list-title">My List <span className="mob-list-badge">{listItems.length}</span></div>
             <div className="mob-list-sub">{listItems.length === 0 ? 'No items yet' : `${listItems.reduce((a,r)=>a+(r.qty||1),0)} bottle${listItems.reduce((a,r)=>a+(r.qty||1),0)!==1?'s':''}`}</div>
@@ -3207,6 +3122,66 @@ function App() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Mobile History view */}
+      {mobNav === 'history' && (
+        <div style={{position:'fixed',inset:0,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
+          <div className="mob-list-hdr">
+            <div className="mob-list-title">Valuation History</div>
+            <button onClick={() => setMobNav('search')} style={{background:'none',border:'none',fontSize:20,color:'var(--text-muted)',cursor:'pointer'}}>×</button>
+          </div>
+          <div style={{flex:1,overflowY:'auto',padding:'8px 10px',display:'flex',flexDirection:'column',gap:6}}>
+            {histLoading ? (
+              <div style={{textAlign:'center',padding:24,fontSize:11,color:'var(--text-muted)'}}>Loading…</div>
+            ) : history.length === 0 ? (
+              <div style={{textAlign:'center',padding:24,fontSize:11,color:'var(--text-muted)'}}>No exports yet.</div>
+            ) : history.map(h => {
+              const d = new Date(h.created_at);
+              return (
+                <div key={h.id} style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 12px'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:4}}>
+                    <div style={{fontSize:11,fontWeight:600,color:'var(--text)'}}>{userProfiles[h.exported_by]||h.exported_by}</div>
+                    <span style={{fontSize:9,background:h.export_type==='pdf'?'rgba(144,196,168,.15)':'rgba(196,130,122,.15)',color:h.export_type==='pdf'?'#90C4A8':'#C4827A',padding:'2px 7px',borderRadius:3,fontWeight:700}}>{(h.export_type||'email').toUpperCase()}</span>
+                  </div>
+                  <div style={{fontSize:10,color:'var(--text-muted)',marginBottom:6}}>{d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})} · {(h.items||[]).length} item{(h.items||[]).length!==1?'s':''}{h.recipient_name?' · '+h.recipient_name:''}</div>
+                  <button onClick={() => { setListItems((h.items||[]).map(it=>({...it,_key:it.vintage+it.name+(it.last_auction||''),qty:it.qty||1,size:it.size||'750ml',baseSize:it.size||'750ml',sizeMultiplier:1,applyMultiplier:false}))); setMobNav('list'); }} style={{width:'100%',background:'var(--wine)',color:'white',border:'none',padding:'6px 0',fontSize:9,fontWeight:700,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Load to My List</button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Flags view */}
+      {mobNav === 'flags' && (
+        <div style={{position:'fixed',inset:0,background:'var(--cream)',zIndex:190,display:'flex',flexDirection:'column'}}>
+          <div className="mob-list-hdr">
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <div className="mob-list-title">Size Flags</div>
+              {sizeFlags.filter(f=>!f.resolved).length > 0 && <span style={{background:'rgba(196,120,0,.12)',border:'1px solid rgba(196,120,0,.25)',color:'#C47800',fontSize:9,fontWeight:700,padding:'2px 7px',borderRadius:10}}>{sizeFlags.filter(f=>!f.resolved).length} active</span>}
+            </div>
+            <button onClick={() => setMobNav('search')} style={{background:'none',border:'none',fontSize:20,color:'var(--text-muted)',cursor:'pointer'}}>×</button>
+          </div>
+          <div style={{flex:1,overflowY:'auto',padding:'8px 10px',display:'flex',flexDirection:'column',gap:6}}>
+            {sizeFlags.filter(f=>!f.resolved).length === 0 ? (
+              <div style={{textAlign:'center',padding:32,fontSize:11,color:'var(--text-muted)',lineHeight:1.7}}>No active flags.</div>
+            ) : sizeFlags.filter(f=>!f.resolved).map(f => (
+              <div key={f.id} style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 12px'}}>
+                <div style={{fontSize:11,fontWeight:600,color:'var(--text)',marginBottom:4}}>{f.wine_name}</div>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8,fontSize:10}}>
+                  <span style={{background:'#F5F2EE',border:'1px solid #E2DDD6',borderRadius:3,padding:'2px 7px',color:'#8A8278'}}>{f.listed_size}</span>
+                  <span style={{color:'#8A8278'}}>→</span>
+                  <span style={{background:'rgba(196,120,0,.1)',border:'1px solid rgba(196,120,0,.25)',borderRadius:3,padding:'2px 7px',color:'#C47800',fontWeight:600}}>{f.suggested_size}</span>
+                </div>
+                <div style={{display:'flex',gap:6}}>
+                  <button onClick={() => resolveFlag(f.id)} style={{flex:1,background:'#5A0E0E',color:'white',border:'none',padding:'6px 0',fontSize:9,fontWeight:700,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Resolved</button>
+                  <button onClick={() => dismissFlag(f.id)} style={{flex:1,background:'none',border:'1px solid var(--border)',color:'var(--text-muted)',padding:'6px 0',fontSize:9,borderRadius:4,cursor:'pointer',fontFamily:"'Inter',sans-serif"}}>Dismiss</button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
