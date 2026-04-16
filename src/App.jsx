@@ -1247,11 +1247,11 @@ html.is-mobile .mob-search-header{display:flex;}
 
 .mob-nav-strip{display:flex;border-top:.5px solid rgba(255,255,255,.12);background:#5A0E0E;}
 .mob-nav-tab{flex:1;padding:5px 0 4px;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;cursor:pointer;position:relative;}
-.mob-nav-tab-icon{width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,.25);flex-shrink:0;}
+.mob-nav-tab-icon{width:16px;height:16px;flex-shrink:0;color:rgba(255,255,255,.35);}
 .mob-nav-tab-lbl{font-size:6.5px;color:rgba(255,255,255,.35);font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
 .mob-nav-tab.mob-nav-active{background:rgba(232,201,122,.1);}
 .mob-nav-tab.mob-nav-active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:#E8C97A;border-radius:1px 1px 0 0;}
-.mob-nav-tab.mob-nav-active .mob-nav-tab-icon{background:#E8C97A;}
+.mob-nav-tab.mob-nav-active .mob-nav-tab-icon{color:#E8C97A;}
 .mob-nav-tab.mob-nav-active .mob-nav-tab-lbl{color:#E8C97A;}
 .mob-nav-pip{position:absolute;top:3px;right:6px;background:var(--wine);color:white;border-radius:8px;font-size:6px;font-family:'Inter',sans-serif;padding:1px 4px;font-weight:700;}
 
@@ -2709,21 +2709,35 @@ function App() {
           </div>
           <div className="mob-nav-strip">
             <button className={`mob-nav-tab${mobNav==='search'?' mob-nav-active':''}`} onClick={() => setMobNav('search')}>
-              <div className="mob-nav-tab-icon"></div>
+              <svg className="mob-nav-tab-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                <circle cx="6.5" cy="6.5" r="4"/>
+                <line x1="10" y1="10" x2="14" y2="14"/>
+              </svg>
               <span className="mob-nav-tab-lbl">Search</span>
             </button>
             <button className={`mob-nav-tab${mobNav==='list'?' mob-nav-active':''}`} onClick={() => setMobNav('list')} style={{position:'relative'}}>
-              <div className="mob-nav-tab-icon"></div>
+              <svg className="mob-nav-tab-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                <line x1="4" y1="4" x2="12" y2="4"/>
+                <line x1="4" y1="8" x2="12" y2="8"/>
+                <line x1="4" y1="12" x2="9" y2="12"/>
+              </svg>
               <span className="mob-nav-tab-lbl">My List</span>
               {listItems.length > 0 && <span className="mob-nav-pip">{listItems.length}</span>}
             </button>
             <button className={`mob-nav-tab${mobNav==='calc'?' mob-nav-active':''}`} onClick={() => setMobCalcOpen(o => !o)}>
-              <div className="mob-nav-tab-icon"></div>
+              <svg className="mob-nav-tab-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="12" height="12" rx="2"/>
+                <line x1="2" y1="7" x2="14" y2="7"/>
+                <line x1="7" y1="7" x2="7" y2="14"/>
+              </svg>
               <span className="mob-nav-tab-lbl">Calc</span>
             </button>
 
             <button className={`mob-nav-tab${mobNav==='flags'?' mob-nav-active':''}`} onClick={() => setMobNav('flags')} style={{position:'relative'}}>
-              <div className="mob-nav-tab-icon"></div>
+              <svg className="mob-nav-tab-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 2v13"/>
+                <path d="M3 2h8l-2.5 4 2.5 4H3"/>
+              </svg>
               <span className="mob-nav-tab-lbl">Flags</span>
               {sizeFlags.filter(f=>!f.resolved).length > 0 && <span className="mob-nav-pip" style={{background:'#C47800'}}>{sizeFlags.filter(f=>!f.resolved).length}</span>}
             </button>
@@ -2966,7 +2980,7 @@ function App() {
             {/* ── Mobile card view (≤768px) ── */}
             <div className="mob-view">
 {/* Mobile pagination — top */}
-              {totalPages > 1 && page > 1 && (
+              {totalPages > 1 && (
                 <div className="mob-pag" style={{marginBottom:4}}>
                   <button className="mob-pag-btn" disabled={page<=1} onClick={() => { setPage(p=>p-1); window.scrollTo(0,0); }}>‹</button>
                   <div className="mob-pag-pages">
