@@ -1155,12 +1155,14 @@ html.is-mobile .mob-search-header{display:flex;}
 [data-theme="light"] .slide-panel-confirm-go{background:var(--wine);color:white;border:none;}
 [data-theme="light"] .slide-panel-confirm-label{color:#8A8278;}
 [data-theme="light"] .slide-panel-confirm-cancel{border-color:#D4CFC9;color:#8A8278;}
+[data-theme="light"] .slide-panel-confirm-go:hover{background:#7B1D1D;color:white;}
+[data-theme="light"] .slide-panel-confirm-cancel:hover{background:#EDE8E2;border-color:#C8C0B4;color:#4A4540;}
 .slide-panel-confirm{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:3px;margin-top:8px;box-sizing:border-box;}
 .slide-panel-confirm-label{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--dk-muted);}
 .slide-panel-confirm-cancel{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:2px;border:1px solid rgba(255,255,255,.15);background:none;color:var(--dk-muted);cursor:pointer;font-family:'Inter',sans-serif;}
-.slide-panel-confirm-cancel:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.75);}
+.slide-panel-confirm-cancel:hover{background:#EDE8E2;border-color:#C8C0B4;color:#4A4540;}
 .slide-panel-confirm-go{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:2px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);cursor:pointer;font-family:'Inter',sans-serif;}
-.slide-panel-confirm-go:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.9);}
+.slide-panel-confirm-go:hover{background:#7B1D1D;color:white;border:none;}
 [data-theme="light"] .slide-panel-clear:hover{background:#EDE8E2;color:#4A4540;}
 [data-theme="light"] .item-wine-name{color:#1A1714;}
 [data-theme="light"] .item-vintage-badge{color:#8A6020;background:rgba(184,146,42,.1);border-color:rgba(184,146,42,.25);}
@@ -1757,6 +1759,7 @@ function CalcDrawerBody({ session, userProfiles, calcHistory, calcHistSearch, se
             const line = `${retailVint || ''}\t${retailWine || ''}\t\t\t$${retailRes.reserve}\t$${retailRes.low}\t$${retailRes.high}`;
             navigator.clipboard.writeText(line).catch(()=>{});
             flash(setRetailFlash, '✓ Copied for spreadsheet', 'gold');
+            if (retailWine.trim()) saveCalcHistory(retailWine, retailVint, 'Retail', parseFloat(retailPrice), retailRes.reserve, retailRes.low, retailRes.high);
           }}>⎘ Copy to spreadsheet</button>
           <div className={`calc-flash${retailFlash ? ' '+retailFlash.cls : ''}`}>{retailFlash ? retailFlash.msg : ''}</div>
         </div>
@@ -1789,6 +1792,7 @@ function CalcDrawerBody({ session, userProfiles, calcHistory, calcHistSearch, se
             const line = `${auctionVint || ''}\t${auctionWine || ''}\t\t\t$${auctionRes.reserve}\t$${auctionRes.low}\t$${auctionRes.high}`;
             navigator.clipboard.writeText(line).catch(()=>{});
             flash(setAuctionFlash, '✓ Copied for spreadsheet', 'gold');
+            if (auctionWine.trim()) saveCalcHistory(auctionWine, auctionVint, 'Auction', parseFloat(auctionPrice), auctionRes.reserve, auctionRes.low, auctionRes.high);
           }}>⎘ Copy to spreadsheet</button>
           <div className={`calc-flash${auctionFlash ? ' '+auctionFlash.cls : ''}`}>{auctionFlash ? auctionFlash.msg : ''}</div>
         </div>
