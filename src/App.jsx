@@ -1292,10 +1292,10 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 
 .mob-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;padding:8px 10px;flex-shrink:0;}
 .mob-card.mob-card-added{border-color:rgba(30,92,58,.35);background:rgba(30,92,58,.02);}
-.mob-card.mob-card-flagged{border-color:rgba(196,120,0,.4);background:rgba(196,120,0,.02);}
+.mob-card.mob-card-flagged{border-top:1px solid rgba(196,120,0,.55)!important;border-bottom:1px solid rgba(196,120,0,.55)!important;border-left:.5px solid #252420!important;border-right:.5px solid #252420!important;background:rgba(196,120,0,.05)!important;}
 .mob-flag-card-btn{width:26px;height:26px;background:none;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tm);flex-shrink:0;cursor:pointer;font-family:'Inter',sans-serif;}
 .mob-flag-card-btn.mob-flagged{background:rgba(196,120,0,.1);border-color:rgba(196,120,0,.35);color:#C47800;}
-.mob-flag-card-note{font-size:8px;color:#C47800;background:rgba(196,120,0,.07);border:1px solid rgba(196,120,0,.2);border-radius:3px;padding:3px 7px;margin-top:4px;display:flex;align-items:center;gap:4px;}
+.mob-flag-card-note{float:right;font-size:7px;font-weight:700;color:#C47800;background:rgba(196,120,0,.18);border:.5px solid rgba(196,120,0,.45);border-radius:2px;padding:1px 5px;margin-top:1px;letter-spacing:.02em;}
 .mob-flag-sheet{background:var(--white);border-radius:14px 14px 0 0;border-top:1px solid var(--border);position:absolute;bottom:0;left:0;right:0;z-index:400;}
 .mob-flag-sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;}
 .mob-flag-sheet-hdr{background:#1A1714;margin-top:8px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;}
@@ -1439,9 +1439,9 @@ html:not(.is-mobile) .mob-view{display:none!important;}html:not(.is-mobile) html
 .flag-view-resolve{background:var(--burg);color:white;border:none;padding:9px 16px;border-radius:4px;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;cursor:pointer;transition:background .12s;letter-spacing:.04em;text-transform:uppercase;}
 .flag-view-resolve:hover{background:var(--burg-hover,#6A1414);}
 .flag-view-dismiss{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.65);padding:9px 16px;font-size:9px;padding:7px;border-radius:4px;font-size:9px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
-.flag-badge{font-size:8px;font-weight:700;color:#C47800;background:rgba(196,120,0,.1);border:.5px solid rgba(196,120,0,.25);border-radius:2px;padding:1px 4px;margin-left:4px;}
-tr.row-flagged{background:rgba(196,120,0,.03)!important;}
-tr.row-flagged:hover{background:rgba(196,120,0,.07)!important;}
+.flag-badge{float:right;background:rgba(196,120,0,.18);border:.5px solid rgba(196,120,0,.45);color:#C47800;font-size:8px;font-weight:700;padding:2px 8px;border-radius:2px;letter-spacing:.02em;white-space:nowrap;margin-top:1px;}
+tr.row-flagged>td{border-top:1px solid rgba(196,120,0,.55)!important;border-bottom:1px solid rgba(196,120,0,.55)!important;background:rgba(196,120,0,.06);}
+tr.row-flagged:hover>td{background:rgba(196,120,0,.1);}
 .flag-panel{position:fixed;right:-380px;top:56px;bottom:0;width:380px;background:#0E0C0B;border-left:2.5px solid #5A0E0E;z-index:999;display:flex;flex-direction:column;transition:right .28s ease;}
 .flag-panel.open{right:0;box-shadow:-8px 0 28px rgba(0,0,0,.6);}
 .flag-panel-hdr{height:56px;padding:0 18px;border-bottom:.5px solid var(--dk-border);background:#161412;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -2081,7 +2081,7 @@ function App() {
     setLoading(true); setError(null);
     const offset = (page - 1) * PAGE;
     if (page === 1 && dq.trim()) logSearch(dq.trim());
-    fetchWines(session.access_token, dq.trim().split(/\s+/).filter(Boolean), house, offset, sortCol, sortDir)
+    fetchWines(session.access_token, keywords, house, offset, sortCol, sortDir)
       .then(({ data, count }) => { setRows(data); setTotalCount(count); })
       .catch(e => {
         if (e.message === "SESSION_EXPIRED") { setSession(null); localStorage.removeItem("sb_session"); }
@@ -2207,7 +2207,14 @@ function App() {
     }
   }, [trendingOpen, trendingPeriod, session]);
 
-  const keywords = useMemo(() => dq.trim().split(/\s+/).filter(Boolean), [dq]);
+  const keywords = useMemo(() => {
+    const raw = dq.trim();
+    const tokens = [];
+    const re = /"([^"]+)"|(\S+)/g;
+    let m;
+    while ((m = re.exec(raw)) !== null) tokens.push(m[1] || m[2]);
+    return tokens.filter(Boolean);
+  }, [dq]);
   const totalPages = Math.ceil(totalCount / PAGE);
 
   const handleQ = v => {
@@ -2748,7 +2755,7 @@ function App() {
           </div>
           <div className="mob-search-pill-wrap">
             <span className="mob-search-pill-icon">⌕</span>
-            <input className="mob-search-pill-input" placeholder="Search wines…"
+            <input className="mob-search-pill-input" placeholder='Search wines… use "quotes" for exact phrases'
               value={q} onChange={e => handleQ(e.target.value)} />
             {q && <button className="mob-search-pill-clear" onClick={() => { setQ(""); setDq(""); setPage(1); }}>×</button>}
           </div>
@@ -2771,7 +2778,7 @@ function App() {
           <div className="search-section">
             <div className="search-wrap">
               <span className="search-icon">⌕</span>
-              <input type="text" placeholder="Search by keyword — e.g. grange 1998, penfolds shiraz"
+              <input type="text" placeholder='Search by keyword — use "quotes" for exact phrases e.g. "Block D"'
                 value={q} onChange={e => handleQ(e.target.value)} />
             </div>
             <select value={house} onChange={e => { setHouse(e.target.value); setPage(1); }}>
@@ -2928,7 +2935,7 @@ function App() {
                   </thead>
                   <tbody>
                     {rows.map((r, i) => (
-                      <tr key={i} onClick={(e) => { if(e.target.closest('.size-flag-cell')) return; copyRow(r, i); }} style={{cursor:"pointer"}} className={copiedRow === i ? "row-copied" : ""}>
+                      <tr key={i} className={`${getFlagForRow(r) ? "row-flagged" : ""} ${copiedRow === i ? "row-copied" : ""}`.trim()} onClick={(e) => { if(e.target.closest('.size-flag-cell')) return; copyRow(r, i); }} style={{cursor:"pointer"}}>
                         <td style={{width:0,padding:0,overflow:"hidden"}} />
                         <td style={{width:30,padding:"4px 8px",textAlign:"center"}} onClick={e => { e.stopPropagation(); toggleListItem(r); }}>
                           <button className={`list-add-btn${isInList(r)?" in-list":""}`} title={isInList(r)?"Remove from list":"Add to list"}>
@@ -2939,7 +2946,7 @@ function App() {
                           <button className="info-btn" title="View price history">ⓘ</button>
                         </td>
                         <td><span className="vintage-badge"><Hl text={r.vintage} keywords={keywords} /></span></td>
-                        <td className="wine-col" title={r.name}><Hl text={r.name} keywords={keywords} /> {getFlagForRow(r) && <span className="flag-badge">⚑ SIZE</span>}</td>
+                        <td className="wine-col" title={r.name}><Hl text={r.name} keywords={keywords} /> {getFlagForRow(r) && <span className="flag-badge">⚑ Size flag</span>}</td>
                         <td><span className="qty-text">{r.qty}</span></td>
                         {(() => {
                           const rowKey = r.vintage + r.name + r.auction_house;

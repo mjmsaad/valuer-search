@@ -4,6 +4,18 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 ---
 
+## [3.1.2] — 24 April 2026 · Quoted Phrase Search & Flag Row Highlight
+
+### New
+- **Quoted phrase search** — wrapping search terms in double quotes treats them as a literal phrase. Searching `"Block D"` returns only results containing that exact string, preventing false matches from common words appearing separately across different parts of a wine name
+- **Flag row highlight** — flagged result rows now show an amber background tint with 1px amber borders top and bottom. An amber "Size flag" badge is floated to the right of the wine name, making size-flagged wines immediately visible while scanning results
+
+### Fixed
+- **Quoted search not returning results** — the keywords useMemo was parsing quoted phrases correctly but `fetchWines` was re-splitting the raw query string directly, discarding phrase tokens. Fixed by passing the parsed keywords array to `fetchWines`
+- **Flag highlight not showing** — the result row `<tr>` had two separate `className` props; the second (`row-copied`) was silently overwriting the first (`row-flagged`) so the flag CSS never applied. Merged into a single template literal
+
+---
+
 ## [3.1.1] — 16 April 2026 · Calculator Light Mode & Panel Behaviour Fixes
 
 ### Fixed
@@ -490,14 +502,15 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 | | |
 |---|---|
-| **New Features** | 92 |
+| **New Features** | 94 |
 | **Improvements** | 41 |
-| **Bug Fixes** | 48 |
-| **Total Changes** | 181 |
-| **Versions** | 30 |
+| **Bug Fixes** | 50 |
+| **Total Changes** | 185 |
+| **Versions** | 34 |
 
 | Version | Date | Highlight | New | Improved | Fixed |
 |---------|------|-----------|-----|----------|-------|
+| 3.1.2 | 24 April 2026 | Quoted Phrase Search & Flag Row Highlight | 2 | — | 2 |
 | 3.1.1 | 16 April 2026 | Calculator Light Mode & Panel Behaviour Fixes | — | — | 2 |
 | 3.1.0 | 16 April 2026 | Light/Dark Mode Polish & Panel Unification | 2 | 7 | 2 |
 | 3.0.0 | 14 April 2026 | Full UI Redesign — Dark Theme & Sidebar Navigation | 7 | 7 | 6 |
