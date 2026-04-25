@@ -1,6 +1,20 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.1.1**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.1.3**.
+
+---
+
+## [3.1.3] — 25 April 2026 · Light Mode Polish, Search UX & Flag Popover Fix
+
+### Improved
+- **CSS light mode consolidation** — all `[data-theme="light"]` overrides unified into a single block. Previously split across three separate locations in the stylesheet, making future edits error-prone
+- **Select dropdown light mode** — the auction source filter now uses `var(--dk-surf)` / `var(--dk-border)` tokens and has an explicit light mode override. Previously fell back to browser-native styling in light mode, inconsistent with the search input beside it
+- **× clear button on search** — a × button appears inside the search input when a query is active, allowing one-click clear without selecting all text. Positioned absolutely at the right edge; input right-padding widened to accommodate it
+
+### Fixed
+- **Dark mode hover bug** — `slide-panel-confirm-cancel:hover` and `slide-panel-confirm-go:hover` had cream background values hardcoded in the base (dark mode) stylesheet. In dark mode, hovering the confirm buttons produced a cream flash. Hover rules moved into the `[data-theme="light"]` block where they belong
+- **Copy rows toast** — the "Copy N rows to clipboard" button was missing the intermediate `setToastHiding(true)` call, so the toast vanished abruptly without the 300ms fade-out that row-level copies use. Now matches identical timing to row copy
+- **Flag popover clipping & scroll drift** — the popover now checks available space below the trigger button and flips upward when the viewport has insufficient room. A capture-phase scroll listener closes the popover on any scroll, preventing it from appearing detached from its button
 
 ---
 
@@ -503,13 +517,14 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 | | |
 |---|---|
 | **New Features** | 94 |
-| **Improvements** | 41 |
-| **Bug Fixes** | 50 |
-| **Total Changes** | 185 |
-| **Versions** | 34 |
+| **Improvements** | 44 |
+| **Bug Fixes** | 53 |
+| **Total Changes** | 191 |
+| **Versions** | 35 |
 
 | Version | Date | Highlight | New | Improved | Fixed |
 |---------|------|-----------|-----|----------|-------|
+| 3.1.3 | 25 April 2026 | Light Mode Polish, Search UX & Flag Popover Fix | — | 3 | 3 |
 | 3.1.2 | 24 April 2026 | Quoted Phrase Search & Flag Row Highlight | 2 | — | 2 |
 | 3.1.1 | 16 April 2026 | Calculator Light Mode & Panel Behaviour Fixes | — | — | 2 |
 | 3.1.0 | 16 April 2026 | Light/Dark Mode Polish & Panel Unification | 2 | 7 | 2 |
