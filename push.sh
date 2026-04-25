@@ -25,6 +25,6 @@ git push origin main
 
 echo ""
 echo "✅  Done! GitHub Actions will now build and deploy."
-echo "🔗  Watch progress: https://github.com/mjmsaad/valuer-search/actions"
-echo "🌐  Live site:      https://mjmsaad.github.io/valuer-search/"
+echo "🔗  Watch progress: https://github.com/awa-wwa/valuer-search/actions"
+echo "🌐  Live site:      https://awa-wwa.github.io/valuer-search/"
 echo ""
