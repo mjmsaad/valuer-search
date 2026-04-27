@@ -2559,7 +2559,7 @@ function App() {
               <span className="sb-nav-lbl">Blank</span>
               <div className="sb-tooltip">Blank email</div>
             </div>
-            <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer"
+            <a href="https://awa-wwa.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer"
               className="sb-nav-item" style={{textDecoration:"none"}}>
               <span className="sb-nav-icon">↗</span>
               <span className="sb-nav-lbl">Sami</span>
