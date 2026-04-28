@@ -4282,6 +4282,7 @@ function parseMatchTokens(input) {
   // Keep tokens >= 2 chars, BUT also keep single-digit numbers (e.g. 'Block 6', 'No 5')
   // Exclude 'ml', 'the', 'de', 'le', 'la', 'du' — too short and non-meaningful
   const stopWords = new Set(['ml','cl','the','de','le','la','les','du','da','di','el','lo','of','et','en','und','van','von','sur','des','san','del']);
+  s = s.replace(/\//g, ' '); // split on slash: cab/sav → cab sav, cab/shiraz → cab shiraz
   return s.split(/[\s,&]+/).map(t => t.trim()).filter(t => (t.length >= 2 || /^\d$/.test(t)) && !stopWords.has(t));
 }
 
@@ -4310,7 +4311,7 @@ const NO_SCORE_WORDS = new Set([
   'mv','nv','little','blend','pink','label','our','red','white','gold',
   'bin','no','number','lot','batch','style',
   'family','creek','chateau','domaine','cotes','chapelle','bordeaux','bourgogne','champagne',
-  'constance','jourdan','vale','cab','sav','tandem','selection','cosecha','recolte','pertuis','alter',
+  'constance','jourdan','vale','cab','sav','bin','sa','tandem','selection','cosecha','recolte','pertuis',
   'cellars','cellar','winemakers','winemaker','station','view','alter','members','craftsman','shipment',
 ]);
 
@@ -4555,7 +4556,7 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
       'mv','nv','little','blend','pink','label','our','red','white','gold',
       'bin','no','number','lot','batch','style',
       'family','creek','chateau','domaine','cotes','chapelle','bordeaux','bourgogne','champagne',
-      'constance','jourdan','vale','cab','sav','tandem','selection','cosecha','recolte','pertuis','alter','alter',
+      'constance','jourdan','vale','cab','sav','bin','sa','tandem','selection','cosecha','recolte','pertuis',
       'cellars','cellar','winemakers','winemaker','station','view','alter','members','craftsman','shipment',
     ]);
     const varietyWords = new Set([
@@ -4578,6 +4579,16 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
     if(numericKws.length) {
       let url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100`;
       numericKws.forEach(k => { url += `&or=(name.ilike.*${encodeURIComponent(k)}*)`; });
+      const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+      if(res.ok) addRows(await res.json());
+    }
+
+    // Query A2: numeric + vintage combined — critical for Penfolds bin numbers
+    // Ensures e.g. Bin 407 1996 is always found even if >100 wines have 407 in name
+    if(numericKws.length && vintageKw) {
+      let url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100`;
+      numericKws.forEach(k => { url += `&or=(name.ilike.*${encodeURIComponent(k)}*)`; });
+      url += `&vintage=ilike.*${encodeURIComponent(vintageKw)}*`;
       const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
       if(res.ok) addRows(await res.json());
     }
@@ -4610,18 +4621,14 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
     }
 
     const rows = [...results.values()];
-    console.log(`[T1] tokens:[${nameKws}] vintage:${vintageKw} raw:${rows.length}`);
-    // Debug: show any baron/nemesis/tanunda/footsteps wines in results
-    rows.filter(r=>{const n=(r.name||'').toLowerCase();return n.includes('nemesis')||n.includes('tanunda')||n.includes('footstep');})
-      .forEach(r=>console.log(`  [DBG] v=${r.vintage} | ${(r.name||'').slice(0,55)}`));
     return rows;
   }
 
-    async function tier2Search(q) {
+  async function tier2Search(q) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_wines_trgm`,{
       method:"POST",
       headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
-      body:JSON.stringify({query:q,threshold:0.3})
+      body:JSON.stringify({query:q,threshold:0.1})
     });
     if(!res.ok) return [];
     const rows = await res.json();
@@ -4647,22 +4654,29 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
     // Tier 2: trigram search on distinctive tokens only (catches misspellings)
     // Use same noQuery list as Tier 1 to avoid matching on generic words
     const noQueryT2 = new Set([
-      'the','and','with','of','et','de','le','la','du','ml','nv','mv','di','el','van','von',
+      'the','and','with','of','et','de','le','la','du','les','ml','nv','mv','di','el','van','von',
       'family','creek','chateau','domaine','cotes','chapelle','cellars','cellar','winery',
       'winemakers','station','valley','hill','estate','vineyard','reserve','vintage',
       'wines','wine','red','white','blend','shiraz','cabernet','sauvignon','chardonnay',
       'pinot','merlot','riesling','semillon','grenache','viognier','primitivo','rioja',
       'bordeaux','bourgogne','champagne','barossa','mclaren','coonawarra','selection',
       'special','cosecha','recolte','constance','jourdan','shipment','craftsman',
+      'baron','bois','view','high','alter','river','abbey',
     ]);
     const allToks = parseMatchTokens(input).filter(t=>!/^\d{4}$/.test(t)&&!/^\d+$/.test(t));
     const distinctiveToks = allToks.filter(w=>!noQueryT2.has(w)&&w.length>=4);
     // Only run trigram if we have distinctive tokens — otherwise skip to unresolved
     const t2Map = new Map();
-    console.log(`[T2] distinctive toks for trigram: [${distinctiveToks.join(',')}]`);
     if(distinctiveToks.length > 0) {
-      for(const q of distinctiveToks.slice(0,2)){
+      // Run tokens one at a time — use first token's results as base, only merge if it improves
+      // This prevents a generic token (e.g. baron) from swamping results from a distinctive one (tununda)
+      for(const q of distinctiveToks.slice(0,1)){
         const rows = await tier2Search(q);
+        rows.forEach(r=>{ if(r.name){ const k=r.name+'|'+(r.vintage||''); if(!t2Map.has(k)||t2Map.get(k).score<r.score) t2Map.set(k,r); } });
+      }
+      // Only run second token if first returned nothing
+      if(t2Map.size === 0 && distinctiveToks.length > 1) {
+        const rows = await tier2Search(distinctiveToks[1]);
         rows.forEach(r=>{ if(r.name){ const k=r.name+'|'+(r.vintage||''); if(!t2Map.has(k)||t2Map.get(k).score<r.score) t2Map.set(k,r); } });
       }
     }
@@ -4671,8 +4685,6 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
       // Re-score trigram results using our word-match scoring to filter out false positives
       // Trigram returns anything with character similarity — we need semantic similarity too
       // Tier 2 is for misspellings — word-match scores will be lower, so use threshold of 30
-      console.log(`[T2] raw results: ${t2.length}, after rescore>=30: ${scoreTier1Results(input, t2, true).filter(w=>w.score>=30).length}`);
-      t2.slice(0,3).forEach(r=>console.log(`  [T2raw] score=${r.score} v=${r.vintage} | ${(r.name||'').slice(0,50)}`));
       const t2scored = scoreTier1Results(input, t2, true).filter(w=>w.score>=30);
       if(t2scored.length){
         const gap = t2scored.length>=2 ? t2scored[0].score-t2scored[1].score : 100;
@@ -4689,10 +4701,13 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
         }
       }
     }
+
+    // Last resort: AI interpretation
     try {
-      const ai=await batchAiInterpret(rawInput);
-      return {...base,aiReasoning:`${ai.interpretation||""} (${(ai.issue||"unknown").replace("_"," ")})`};
+      const ai = await batchAiInterpret(input);
+      if(ai && ai.producer) return {...base,matchStatus:"unresolved",aiReasoning:ai.note||null};
     } catch(e){}
+
     return base;
   }
 

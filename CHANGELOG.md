@@ -1,6 +1,34 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.1.3**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.1.4**.
+
+---
+
+## [3.1.4] — 28 April 2026 · Batch Match — Automated List Matching
+
+### New
+- **Batch match page** — full-screen overlay behind new ⊟ Batch sidebar nav item. Three-step workflow: paste input → algorithm runs → review and confirm each row
+- **Three-tier matching engine** — Tier 1 (JS normalisation), Tier 2 (Supabase pg_trgm trigram), Tier 3 (AI disambiguation via Claude API)
+- **Query A2** — combined bin number + vintage Supabase query prevents large producers (Penfolds Bin 407/128/389 etc) returning empty results when >100 rows match the bin number alone
+- **Session resume** — banner on main search page when a batch session is in progress; sidebar pending dot; full session state restores including candidate picker
+- **Undo confirm** — confirmed rows show ↩ Undo button, reverts status to `confident` and updates Supabase record
+- **Add to My List** — bulk-adds all confirmed rows to My List at the end of a session
+- **Supabase batch tables** — `batch_sessions` (one row per job) and `batch_rows` (one row per input line, including `candidates_json` for full session restore)
+- **pg_trgm + RPC** — `pg_trgm` extension enabled, GIN index on `wines.name`, `search_wines_trgm(query text)` function installed
+
+### Improved
+- **Tier 1 normalisation expanded** — hash numbers (`#9`, `#15`) tokenised as hard numeric filters; slash-split (`Cab/Sav`, `Cab/Shiraz`) handled correctly; stop/no-score words expanded: `les`, `sur`, `des`, `san`, `del`, `bin`, `sa`, `domaine`, `cotes`, `vale`, `cab`, `sav`, `baron`, `chateau`, `family` and others
+- **Tier 2 trigram** — switched to token-level queries, lower similarity threshold, improved noise filtering
+- **Candidate threshold** — 50% minimum confidence required before a row is shown as a match, prevents false positives
+- **Row layout** — B4+B3 hybrid: vintage year displayed large inline with wine name; price bar with Reserve emphasis; flagged rows show amber left border and tint; flagged candidate cards amber border
+- **AI reasoning display** — AI suggestion text surfaces in amber popover on hover of the flag pill in review rows
+- **vite.config.js** — Anthropic API proxy configured for local dev without CORS issues
+
+### Fixed
+- **Hash/number tokenisation** — `#9`, `#15`, `#7` etc were being stripped rather than treated as numeric filters, causing bin number lookups to fail
+- **Slash tokens** — `Cab/Sav` was not being split, causing zero matches for slash-notated varieties
+- **Bin number + vintage miss** — single numeric query returning 100+ results was cutting off newer vintages for high-volume producers; fixed by Query A2
+- **Vite startup after cache clear** — deleting `.vite` folder was removing the vite binary reference; `npm install` restores correctly
 
 ---
 
@@ -516,14 +544,15 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 | | |
 |---|---|
-| **New Features** | 94 |
-| **Improvements** | 44 |
-| **Bug Fixes** | 53 |
-| **Total Changes** | 191 |
-| **Versions** | 35 |
+| **New Features** | 102 |
+| **Improvements** | 50 |
+| **Bug Fixes** | 57 |
+| **Total Changes** | 209 |
+| **Versions** | 36 |
 
 | Version | Date | Highlight | New | Improved | Fixed |
 |---------|------|-----------|-----|----------|-------|
+| 3.1.4 | 28 April 2026 | Batch Match — Automated List Matching | 8 | 6 | 4 |
 | 3.1.3 | 25 April 2026 | Light Mode Polish, Search UX & Flag Popover Fix | — | 3 | 3 |
 | 3.1.2 | 24 April 2026 | Quoted Phrase Search & Flag Row Highlight | 2 | — | 2 |
 | 3.1.1 | 16 April 2026 | Calculator Light Mode & Panel Behaviour Fixes | — | — | 2 |
