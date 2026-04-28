@@ -740,7 +740,7 @@ body{background:var(--dk-bg);color:var(--dk-text);font-family:'Inter',sans-serif
 .sb-logo-wrap{height:56px;display:flex;align-items:center;justify-content:center;border-bottom:.5px solid rgba(255,255,255,.08);flex-shrink:0;padding:4px 0;}
 .sb-logo-w{}
 .sb-nav{flex:1;display:flex;flex-direction:column;padding:8px 0;overflow-y:auto;}
-.sb-nav-item{width:52px;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:all .12s;border-left:2px solid transparent;position:relative;flex-shrink:0;}
+.sb-nav-item{width:52px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:all .12s;border-left:2px solid transparent;position:relative;flex-shrink:0;}
 .sb-nav-item:hover{background:rgba(255,255,255,.1);}
 .sb-nav-item.sb-active{background:rgba(255,255,255,.15);border-left-color:white;}
 .sb-nav-icon{font-size:17px;line-height:1;color:rgba(255,255,255,.55);}
@@ -1124,6 +1124,165 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .info-btn:hover{border-color:var(--pr-res);color:var(--pr-res);background:rgba(196,80,80,.06);}
 .copy-toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(0);background:var(--pr-hi);color:var(--dk-bg);font-size:13px;font-weight:600;letter-spacing:0.04em;padding:10px 22px;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.18);pointer-events:none;opacity:1;transition:opacity 0.3s;z-index:999;}
 .copy-toast.hiding{opacity:0;}
+/* ── Batch Match ── */
+/* Batch pending indicator on sidebar nav item */
+.sb-nav-pending{border-left-color:rgba(186,117,23,.5)!important;background:rgba(186,117,23,.08)!important;}
+.sb-pending-dot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%;background:#BA7517;}
+.sb-tooltip-wide{white-space:normal!important;max-width:200px!important;width:200px;}
+/* Resume banner */
+.batch-resume-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;background:rgba(186,117,23,.1);border-bottom:0.5px solid rgba(186,117,23,.3);flex-shrink:0;}
+.batch-resume-info{display:flex;flex-direction:column;gap:2px;}
+.batch-resume-label{font-size:12px;font-weight:500;color:#633806;}
+.batch-resume-detail{font-size:11px;color:#855009;}
+.batch-resume-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.batch-resume-btn{background:#5A0E0E;border:none;border-radius:5px;padding:6px 14px;font-size:12px;font-weight:500;color:#fff;cursor:pointer;white-space:nowrap;}
+.batch-resume-btn:hover{opacity:.88;}
+.batch-resume-dismiss{background:none;border:none;font-size:14px;color:rgba(186,117,23,.6);cursor:pointer;padding:4px 6px;line-height:1;}
+.batch-resume-dismiss:hover{color:#BA7517;}
+[data-theme="light"] .batch-resume-label{color:#4A2A04;}
+[data-theme="light"] .batch-resume-detail{color:#633806;}
+.batch-overlay{position:fixed;inset:0;z-index:200;background:var(--dk-bg);display:flex;flex-direction:column;}
+.batch-page{display:flex;flex-direction:column;height:100%;overflow:hidden;background:var(--dk-bg);}
+.batch-hdr{display:flex;align-items:center;gap:16px;padding:0 20px;height:52px;background:#5A0E0E;flex-shrink:0;border-bottom:.5px solid rgba(255,255,255,.08);}
+.batch-back-btn{background:none;border:none;color:rgba(255,255,255,.6);font-size:13px;cursor:pointer;padding:4px 0;font-family:inherit;}
+.batch-back-btn:hover{color:#fff;}
+.batch-hdr-title{font-size:14px;font-weight:500;color:#fff;font-family:'Cormorant Garamond',serif;letter-spacing:.04em;}
+.batch-steps{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.batch-step{font-size:11px;color:rgba(255,255,255,.35);padding:2px 8px;border-radius:10px;}
+.batch-step.current{background:rgba(255,255,255,.2);color:#fff;}
+.batch-step.done{color:rgba(255,255,255,.55);}
+.batch-step-sep{color:rgba(255,255,255,.25);font-size:11px;}
+/* Input step */
+.batch-input-layout{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
+.batch-input-card{width:100%;max-width:560px;background:var(--dk-card);border:.5px solid var(--dk-border);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.batch-input-section{display:flex;flex-direction:column;gap:6px;}
+.batch-field-label{font-size:12px;font-weight:600;color:var(--dk-text);letter-spacing:.04em;text-transform:uppercase;}
+.batch-field-sub{font-size:12px;color:var(--dk-muted);}
+.batch-field-input{background:var(--dk-dim);border:.5px solid var(--dk-border);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--dk-text);font-family:inherit;outline:none;}
+.batch-field-input:focus{border-color:rgba(255,255,255,.25);}
+.batch-textarea{background:var(--dk-dim);border:.5px solid var(--dk-border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--dk-text);font-family:'Inter',monospace;line-height:1.6;resize:vertical;min-height:140px;outline:none;}
+.batch-textarea:focus{border-color:rgba(255,255,255,.25);}
+.batch-line-count{font-size:11px;color:var(--dk-muted);text-align:right;}
+.batch-ai-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:.5px solid var(--dk-border);}
+.batch-ai-label{font-size:13px;color:var(--dk-text);}
+.batch-ai-sub{font-size:11px;color:var(--dk-muted);margin-top:2px;}
+.batch-toggle{width:32px;height:18px;background:var(--dk-border);border-radius:9px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.batch-toggle.on{background:#5A0E0E;}
+.batch-toggle-knob{position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;}
+.batch-toggle.on .batch-toggle-knob{transform:translateX(14px);}
+.batch-run-btn{background:#5A0E0E;color:#fff;border:none;border-radius:6px;padding:11px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;letter-spacing:.03em;transition:opacity .15s;}
+.batch-run-btn:hover{opacity:.88;}
+.batch-run-btn:disabled{opacity:.4;cursor:not-allowed;}
+/* Processing step */
+.batch-processing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.batch-spinner{width:28px;height:28px;border:2px solid var(--dk-border);border-top-color:rgba(255,255,255,.6);border-radius:50%;animation:batch-spin .7s linear infinite;}
+@keyframes batch-spin{to{transform:rotate(360deg);}}
+.batch-process-msg{font-size:13px;color:var(--dk-muted);}
+/* Review step */
+.batch-review-layout{flex:1;display:flex;overflow:hidden;}
+.batch-review-sidebar{width:200px;flex-shrink:0;border-right:.5px solid var(--dk-border);padding:20px 16px;display:flex;flex-direction:column;gap:12px;background:var(--dk-surf);}
+.batch-review-customer{font-size:14px;font-weight:500;color:var(--dk-text);font-family:'Cormorant Garamond',serif;}
+.batch-review-date{font-size:11px;color:var(--dk-muted);}
+.batch-summary-cells{display:flex;flex-direction:column;gap:6px;margin:4px 0;}
+.batch-sum-cell{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--dk-border);}
+.batch-sum-n{font-size:18px;font-weight:600;}
+.batch-sum-n.green{color:#90C4A8;}
+.batch-sum-n.amber{color:var(--vbdg-c);}
+.batch-sum-n.red{color:#C4827A;}
+.batch-sum-lbl{font-size:11px;color:var(--dk-muted);}
+.batch-add-btn{background:#5A0E0E;color:#fff;border:none;border-radius:6px;padding:9px 12px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .15s;margin-top:4px;}
+.batch-add-btn:hover{opacity:.88;}
+.batch-add-btn:disabled{opacity:.35;cursor:not-allowed;}
+.batch-copy-btn{background:none;border:.5px solid var(--dk-border);border-radius:6px;padding:9px 12px;font-size:12px;color:var(--dk-text);font-family:inherit;cursor:pointer;transition:all .15s;text-align:center;}
+.batch-copy-btn:hover{border-color:rgba(255,255,255,.25);background:var(--dk-dim);}
+.batch-copy-btn:disabled{opacity:.35;cursor:not-allowed;}
+.batch-reset-btn{background:none;border:.5px solid var(--dk-border);border-radius:6px;padding:7px 12px;font-size:12px;color:var(--dk-muted);font-family:inherit;cursor:pointer;}
+.batch-reset-btn:hover{color:var(--dk-text);border-color:rgba(255,255,255,.2);}
+.batch-review-main{flex:1;overflow-y:auto;padding:0;}
+/* Review rows — B4+B3 hybrid layout */
+.batch-row{display:flex;border-bottom:.5px solid var(--dk-border);align-items:stretch;}
+.batch-row-confident{background:var(--dk-surf);}
+.batch-row-confirmed{background:rgba(144,196,168,.05);border-left:2px solid rgba(144,196,168,.5);}
+.batch-row-candidate{background:var(--dk-surf);border-left:2px solid transparent;}
+.batch-row-flagged{background:rgba(186,117,23,.05);border-left:2px solid rgba(186,117,23,.55);}
+.batch-row-unresolved{background:rgba(196,130,122,.05);border-left:2px solid rgba(196,130,122,.4);}
+.batch-row-skipped{opacity:.35;border-left:2px solid transparent;}
+/* Input column */
+.batch-row-input{flex:0 0 200px;padding:15px 14px;border-right:.5px solid var(--dk-border);display:flex;align-items:flex-start;}
+.batch-row-raw{font-size:12px;color:var(--dk-muted);font-style:italic;line-height:1.5;}
+.batch-row-norm{font-size:11px;color:var(--dk-muted);margin-top:4px;opacity:.6;}
+/* Result column */
+.batch-row-result{flex:1;padding:15px 17px;display:flex;flex-direction:column;gap:0;}
+/* Line 1: year + name + status */
+.batch-row-line1{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px;}
+.batch-row-year{font-size:20px;font-weight:500;color:#F0EBE4;flex-shrink:0;line-height:1.1;}
+.batch-row-match-name{font-size:15px;font-weight:500;color:#E8E3DC;flex:1;line-height:1.3;}
+[data-theme="light"] .batch-row-year{color:#1A1714;}
+[data-theme="light"] .batch-row-match-name{color:#1A1714;}
+.batch-row-line1-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+/* Line 2: size · source · date · tags */
+.batch-row-line2{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.batch-row-size{font-size:12px;color:var(--dk-muted);}
+.batch-row-linesep{width:1px;height:12px;background:var(--dk-border);flex-shrink:0;}
+/* Price bar */
+.batch-price-bar{display:flex;border-radius:6px;overflow:hidden;border:.5px solid var(--dk-border);margin-bottom:10px;background:var(--dk-card);}
+.batch-price-res{flex:0 0 40%;padding:8px 14px;background:rgba(255,255,255,.04);border-right:.5px solid var(--dk-border);}
+.batch-price-lo{flex:1;padding:8px 12px;border-right:.5px solid var(--dk-border);}
+.batch-price-hi{flex:1;padding:8px 12px;}
+.batch-price-lbl{font-size:10px;color:var(--dk-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+.batch-price-val{font-size:16px;font-weight:500;color:#E8E3DC;}
+.batch-price-res-val{font-size:16px;font-weight:600;color:#EDEAE4;}
+[data-theme="light"] .batch-price-bar{background:#fff;}
+[data-theme="light"] .batch-price-res{background:rgba(0,0,0,.03);}
+[data-theme="light"] .batch-price-val{color:#1A1714;}
+[data-theme="light"] .batch-price-res-val{color:#1A1714;}
+/* Action buttons */
+.batch-row-actions{display:flex;gap:8px;}
+.batch-btn-confirm{background:#5A0E0E;border:none;border-radius:5px;padding:5px 14px;font-size:12px;color:#fff;font-family:inherit;cursor:pointer;}
+.batch-btn-confirm:hover{opacity:.85;}
+.batch-btn-unconfirm{background:none;border:.5px solid var(--dk-border);border-radius:5px;padding:5px 10px;font-size:12px;color:var(--dk-muted);font-family:inherit;cursor:pointer;}
+.batch-btn-unconfirm:hover{color:var(--dk-text);border-color:rgba(255,255,255,.2);}
+.batch-btn-skip{background:none;border:.5px solid var(--dk-border);border-radius:5px;padding:5px 10px;font-size:12px;color:var(--dk-muted);font-family:inherit;cursor:pointer;}
+.batch-btn-skip:hover{color:var(--dk-text);}
+/* Status pills */
+.batch-conf-pill{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;}
+.batch-conf-pill.green{background:rgba(144,196,168,.15);color:#90C4A8;}
+.batch-conf-pill.confirmed{background:rgba(144,196,168,.2);color:#90C4A8;}
+/* Flag pill */
+.batch-flag-pill{font-size:11px;padding:2px 8px;border-radius:3px;background:rgba(186,117,23,.15);border:.5px solid rgba(186,117,23,.4);color:#BA7517;flex-shrink:0;white-space:nowrap;cursor:default;position:relative;font-weight:500;}
+.batch-flag-pill:hover .batch-flag-tooltip{opacity:1;pointer-events:auto;}
+.batch-flag-tooltip{position:absolute;bottom:calc(100% + 5px);left:0;background:#1A1816;border:.5px solid #2A2420;border-radius:4px;padding:6px 10px;font-size:11px;color:#C8C0B8;opacity:0;pointer-events:none;transition:opacity .15s;z-index:999;max-width:240px;white-space:normal;line-height:1.4;}
+/* AI note */
+.batch-row-ai-note{font-size:11px;color:var(--vbdg-c);background:var(--vbdg-bg);border:.5px solid var(--vbdg-bd);padding:5px 10px;}
+/* Candidate cards */
+.batch-candidates{display:flex;flex-direction:column;gap:6px;margin-bottom:9px;}
+.batch-candidate{padding:11px 14px;border:.5px solid var(--dk-border);border-radius:6px;cursor:pointer;transition:border-color .15s,background .15s;}
+.batch-candidate:hover{border-color:rgba(255,255,255,.25);background:var(--dk-dim);}
+.batch-candidate-best{border-color:rgba(144,196,168,.45);background:rgba(144,196,168,.06);}
+.batch-candidate-best:hover{border-color:rgba(144,196,168,.7);}
+.batch-candidate-flagged{border-color:rgba(186,117,23,.45);background:rgba(186,117,23,.07);}
+.batch-candidate-flagged:hover{border-color:rgba(186,117,23,.7);}
+.batch-candidate-hdr{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.batch-candidate-name{font-size:14px;font-weight:500;color:var(--dk-text);}
+.batch-candidate-meta{display:flex;gap:8px;font-size:12px;color:var(--dk-muted);margin-bottom:8px;flex-wrap:wrap;}
+.batch-cand-score{font-size:12px;color:var(--dk-muted);flex-shrink:0;}
+.batch-cand-score.best{color:#90C4A8;font-weight:600;}
+.batch-cand-source{font-size:11px;color:var(--dk-muted);background:var(--dk-dim);padding:1px 6px;border-radius:3px;flex-shrink:0;}
+.batch-cand-date{font-size:11px;color:var(--dk-muted);flex-shrink:0;}
+.batch-nearest-tag{font-size:10px;padding:2px 7px;border-radius:3px;background:rgba(186,117,23,.15);color:var(--vbdg-c);flex-shrink:0;white-space:nowrap;}
+/* Unresolved / skipped */
+.batch-row-unresolved-text{font-size:13px;color:#C4827A;font-weight:500;margin-bottom:4px;}
+.batch-row-skipped-text{font-size:12px;color:var(--dk-muted);}
+/* Light mode */
+[data-theme="light"] .batch-candidate-best{border-color:rgba(30,92,58,.35);background:rgba(30,92,58,.05);}
+[data-theme="light"] .batch-candidate-flagged{border-color:rgba(133,79,11,.35);background:rgba(133,79,11,.05);}
+[data-theme="light"] .batch-cand-score.best{color:#1E5C3A;}
+[data-theme="light"] .batch-sum-n.green{color:#1E5C3A;}
+[data-theme="light"] .batch-flag-pill{color:#854F0B;background:rgba(133,79,11,.12);border-color:rgba(133,79,11,.35);}
+[data-theme="light"] .batch-price-res{background:var(--dk-dim);}
+[data-theme="light"] .batch-sum-n.red{color:#7B1D1D;}
+[data-theme="light"] .batch-conf-pill.green,[data-theme="light"] .batch-conf-pill.confirmed{background:rgba(30,92,58,.1);color:#1E5C3A;}
+[data-theme="light"] .batch-row-unresolved{color:#7B1D1D;}
 .detail-overlay{position:fixed;inset:0;background:var(--cream);z-index:200;overflow-y:auto;display:flex;flex-direction:column;}
 .detail-topbar{background:var(--text);padding:0 24px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;flex-shrink:0;}
 .detail-back{background:none;border:none;color:#7A7060;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;padding:0;}
@@ -1868,6 +2027,9 @@ function App() {
   const [detailLoading, setDetailLoading]   = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [calcOpen, setCalcOpen]               = useState(false);
+  const [batchOpen, setBatchOpen]             = useState(false);
+  const [pendingBatchSession, setPendingBatchSession] = useState(null); // in-progress session to resume
+  const [resumeSessionData, setResumeSessionData]     = useState(null); // full session + rows to restore
   const [sizeFlags, setSizeFlags]             = useState([]);   // {wine_name,vintage,auction_house,listed_size,suggested_size,note,flagged_by,id,resolved}
   const [flagPopover, setFlagPopover]         = useState(null); // row key of open popover
   const [flagPopoverPos, setFlagPopoverPos]   = useState({top:0,left:0}); // fixed coords for popover
@@ -2047,6 +2209,17 @@ function App() {
     }, 45 * 60 * 1000);
     return () => clearInterval(refreshInterval);
   }, []);
+
+  // Check for any in-progress batch sessions on login
+  useEffect(() => {
+    if (!session) { setPendingBatchSession(null); return; }
+    fetch(`${SUPABASE_URL}/rest/v1/batch_sessions?status=eq.in_progress&order=updated_at.desc&limit=1&select=*`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` }
+    }).then(r => r.json()).then(rows => {
+      if (Array.isArray(rows) && rows.length > 0) setPendingBatchSession(rows[0]);
+      else setPendingBatchSession(null);
+    }).catch(() => setPendingBatchSession(null));
+  }, [session]);
 
   useEffect(() => {
     if (!session) return;
@@ -2552,6 +2725,13 @@ function App() {
               <span className="sb-nav-lbl">Calc</span>
               <div className="sb-tooltip">Calculator</div>
             </div>
+            <div className={`sb-nav-item${batchOpen?" sb-active":""}${pendingBatchSession&&!batchOpen?" sb-nav-pending":""}`}
+              onClick={() => { setResumeSessionData(null); setBatchOpen(true); setCalcOpen(false); setActivePanel(null); }}>
+              <span className="sb-nav-icon">⊟</span>
+              <span className="sb-nav-lbl">Batch</span>
+              {pendingBatchSession&&!batchOpen&&<span className="sb-pending-dot"/>}
+              <div className="sb-tooltip">Batch match{pendingBatchSession?" · session in progress":""}</div>
+            </div>
             <div className="sb-divider" />
             <div className="sb-nav-item"
               onClick={handleBlankEmail}>
@@ -2559,7 +2739,7 @@ function App() {
               <span className="sb-nav-lbl">Blank</span>
               <div className="sb-tooltip">Blank email</div>
             </div>
-            <a href="https://awa-wwa.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer"
+            <a href="https://mjmsaad.github.io/Sami-Odi-Identification-Tool/" target="_blank" rel="noopener noreferrer"
               className="sb-nav-item" style={{textDecoration:"none"}}>
               <span className="sb-nav-icon">↗</span>
               <span className="sb-nav-lbl">Sami</span>
@@ -2606,6 +2786,18 @@ function App() {
             )}
           </div>
         </header>
+        {pendingBatchSession && !batchOpen && (
+          <div className="batch-resume-banner">
+            <div className="batch-resume-info">
+              <span className="batch-resume-label">Unfinished batch session</span>
+              <span className="batch-resume-detail">{pendingBatchSession.customer_name} · {pendingBatchSession.matched||0} confirmed · {pendingBatchSession.total_lines||0} lines total</span>
+            </div>
+            <div className="batch-resume-actions">
+              <button className="batch-resume-btn" onClick={() => { setResumeSessionData(pendingBatchSession); setBatchOpen(true); setCalcOpen(false); setActivePanel(null); }}>Resume session</button>
+              <button className="batch-resume-dismiss" onClick={() => setPendingBatchSession(null)}>✕</button>
+            </div>
+          </div>
+        )}
 
         {/* ── Auction Date Tile ── */}
         {nextAuction && (() => {
@@ -4017,6 +4209,30 @@ function App() {
       {showToast && (
         <div className={`copy-toast${toastHiding?" hiding":""}`}>✓ Copied to clipboard</div>
       )}
+
+      {batchOpen && (
+        <div className="batch-overlay">
+          <BatchMatchPage
+            session={session}
+            sizeFlags={sizeFlags}
+            resumeSession={resumeSessionData}
+            onClose={() => { setBatchOpen(false); setResumeSessionData(null); }}
+            onSessionComplete={() => setPendingBatchSession(null)}
+            onAddToList={(wine) => {
+              const key = (wine.name||"") + (wine.vintage||"") + Date.now();
+              setListItems(prev => [...prev, {
+                name: wine.name, vintage: wine.vintage||"", _key: key,
+                reserve: wine.reserve||"—", low: wine.low||"—",
+                high: wine.high||"—", ave: wine.ave||"—",
+                qty: wine.qty||1,
+                size: wine.size||"750ml", baseSize: wine.size||"750ml",
+                sizeMultiplier: 1, applyMultiplier: false,
+                auction_house: wine.auction_house||""
+              }]);
+            }}
+          />
+        </div>
+      )}
         </div>
 
     </>
@@ -4025,3 +4241,796 @@ function App() {
 
 
 export default App;
+
+// ─────────────────────────────────────────────────────────────
+// BATCH MATCH PAGE — v1.4.2
+// ─────────────────────────────────────────────────────────────
+
+const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "";
+
+function parseMatchTokens(input) {
+  let s = input.toLowerCase();
+  s = s.replace(/^\d+\s*x\s*/i, "");
+  const expansions = {
+    "\\bchard\\b":"chardonnay","\\bsauv bl\\b":"sauvignon blanc",
+    "\\bcab sauv\\b":"cabernet sauvignon","\\bcab merlot\\b":"cabernet merlot",
+    "\\bpinot n\\b":"pinot noir","\\bpinot g\\b":"pinot gris",
+    "\\bsem\\b":"semillon","\\bgren\\b":"grenache","\\bsyrah\\b":"shiraz",
+    "\\bmag\\b":"1500ml","\\bmagnum\\b":"1500ml","\\bhalf bot\\b":"375ml",
+    "\\bhalf\\b":"375ml","\\bdbl mag\\b":"3000ml","\\bowc\\b":"","\\biws\\b":""
+  };
+  for (const [p,r] of Object.entries(expansions)) s = s.replace(new RegExp(p,"gi"),r);
+  // Only expand apostrophe-prefixed 2-digit years e.g. '98 — NOT standalone numbers like Bin 98
+  s = s.replace(/(^|[\s])'(\d{2})(\s|$)/g, (_,a,yr,b) => {
+    const n = parseInt(yr, 10); return a + (n >= 60 ? "19"+yr : "20"+yr) + b;
+  });
+  // Keep tokens >= 3 chars, but also keep 2-char numeric tokens (e.g. Bin 98, Bin 28)
+  // Normalise No.X patterns — "no.5" → "no5", "no.8" → "no8" for consistent matching
+  s = s.replace(/\bno\.\s*(\d+)/g, 'no$1');
+  s = s.replace(/#(\d+)/g, '$1'); // strip # from wine numbers: #9 → 9, #15 → 15
+  s = s.replace(/'/g, ''); // strip apostrophes: jacob's → jacobs
+  // Normalise common producer abbreviations so input matches DB naming
+  s = s.replace(/\bbrothers\b/g, 'bros');
+  s = s.replace(/\bsons\b/g, 'son');
+  s = s.replace(/\bestate\b/g, 'estate'); // already in NO_SCORE_WORDS
+  s = s.replace(/\bwinery\b/g, 'wines');
+  s = s.replace(/\bwineries\b/g, 'wines');
+  // Strip trailing size notation that snuck through
+  // Strip size notations in all formats: 750ml, 750 ml, 1.5L, 1.5l, 3L etc
+  s = s.replace(/\b\d+(\.\d+)?\s*(ml|cl|l)\b/gi, '');
+  s = s.replace(/\b750\b/g, ''); // standalone 750 without ml
+  // Keep tokens >= 2 chars, BUT also keep single-digit numbers (e.g. 'Block 6', 'No 5')
+  // Exclude 'ml', 'the', 'de', 'le', 'la', 'du' — too short and non-meaningful
+  const stopWords = new Set(['ml','cl','the','de','le','la','les','du','da','di','el','lo','of','et','en','und','van','von','sur','des','san','del']);
+  return s.split(/[\s,&]+/).map(t => t.trim()).filter(t => (t.length >= 2 || /^\d$/.test(t)) && !stopWords.has(t));
+}
+
+function extractVintage(input) {
+  const m = input.match(/\b(19[5-9]\d|20[012]\d)\b/);
+  return m ? m[1] : null;
+}
+
+const VARIETY_WORDS = new Set([
+  'cabernet','sauvignon','chardonnay','shiraz','pinot','merlot','riesling','semillon',
+  'grenache','viognier','tempranillo','blanc','noir','gris','rose','muscat','verdelho',
+  'zinfandel','sangiovese','nebbiolo','barbera','mourvedre','mataro','durif','marsanne',
+  'roussanne','chenin','gewurz','traminer','fiano','vermentino','arneis','dolcetto',
+]);
+
+// Words that should be excluded from scoring entirely — too generic to differentiate wines
+const NO_SCORE_WORDS = new Set([
+  '750ml','750','1500ml','375ml','magnum','half','bottle','bottles','3000ml','ml',
+  'sparkling','wine','wines','winery','the','and','with',
+  'valley','creek','ridge','hill','hills','road','range','ranges','flat','plains',
+  'limited','release','single','block','old','vines','barrel','aged','cellar',
+  'eden','barossa','coonawarra','mclaren','clare','yarra','hunter','margaret',
+  'great','southern','western','north','south','east','west','high','upper','lower',
+  'estate','vineyard','reserve','vintage','collection','selection','series','special',
+  'australian','australia','south','new','classic','premium','private',
+  'mv','nv','little','blend','pink','label','our','red','white','gold',
+  'bin','no','number','lot','batch','style',
+  'family','creek','chateau','domaine','cotes','chapelle','bordeaux','bourgogne','champagne',
+  'constance','jourdan','vale','cab','sav','tandem','selection','cosecha','recolte','pertuis','alter',
+  'cellars','cellar','winemakers','winemaker','station','view','alter','members','craftsman','shipment',
+]);
+
+function scoreWine(nameTokens, vintageToken, wine, softVintage = false) {
+  const wineVintage = (wine.vintage || "").toString().trim();
+  const wineName    = (wine.name || "").toLowerCase()
+    .replace(/\bno\.\s*(\d+)/g, "no$1")
+    .replace(/#(\d+)/g, "$1")
+    .replace(/'/g, "")
+    .replace(/\bbrothers\b/g, "bros")
+    .replace(/\bsons\b/g, "son")
+    .replace(/\bwinery\b/g, "wines")
+    .replace(/\bwineries\b/g, "wines");
+  const hayFull     = wineName + " " + wineVintage + " " + (wine.size || "");
+
+  const vintageMatch    = vintageToken && wineVintage && wineVintage.includes(vintageToken);
+  const vintageMismatch = vintageToken && wineVintage && !wineVintage.includes(vintageToken);
+  if (vintageMismatch && !softVintage) return 0;
+
+  const numericTokens = nameTokens.filter(t => /^\d+$/.test(t));
+  // Exclude generic geography/descriptor words from scoring — they match too broadly
+  const wordTokens    = nameTokens.filter(t => !/^\d+$/.test(t) && !NO_SCORE_WORDS.has(t));
+
+  for (const num of numericTokens) {
+    try { if (!new RegExp(`\\b${num}\\b`).test(hayFull)) return 0; }
+    catch(e) { if (!hayFull.includes(num)) return 0; }
+  }
+
+  // Score word tokens — variety words count at half weight (they help differentiate
+  // but shouldn't dominate over producer/wine name matches)
+  let weightedHits = 0, weightedTotal = 0;
+  for (const t of wordTokens) {
+    const weight = VARIETY_WORDS.has(t) ? 0.5 : 1;
+    weightedTotal += weight;
+    try { if (new RegExp(`\\b${t}\\b`).test(wineName)) weightedHits += weight; }
+    catch(e) { if (wineName.includes(t)) weightedHits += weight; }
+  }
+
+  const wordScore    = weightedTotal > 0 ? Math.round((weightedHits / weightedTotal) * 80) : 60;
+  const vintageBonus = vintageMatch ? 10 : (softVintage && vintageMismatch ? -5 : 0);
+  const numBonus     = numericTokens.length * 5;
+  return Math.min(100, Math.max(0, wordScore + vintageBonus + numBonus));
+}
+
+function parseBatchAuctionDate(d) {
+  if (!d) return 0;
+  const months = {Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
+  const [mon, yr] = (d || '').split('-');
+  if (!months[mon] || !yr) return 0;
+  return parseInt('20'+yr)*100 + months[mon];
+}
+
+function vintageDistance(wineVintage, targetVintage) {
+  if (!targetVintage || !wineVintage) return 9999;
+  const wv = parseInt((wineVintage || '').toString().trim(), 10);
+  const tv = parseInt(targetVintage, 10);
+  return isNaN(wv) || isNaN(tv) ? 9999 : Math.abs(wv - tv);
+}
+
+function scoreTier1Results(input, wines, softVintage = false) {
+  const allTokens    = parseMatchTokens(input);
+  const vintageToken = extractVintage(input);
+  const nameTokens   = allTokens.filter(t => !/^\d{4}$/.test(t));
+  if (!nameTokens.length && !vintageToken) return [];
+
+  const scored = wines
+    .map(w => ({ ...w, score: scoreWine(nameTokens, vintageToken, w, softVintage) }))
+    .filter(w => w.score > 0)
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      // Same score — prefer closest vintage to searched year
+      const distA = vintageDistance(a.vintage, vintageToken);
+      const distB = vintageDistance(b.vintage, vintageToken);
+      if (distA !== distB) return distA - distB;
+      // Same distance — prefer most recent sale
+      return parseBatchAuctionDate(b.last_auction) - parseBatchAuctionDate(a.last_auction);
+    });
+
+  // Flag the nearest vintage when exact match not found
+  if (vintageToken && scored.length > 0) {
+    const hasExact = scored.some(w => (w.vintage||'').toString().trim() === vintageToken);
+    if (!hasExact) {
+      // Find the closest vintage among top name-matched results
+      // Only flag among wines with the same top score (same name match quality)
+      const topScore = scored[0].score;
+      const topWines = scored.filter(w => w.score === topScore);
+      const nearest = topWines.reduce((best, w) => {
+        return vintageDistance(w.vintage, vintageToken) < vintageDistance(best.vintage, vintageToken) ? w : best;
+      }, topWines[0]);
+      // Add a flag so the UI can show "nearest: YYYY"
+      scored.forEach(w => { w._nearestVintage = null; });
+      nearest._nearestVintage = nearest.vintage;
+    }
+  }
+
+  return scored;
+}
+
+async function batchAiNormalise(rawLines) {
+  console.log("[AI Norm] Calling proxy with", rawLines.length, "lines");
+  const res = await fetch("/api/anthropic/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01"},
+    body:JSON.stringify({
+      model:"claude-haiku-4-5-20251001",max_tokens:2000,
+      messages:[{role:"user",content:`You are a wine data normaliser. Convert each line into a standardised single line. Preserve quantity prefix if present. Expand abbreviations (Chard→Chardonnay, Cab Sauv→Cabernet Sauvignon, Sauv Bl→Sauvignon Blanc, Pinot N→Pinot Noir, Sem→Semillon, Syrah→Shiraz), convert 2-digit vintages ('98→1998), normalise sizes (mag→1500ml, half→375ml), strip OWC/IWC. Return ONLY a valid JSON array of strings with one entry per input line, no markdown, no explanation. Input:\n${rawLines.join("\n")}`}]
+    })
+  });
+  console.log("[AI Norm] Response status:", res.status);
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("[AI Norm] Error response:", err);
+    throw new Error("AI normalise failed: " + res.status);
+  }
+  const data = await res.json();
+  console.log("[AI Norm] Response data:", JSON.stringify(data).slice(0,200));
+  const text = data.content?.[0]?.text || "[]";
+  const cleaned = text.replace(/```json|```/g,"").trim();
+  const parsed = JSON.parse(cleaned);
+  console.log("[AI Norm] Parsed", parsed.length, "lines");
+  return parsed;
+}
+
+async function batchAiDisambiguate(input, candidates) {
+  const list = candidates.map((c,i)=>`${i+1}. ${c.name} ${c.vintage||""} ${c.size||""} (${c.score}%)`).join("\n");
+  const res = await fetch("/api/anthropic/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01"},
+    body:JSON.stringify({
+      model:"claude-haiku-4-5-20251001",max_tokens:200,
+      messages:[{role:"user",content:`Customer wrote: "${input}". Candidates:\n${list}\nWhich is most likely? Reply ONLY with JSON: {"best":1,"confidence":"high","reason":"brief explanation"}`}]
+    })
+  });
+  const data = await res.json();
+  const text = data.content?.[0]?.text||"{}";
+  return JSON.parse(text.replace(/```json|```/g,"").trim());
+}
+
+async function batchAiInterpret(rawInput) {
+  const res = await fetch("/api/anthropic/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01"},
+    body:JSON.stringify({
+      model:"claude-haiku-4-5-20251001",max_tokens:200,
+      messages:[{role:"user",content:`Customer listed: "${rawInput}". No database match found. What is this likely referring to (Australian wine)? Reply ONLY with JSON: {"likely_wine":"name","issue":"data_gap or unclear or unknown","interpretation":"one sentence"}`}]
+    })
+  });
+  const data = await res.json();
+  const text = data.content?.[0]?.text||"{}";
+  return JSON.parse(text.replace(/```json|```/g,"").trim());
+}
+
+function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeSession = null, onSessionComplete }) {
+  // Check if a wine result has an existing size flag
+  function getFlagForWine(wine) {
+    if (!wine || !sizeFlags.length) return null;
+    return sizeFlags.find(f =>
+      f.wine_name === wine.name &&
+      (f.vintage||'').toString() === (wine.vintage||'').toString() &&
+      f.auction_house === wine.auction_house &&
+      !f.resolved
+    ) || null;
+  }
+
+  // Restore in-progress session on mount
+  useEffect(() => {
+    if (!resumeSession) return;
+    setCustomerName(resumeSession.customer_name || '');
+    setSessionId(resumeSession.id);
+    // Fetch the rows for this session
+    fetch(`${SUPABASE_URL}/rest/v1/batch_rows?session_id=eq.${resumeSession.id}&order=row_order.asc&select=*`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` }
+    }).then(r => r.json()).then(rows => {
+      if (!Array.isArray(rows) || !rows.length) return;
+      // Reconstruct results array from stored rows
+      const restored = rows.map(r => {
+        let candidates = [];
+        try { if (r.candidates_json) candidates = JSON.parse(r.candidates_json); } catch(e) {}
+        // For unconfirmed rows, derive bestMatch from candidates if available
+        const bestMatch = r.matched_wine_name
+          ? { name: r.matched_wine_name, vintage: r.matched_vintage, size: r.matched_size }
+          : (candidates.length > 0 ? candidates[0] : null);
+        return {
+          id: r.id,
+          rawInput: r.raw_input,
+          normalisedInput: r.normalised_input,
+          matchStatus: r.match_status,
+          confidenceScore: r.confidence_score,
+          tierResolved: r.tier_resolved,
+          aiReasoning: r.ai_reasoning,
+          rowOrder: r.row_order,
+          bestMatch,
+          candidates,
+        };
+      });
+      setResults(restored);
+      setStep('review');
+    }).catch(e => console.error('[BatchMatch] Resume failed:', e));
+  }, [resumeSession]);
+  const [step, setStep]                 = useState("input");
+  const [customerName, setCustomerName] = useState("");
+  const [rawText, setRawText]           = useState("");
+  const [useAiNorm, setUseAiNorm]       = useState(false);
+  const [processMsg, setProcessMsg]     = useState("");
+  const [results, setResults]           = useState([]);
+  const [sessionId, setSessionId]       = useState(null);
+  const token = session?.access_token;
+
+  async function sbPost(path, body) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{
+      method:"POST",
+      headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${token}`,"Content-Type":"application/json",Prefer:"return=representation"},
+      body:JSON.stringify(body)
+    });
+    if(!res.ok) throw new Error(`POST ${path} ${res.status}`);
+    return res.json();
+  }
+  async function sbPatch(path, body) {
+    await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{
+      method:"PATCH",
+      headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${token}`,"Content-Type":"application/json",Prefer:"return=minimal"},
+      body:JSON.stringify(body)
+    });
+  }
+  async function tier1Search(keywords) {
+    if(!keywords.length) return [];
+    const vintageKw  = keywords.find(k => /^\d{4}$/.test(k));
+    const nameKws    = keywords.filter(k => !/^\d{4}$/.test(k));
+    if(!nameKws.length && !vintageKw) return [];
+
+    const numericKws = nameKws.filter(k => /^\d+$/.test(k) && k.length >= 2);
+    const wordKws    = nameKws.filter(k => !/^\d+$/.test(k));
+
+    const noQuery = new Set([
+      '750ml','750','1500ml','375ml','magnum','half','bottle','bottles','3000ml',
+      'sparkling','wine','wines','winery','the','and','with',
+      'valley','creek','ridge','hill','hills','road','range','ranges','flat','plains',
+      'limited','release','single','block','old','vines','barrel','aged','cellar',
+      'eden','barossa','coonawarra','mclaren','clare','yarra','hunter','margaret',
+      'great','southern','western','north','south','east','west','high','upper','lower',
+      'estate','vineyard','reserve','vintage',
+      'mv','nv','little','blend','pink','label','our','red','white','gold',
+      'bin','no','number','lot','batch','style',
+      'family','creek','chateau','domaine','cotes','chapelle','bordeaux','bourgogne','champagne',
+      'constance','jourdan','vale','cab','sav','tandem','selection','cosecha','recolte','pertuis','alter','alter',
+      'cellars','cellar','winemakers','winemaker','station','view','alter','members','craftsman','shipment',
+    ]);
+    const varietyWords = new Set([
+      'cabernet','sauvignon','chardonnay','shiraz','pinot','merlot','riesling','semillon',
+      'grenache','viognier','tempranillo','blanc','noir','gris','rose','muscat','verdelho',
+      'zinfandel','sangiovese','nebbiolo','barbera','mourvedre','mataro','durif','marsanne',
+      'roussanne','chenin','gewurz','traminer','fiano','vermentino','arneis','dolcetto',
+    ]);
+
+    const producerWords = wordKws.filter(w => !noQuery.has(w) && !varietyWords.has(w));
+    const varietyKws    = wordKws.filter(w => varietyWords.has(w));
+    const queryWords    = producerWords.length > 0 ? producerWords : (varietyKws.length > 0 ? varietyKws : wordKws.filter(w => !noQuery.has(w)));
+
+    const results = new Map();
+    const addRows = (rows) => rows.forEach(r => {
+      if(r.name) results.set(r.name + '|' + r.vintage + '|' + (r.auction_house||''), r);
+    });
+
+    // Query A: numeric tokens
+    if(numericKws.length) {
+      let url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100`;
+      numericKws.forEach(k => { url += `&or=(name.ilike.*${encodeURIComponent(k)}*)`; });
+      const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+      if(res.ok) addRows(await res.json());
+    }
+
+    // Query B: individual word queries
+    for(const word of queryWords) {
+      const url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=200&or=(name.ilike.*${encodeURIComponent(word)}*)`;
+      const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+      if(res.ok) addRows(await res.json());
+    }
+
+    // Query C: producer + variety combined (catches Spinifex Riesling, Gibson Riesling etc)
+    if(producerWords.length > 0 && varietyKws.length > 0) {
+      const w1 = encodeURIComponent(producerWords[0]);
+      const w2 = encodeURIComponent(varietyKws[0]);
+      let url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100`;
+      url += `&or=(name.ilike.*${w1}*)&or=(name.ilike.*${w2}*)`;
+      const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+      if(res.ok) addRows(await res.json());
+    }
+
+    // Query D: VINTAGE-SPECIFIC query — most distinctive word + exact vintage
+    // Critical for large producers (Penfolds, Henschke) where 200 results isn't enough
+    // to guarantee finding a specific recent vintage
+    if(vintageKw && queryWords.length > 0) {
+      const bestWord = queryWords.slice().sort((a,b) => b.length - a.length)[0];
+      const url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100&or=(name.ilike.*${encodeURIComponent(bestWord)}*)&vintage=ilike.*${encodeURIComponent(vintageKw)}*`;
+      const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+      if(res.ok) addRows(await res.json());
+    }
+
+    const rows = [...results.values()];
+    console.log(`[T1] tokens:[${nameKws}] vintage:${vintageKw} raw:${rows.length}`);
+    // Debug: show any baron/nemesis/tanunda/footsteps wines in results
+    rows.filter(r=>{const n=(r.name||'').toLowerCase();return n.includes('nemesis')||n.includes('tanunda')||n.includes('footstep');})
+      .forEach(r=>console.log(`  [DBG] v=${r.vintage} | ${(r.name||'').slice(0,55)}`));
+    return rows;
+  }
+
+    async function tier2Search(q) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_wines_trgm`,{
+      method:"POST",
+      headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
+      body:JSON.stringify({query:q,threshold:0.3})
+    });
+    if(!res.ok) return [];
+    const rows = await res.json();
+    return rows.map(r=>({...r,score:Math.round((r.score||0)*100)}));
+  }
+
+  async function matchLine(input, rawInput) {
+    const base = {rawInput,normalisedInput:input!==rawInput?input:null,matchStatus:"unresolved",confidenceScore:null,tierResolved:null,aiReasoning:null,candidates:[],bestMatch:null};
+    const t1raw = await tier1Search(parseMatchTokens(input));
+    // Always use soft vintage — exact vintage match gets +20 bonus, mismatch gets -10 penalty
+    // This means correct vintage always ranks first, but wrong vintages still surface as candidates
+    const t1 = scoreTier1Results(input, t1raw, true);
+    if(t1.length){
+      const top = t1[0];
+      const gap = t1.length >= 2 ? top.score - t1[1].score : 100;
+      // Confident if top score >= 70 AND clear gap from second result
+      if(top.score >= 70 && gap >= 10)
+        return {...base,matchStatus:"confident",confidenceScore:top.score,tierResolved:1,bestMatch:top,candidates:t1.slice(0,4)};
+      // Has candidates — show top results for user to pick
+      if(top.score >= 50)
+        return {...base,matchStatus:"candidate",confidenceScore:top.score,tierResolved:1,candidates:t1.slice(0,4),bestMatch:top};
+    }
+    // Tier 2: trigram search on distinctive tokens only (catches misspellings)
+    // Use same noQuery list as Tier 1 to avoid matching on generic words
+    const noQueryT2 = new Set([
+      'the','and','with','of','et','de','le','la','du','ml','nv','mv','di','el','van','von',
+      'family','creek','chateau','domaine','cotes','chapelle','cellars','cellar','winery',
+      'winemakers','station','valley','hill','estate','vineyard','reserve','vintage',
+      'wines','wine','red','white','blend','shiraz','cabernet','sauvignon','chardonnay',
+      'pinot','merlot','riesling','semillon','grenache','viognier','primitivo','rioja',
+      'bordeaux','bourgogne','champagne','barossa','mclaren','coonawarra','selection',
+      'special','cosecha','recolte','constance','jourdan','shipment','craftsman',
+    ]);
+    const allToks = parseMatchTokens(input).filter(t=>!/^\d{4}$/.test(t)&&!/^\d+$/.test(t));
+    const distinctiveToks = allToks.filter(w=>!noQueryT2.has(w)&&w.length>=4);
+    // Only run trigram if we have distinctive tokens — otherwise skip to unresolved
+    const t2Map = new Map();
+    console.log(`[T2] distinctive toks for trigram: [${distinctiveToks.join(',')}]`);
+    if(distinctiveToks.length > 0) {
+      for(const q of distinctiveToks.slice(0,2)){
+        const rows = await tier2Search(q);
+        rows.forEach(r=>{ if(r.name){ const k=r.name+'|'+(r.vintage||''); if(!t2Map.has(k)||t2Map.get(k).score<r.score) t2Map.set(k,r); } });
+      }
+    }
+    const t2 = [...t2Map.values()].sort((a,b)=>b.score-a.score);
+    if(t2.length){
+      // Re-score trigram results using our word-match scoring to filter out false positives
+      // Trigram returns anything with character similarity — we need semantic similarity too
+      // Tier 2 is for misspellings — word-match scores will be lower, so use threshold of 30
+      console.log(`[T2] raw results: ${t2.length}, after rescore>=30: ${scoreTier1Results(input, t2, true).filter(w=>w.score>=30).length}`);
+      t2.slice(0,3).forEach(r=>console.log(`  [T2raw] score=${r.score} v=${r.vintage} | ${(r.name||'').slice(0,50)}`));
+      const t2scored = scoreTier1Results(input, t2, true).filter(w=>w.score>=30);
+      if(t2scored.length){
+        const gap = t2scored.length>=2 ? t2scored[0].score-t2scored[1].score : 100;
+        if(t2scored[0].score>=65 && gap>=15)
+          return {...base,matchStatus:"confident",confidenceScore:t2scored[0].score,tierResolved:2,bestMatch:t2scored[0],candidates:t2scored.slice(0,3)};
+        if(t2scored[0].score>=50){
+          const cands=t2scored.slice(0,4);
+          try {
+            const ai=await batchAiDisambiguate(input,cands);
+            return {...base,matchStatus:"candidate",confidenceScore:t2scored[0].score,tierResolved:3,aiReasoning:ai.reason||null,bestMatch:cands[(ai.best||1)-1]||cands[0],candidates:cands};
+          } catch(e){
+            return {...base,matchStatus:"candidate",confidenceScore:t2scored[0].score,tierResolved:2,candidates:cands,bestMatch:cands[0]};
+          }
+        }
+      }
+    }
+    try {
+      const ai=await batchAiInterpret(rawInput);
+      return {...base,aiReasoning:`${ai.interpretation||""} (${(ai.issue||"unknown").replace("_"," ")})`};
+    } catch(e){}
+    return base;
+  }
+
+  async function runMatching() {
+    const lines = rawText.split("\n").map(l=>l.trim()).filter(Boolean);
+    if(!lines.length||!customerName.trim()) return;
+    setStep("processing");
+    try {
+      setProcessMsg("Creating session…");
+      const [sess] = await sbPost("batch_sessions",{
+        user_id:session.user.id,customer_name:customerName.trim(),
+        total_lines:lines.length,ai_normalised:useAiNorm,status:"in_progress"
+      });
+      setSessionId(sess.id);
+      let working=[...lines];
+      if(useAiNorm){
+        setProcessMsg("Normalising with AI…");
+        try{ 
+          working=await batchAiNormalise(lines);
+          if(!working || !working.length) {
+            console.warn("[AI Norm] Returned empty array — falling back to raw lines");
+            working=[...lines];
+          }
+        }catch(e){
+          console.error("[AI Norm] Failed:", e.message, "— falling back to raw lines");
+          working=[...lines];
+          setProcessMsg("AI normalisation failed — matching with original input…");
+        }
+      }
+      const matched=[];
+      for(let i=0;i<working.length;i++){
+        setProcessMsg(`Matching ${i+1} of ${working.length}…`);
+        matched.push({...await matchLine(working[i],lines[i]),rowOrder:i,id:null});
+      }
+      setProcessMsg("Saving…");
+      const inserted = await sbPost("batch_rows", matched.map((r,i)=>({
+        session_id:sess.id,raw_input:r.rawInput,normalised_input:r.normalisedInput||null,
+        match_status:r.matchStatus,confidence_score:r.confidenceScore||null,
+        tier_resolved:r.tierResolved||null,ai_reasoning:r.aiReasoning||null,row_order:i,
+        candidates_json: r.candidates && r.candidates.length > 0 ? JSON.stringify(r.candidates) : null
+      })));
+      const withIds = matched.map((r,i)=>({...r,id:inserted[i]?.id||null}));
+      const c = withIds.reduce((a,r)=>{
+        if(r.matchStatus==="confident")a.matched++;
+        else if(r.matchStatus==="candidate")a.needs_pick++;
+        else if(r.matchStatus==="unresolved")a.unresolved++;
+        return a;
+      },{matched:0,needs_pick:0,unresolved:0});
+      await sbPatch(`batch_sessions?id=eq.${sess.id}`,{...c,status:"in_progress"});
+      setResults(withIds);
+      setStep("review");
+    } catch(e){
+      console.error("[BatchMatch]",e);
+      setProcessMsg("Something went wrong — please try again.");
+    }
+  }
+
+  async function confirmRow(rowId, wine) {
+    setResults(p=>p.map(r=>r.id===rowId?{...r,matchStatus:"confirmed",bestMatch:wine}:r));
+    if(rowId) {
+      // Find the row to get its current candidates for persistence
+      const row = results.find(r=>r.id===rowId);
+      const candidatesJson = row?.candidates?.length ? JSON.stringify(row.candidates) : null;
+      await sbPatch(`batch_rows?id=eq.${rowId}`,{
+        matched_wine_name:wine.name,matched_vintage:wine.vintage||null,
+        matched_size:wine.size||null,match_status:"confirmed",confirmed_at:new Date().toISOString(),
+        candidates_json: candidatesJson
+      });
+    }
+  }
+  async function skipRow(rowId) {
+    setResults(p=>p.map(r=>r.id===rowId?{...r,matchStatus:"skipped"}:r));
+    if(rowId) await sbPatch(`batch_rows?id=eq.${rowId}`,{match_status:"skipped"});
+  }
+
+  async function unconfirmRow(rowId) {
+    setResults(p=>p.map(r=>{
+      if(r.id!==rowId) return r;
+      // If multiple candidates exist, show picker again; otherwise revert to confident
+      const revertStatus = (r.candidates&&r.candidates.length>1) ? "candidate" : "confident";
+      return {...r, matchStatus:revertStatus};
+    }));
+    if(rowId) await sbPatch(`batch_rows?id=eq.${rowId}`,{
+      match_status:"confident", confirmed_at:null,
+      matched_wine_name:null, matched_vintage:null, matched_size:null
+    });
+  }
+
+  async function addConfirmedToList() {
+    results.filter(r=>r.matchStatus==="confirmed"&&r.bestMatch).forEach(r=>{
+      onAddToList({name:r.bestMatch.name,vintage:r.bestMatch.vintage,qty:1,
+        size:r.bestMatch.size,reserve:r.bestMatch.reserve,low:r.bestMatch.low,
+        high:r.bestMatch.high,ave:r.bestMatch.ave,auction_house:r.bestMatch.auction_house});
+    });
+    const c=results.reduce((a,r)=>{
+      if(r.matchStatus==="confirmed")a.matched++;
+      else if(r.matchStatus==="candidate")a.needs_pick++;
+      else if(r.matchStatus==="unresolved")a.unresolved++;
+      return a;
+    },{matched:0,needs_pick:0,unresolved:0});
+    if(sessionId) await sbPatch(`batch_sessions?id=eq.${sessionId}`,{...c,status:"complete"});
+    if(onSessionComplete) onSessionComplete();
+    onClose();
+  }
+
+  const [batchCopied, setBatchCopied] = useState(false);
+
+  function copyBatchResults() {
+    // Preserve original row order — blank line for skipped/unresolved so position is maintained
+    const lines = results
+      .slice()
+      .sort((a, b) => (a.rowOrder||0) - (b.rowOrder||0))
+      .map(r => {
+        if (r.matchStatus === "confirmed" && r.bestMatch) {
+          const w = r.bestMatch;
+          const fmtPrice = v => {
+            if (!v) return "—";
+            const n = parseFloat(String(v).replace(/[$,\s]/g, ""));
+            return !isNaN(n) && n !== 0 ? `$${Math.round(n)}` : (v || "—");
+          };
+          return [w.vintage||"", w.name||"", 1, w.size||"750ml",
+            fmtPrice(w.reserve), fmtPrice(w.low), fmtPrice(w.high)].join("\t");
+        }
+        // Skipped, unresolved, candidate not picked — blank line preserves position
+        return "";
+      });
+    navigator.clipboard.writeText(lines.join("\n")).then(() => {
+      setBatchCopied(true);
+      setTimeout(() => setBatchCopied(false), 2000);
+    });
+  }
+
+  const confirmed = results.filter(r=>r.matchStatus==="confirmed").length;
+  const sumConf   = results.filter(r=>r.matchStatus==="confident"||r.matchStatus==="confirmed").length;
+  const sumCand   = results.filter(r=>r.matchStatus==="candidate").length;
+  const sumUnres  = results.filter(r=>r.matchStatus==="unresolved").length;
+
+  return (
+    <div className="batch-page">
+      <div className="batch-hdr">
+        <button className="batch-back-btn" onClick={onClose}>← Back to search</button>
+        <span className="batch-hdr-title">Batch match <span style={{fontSize:10,opacity:.6}}>v1.4.2</span></span>
+        {step!=="input"&&(
+          <div className="batch-steps">
+            <span className={`batch-step${step==="review"?" done":" current"}`}>1 Input</span>
+            <span className="batch-step-sep">›</span>
+            <span className={`batch-step${step==="processing"?" current":step==="review"?" done":""}`}>2 Matching</span>
+            <span className="batch-step-sep">›</span>
+            <span className={`batch-step${step==="review"?" current":""}`}>3 Review</span>
+          </div>
+        )}
+      </div>
+
+      {step==="input"&&(
+        <div className="batch-input-layout">
+          <div className="batch-input-card">
+            <div className="batch-input-section">
+              <label className="batch-field-label">Customer name</label>
+              <input className="batch-field-input" placeholder="e.g. Smith estate"
+                value={customerName} onChange={e=>setCustomerName(e.target.value)}/>
+            </div>
+            <div className="batch-input-section">
+              <label className="batch-field-label">Wine list</label>
+              <div className="batch-field-sub">One wine per line — paste raw customer text or pre-cleaned lines</div>
+              <textarea className="batch-textarea"
+                placeholder={"Grange 98\n2x Hill of Grace 2012\nLeeuwin Chard 19 mag\nRockford BP Shiraz 2016"}
+                value={rawText} onChange={e=>setRawText(e.target.value)}/>
+              <div className="batch-line-count">{rawText.split("\n").filter(l=>l.trim()).length} lines</div>
+            </div>
+            <div className="batch-ai-toggle-row">
+              <div>
+                <div className="batch-ai-label">AI normalisation</div>
+                <div className="batch-ai-sub">Expand abbreviations and fix vintages before matching</div>
+              </div>
+              <div className={`batch-toggle${useAiNorm?" on":""}`} onClick={()=>setUseAiNorm(o=>!o)}>
+                <div className="batch-toggle-knob"/>
+              </div>
+            </div>
+            <button className="batch-run-btn" disabled={!customerName.trim()||!rawText.trim()} onClick={runMatching}>
+              Run matching →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step==="processing"&&(
+        <div className="batch-processing">
+          <div className="batch-spinner"/>
+          <div className="batch-process-msg">{processMsg}</div>
+        </div>
+      )}
+
+      {step==="review"&&(
+        <div className="batch-review-layout">
+          <div className="batch-review-sidebar">
+            <div className="batch-review-customer">{customerName}</div>
+            <div className="batch-review-date">{new Date().toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"})}</div>
+            <div className="batch-summary-cells">
+              <div className="batch-sum-cell"><div className="batch-sum-n green">{sumConf}</div><div className="batch-sum-lbl">Confident</div></div>
+              <div className="batch-sum-cell"><div className="batch-sum-n amber">{sumCand}</div><div className="batch-sum-lbl">Needs pick</div></div>
+              <div className="batch-sum-cell"><div className="batch-sum-n red">{sumUnres}</div><div className="batch-sum-lbl">Not found</div></div>
+            </div>
+            <button className="batch-add-btn" disabled={confirmed===0} onClick={addConfirmedToList}>
+              Add {confirmed} to My List
+            </button>
+            <button className="batch-copy-btn" disabled={confirmed===0} onClick={copyBatchResults}>
+              {batchCopied ? "✓ Copied" : `Copy ${confirmed} row${confirmed===1?"":"s"}`}
+            </button>
+            <button className="batch-reset-btn" onClick={()=>{setStep("input");setResults([]);setSessionId(null);setCustomerName('');}}>
+              New session
+            </button>
+          </div>
+          <div className="batch-review-main">
+            {results.map((r,i)=>(
+              <div key={i} className={`batch-row batch-row-${r.matchStatus}${getFlagForWine(r.bestMatch)&&r.matchStatus!=="confirmed"?" batch-row-flagged":""}`}>
+                <div className="batch-row-input">
+                  <div className="batch-row-raw">"{r.rawInput}"</div>
+                  {r.normalisedInput&&<div className="batch-row-norm">→ {r.normalisedInput}</div>}
+                </div>
+                {(r.matchStatus==="confident"||r.matchStatus==="confirmed")&&r.bestMatch&&(
+                  <div className="batch-row-result">
+                    {/* If confident with multiple candidates, show the full picker */}
+                    {r.matchStatus==="confident"&&r.candidates&&r.candidates.length>1 ? (
+                      <>
+                        <div className="batch-candidates">
+                          {r.candidates.map((c,ci)=>(
+                            <div key={ci} className={`batch-candidate${ci===0?" batch-candidate-best":""}${getFlagForWine(c)?" batch-candidate-flagged":""}`} onClick={()=>confirmRow(r.id,c)}>
+                              <div className="batch-candidate-hdr">
+                                {c.vintage&&<span className="batch-row-year" style={{fontSize:18}}>{c.vintage}</span>}
+                                <span className="batch-candidate-name">{c.name}</span>
+                                <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
+                                  {c._nearestVintage&&<span className="batch-nearest-tag">nearest</span>}
+                                  {getFlagForWine(c)&&(()=>{const _f=getFlagForWine(c);return(<span className="batch-flag-pill">⚑ flagged{_f?.note&&<span className="batch-flag-tooltip">{_f.note}</span>}</span>);})()}
+                                  <span className={`batch-cand-score${ci===0?" best":""}`}>{c.score}%</span>
+                                </div>
+                              </div>
+                              <div className="batch-candidate-meta">
+                                {c.size&&<span className="batch-row-size">{c.size}</span>}
+                                {c.size&&(c.auction_house||c.last_auction)&&<span className="batch-row-linesep"/>}
+                                {c.auction_house&&<span className="batch-cand-source">{c.auction_house}</span>}
+                                {c.last_auction&&<span className="batch-cand-date">{c.last_auction}</span>}
+                              </div>
+                              <div className="batch-price-bar">
+                                <div className="batch-price-res"><div className="batch-price-lbl">Reserve</div><div className="batch-price-res-val">{c.reserve||"—"}</div></div>
+                                <div className="batch-price-lo"><div className="batch-price-lbl">Low</div><div className="batch-price-val">{c.low||"—"}</div></div>
+                                <div className="batch-price-hi"><div className="batch-price-lbl">High</div><div className="batch-price-val">{c.high||"—"}</div></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="batch-row-line1">
+                          {r.bestMatch.vintage&&<span className="batch-row-year">{r.bestMatch.vintage}</span>}
+                          <span className="batch-row-match-name">{r.bestMatch.name}</span>
+                          <div className="batch-row-line1-right">
+                            {r.bestMatch._nearestVintage&&<span className="batch-nearest-tag">nearest</span>}
+                            {getFlagForWine(r.bestMatch)&&(()=>{const _f=getFlagForWine(r.bestMatch);return(<span className="batch-flag-pill">⚑ flagged{_f?.note&&<span className="batch-flag-tooltip">{_f.note}</span>}</span>);})()}
+                            <span className={`batch-conf-pill${r.matchStatus==="confirmed"?" confirmed":" green"}`}>
+                              {r.matchStatus==="confirmed"?"✓ Confirmed":`${r.confidenceScore}%`}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="batch-row-line2">
+                          {r.bestMatch.size&&<span className="batch-row-size">{r.bestMatch.size}</span>}
+                          {r.bestMatch.size&&(r.bestMatch.auction_house||r.bestMatch.last_auction)&&<span className="batch-row-linesep"/>}
+                          {r.bestMatch.auction_house&&<span className="batch-cand-source">{r.bestMatch.auction_house}</span>}
+                          {r.bestMatch.last_auction&&<span className="batch-cand-date">{r.bestMatch.last_auction}</span>}
+                        </div>
+                        <div className="batch-price-bar">
+                          <div className="batch-price-res"><div className="batch-price-lbl">Reserve</div><div className="batch-price-res-val">{r.bestMatch.reserve||"—"}</div></div>
+                          <div className="batch-price-lo"><div className="batch-price-lbl">Low</div><div className="batch-price-val">{r.bestMatch.low||"—"}</div></div>
+                          <div className="batch-price-hi"><div className="batch-price-lbl">High</div><div className="batch-price-val">{r.bestMatch.high||"—"}</div></div>
+                        </div>
+                        {r.matchStatus==="confident"&&(
+                          <div className="batch-row-actions">
+                            <button className="batch-btn-confirm" onClick={()=>confirmRow(r.id,r.bestMatch)}>Confirm</button>
+                            <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                          </div>
+                        )}
+                        {r.matchStatus==="confirmed"&&(
+                          <div className="batch-row-actions">
+                            <button className="batch-btn-unconfirm" onClick={()=>unconfirmRow(r.id)}>↩ Undo</button>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+                {r.matchStatus==="candidate"&&(
+                  <div className="batch-row-result">
+                    {r.aiReasoning&&<div className="batch-row-ai-note">AI: {r.aiReasoning}</div>}
+                    <div className="batch-candidates">
+                      {r.candidates.map((c,ci)=>(
+                        <div key={ci} className={`batch-candidate${ci===0?" batch-candidate-best":""}${getFlagForWine(c)?" batch-candidate-flagged":""}`} onClick={()=>confirmRow(r.id,c)}>
+                          <div className="batch-candidate-hdr">
+                            {c.vintage&&<span className="batch-row-year" style={{fontSize:18}}>{c.vintage}</span>}
+                            <span className="batch-candidate-name">{c.name}</span>
+                            <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
+                              {c._nearestVintage&&<span className="batch-nearest-tag">nearest</span>}
+                              {getFlagForWine(c)&&(()=>{const _f=getFlagForWine(c);return(<span className="batch-flag-pill">⚑ flagged{_f?.note&&<span className="batch-flag-tooltip">{_f.note}</span>}</span>);})()}
+                              <span className={`batch-cand-score${ci===0?" best":""}`}>{c.score}%</span>
+                            </div>
+                          </div>
+                          <div className="batch-candidate-meta">
+                            {c.size&&<span className="batch-row-size">{c.size}</span>}
+                            {c.size&&(c.auction_house||c.last_auction)&&<span className="batch-row-linesep"/>}
+                            {c.auction_house&&<span className="batch-cand-source">{c.auction_house}</span>}
+                            {c.last_auction&&<span className="batch-cand-date">{c.last_auction}</span>}
+                          </div>
+                          <div className="batch-price-bar">
+                            <div className="batch-price-res"><div className="batch-price-lbl">Reserve</div><div className="batch-price-res-val">{c.reserve||"—"}</div></div>
+                            <div className="batch-price-lo"><div className="batch-price-lbl">Low</div><div className="batch-price-val">{c.low||"—"}</div></div>
+                            <div className="batch-price-hi"><div className="batch-price-lbl">High</div><div className="batch-price-val">{c.high||"—"}</div></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                  </div>
+                )}
+                {r.matchStatus==="unresolved"&&(
+                  <div className="batch-row-result">
+                    <div className="batch-row-unresolved-text">No match found</div>
+                    {r.aiReasoning&&<div className="batch-row-ai-note">{r.aiReasoning}</div>}
+                    <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                  </div>
+                )}
+                {r.matchStatus==="skipped"&&(
+                  <div className="batch-row-result"><div className="batch-row-skipped-text">Skipped</div></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
