@@ -1,8 +1,14 @@
 import { useState, useRef, useMemo, useEffect } from "react";
+import PRODUCER_ALIASES_FILE from './producer-aliases.js';
 
 const SUPABASE_URL = "https://wpfwwgmicxcegooxkxtk.supabase.co";
 const SUPABASE_KEY = "sb_publishable_c1mn9Pe5ltsToILat1bpiw_ITVFdn-d";
 const TABLE = "wines";
+
+// Producer aliases — edit src/producer-aliases.js to add new entries
+// No changes to this file needed — just add to that file and restart dev server
+import PRODUCER_ALIASES_IMPORT from './producer-aliases.js';
+const PRODUCER_ALIASES = {...PRODUCER_ALIASES_IMPORT};
 const PAGE = 50;
 
 const ICAL_URL = "https://p127-caldav.icloud.com/published/2/MTA3Mzc3ODY4ODEwNzM3N6bQ6FcAHGARVLeh2TQj25eBtS0BK8GU4LWeKgBJgRAkaqsh0AeZCIThDqQ5tNj9mu2_J9EZARoYks1IqkGZrCg";
@@ -1225,6 +1231,23 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 .batch-row-size{font-size:12px;color:var(--dk-muted);}
 .batch-row-linesep{width:1px;height:12px;background:var(--dk-border);flex-shrink:0;}
 /* Price bar */
+.batch-qty-badge{font-size:11px;font-weight:600;color:var(--dk-text);background:var(--dk-dim);border:.5px solid var(--dk-border);border-radius:4px;padding:1px 6px;margin-bottom:4px;display:inline-block;}
+.batch-input-size{font-size:11px;color:#378ADD;margin-top:3px;font-weight:500;}
+.batch-btn-resrch{background:none;border:.5px solid var(--dk-border);border-radius:5px;padding:4px 10px;font-size:12px;color:var(--dk-muted);font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.batch-btn-resrch:hover{color:var(--dk-text);border-color:rgba(255,255,255,.25);}
+.batch-resrch-box{border:.5px solid rgba(55,138,221,.35);border-radius:6px;background:rgba(55,138,221,.05);padding:10px 12px;margin-top:8px;}
+.batch-resrch-lbl{font-size:11px;color:#378ADD;font-weight:500;margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.batch-resrch-wrap{display:flex;gap:6px;align-items:center;}
+.batch-resrch-input{flex:1;height:32px;border:.5px solid var(--dk-border);border-radius:5px;padding:0 10px;font-size:12px;background:var(--dk-bg);color:var(--dk-text);font-family:inherit;outline:none;}
+.batch-resrch-input:focus{border-color:rgba(55,138,221,.5);}
+.batch-resrch-run{background:#185FA5;border:none;border-radius:5px;padding:0 12px;height:32px;font-size:12px;color:#fff;cursor:pointer;font-family:inherit;}
+.batch-resrch-run:hover{opacity:.88;}
+.batch-resrch-cancel{border:none;background:none;font-size:14px;color:var(--dk-muted);cursor:pointer;padding:0 4px;line-height:1;}
+.batch-resrch-cancel:hover{color:var(--dk-text);}
+.batch-resrch-spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(55,138,221,.2);border-top-color:#378ADD;border-radius:50%;animation:brspin .7s linear infinite;flex-shrink:0;}
+@keyframes brspin{to{transform:rotate(360deg)}}
+[data-theme="light"] .batch-resrch-box{background:rgba(55,138,221,.04);}
+[data-theme="light"] .batch-resrch-lbl{color:#185FA5;}
 .batch-price-bar{display:flex;border-radius:6px;overflow:hidden;border:.5px solid var(--dk-border);margin-bottom:10px;background:var(--dk-card);}
 .batch-price-res{flex:0 0 40%;padding:8px 14px;background:rgba(255,255,255,.04);border-right:.5px solid var(--dk-border);}
 .batch-price-lo{flex:1;padding:8px 12px;border-right:.5px solid var(--dk-border);}
@@ -1237,7 +1260,7 @@ mark.hl{background:rgba(184,146,42,0.2);color:var(--gold);border-radius:2px;padd
 [data-theme="light"] .batch-price-val{color:#1A1714;}
 [data-theme="light"] .batch-price-res-val{color:#1A1714;}
 /* Action buttons */
-.batch-row-actions{display:flex;gap:8px;}
+.batch-row-actions{display:flex;gap:8px;align-items:center;width:100%;flex-wrap:nowrap;}
 .batch-btn-confirm{background:#5A0E0E;border:none;border-radius:5px;padding:5px 14px;font-size:12px;color:#fff;font-family:inherit;cursor:pointer;}
 .batch-btn-confirm:hover{opacity:.85;}
 .batch-btn-unconfirm{background:none;border:.5px solid var(--dk-border);border-radius:5px;padding:5px 10px;font-size:12px;color:var(--dk-muted);font-family:inherit;cursor:pointer;}
@@ -4250,12 +4273,21 @@ const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "";
 
 function parseMatchTokens(input) {
   let s = input.toLowerCase();
-  s = s.replace(/^\d+\s*x\s*/i, "");
+  s = s.replace(/^\d+\s*x\s*/i, "");  // strip quantity: 2x, 3x
+  s = s.replace(/^(19|20)\d{2}[\t ]+/, ""); // strip leading year column: "2007  Longview..."
+  s = s.replace(/^(nv|mv)[\t ]+/i, "");      // strip leading NV/MV column
+  s = s.replace(/\s+nv\s*$/i, "");              // strip trailing NV
+  s = s.replace(/\//g, ' '); // split on slash BEFORE expansions so cab/sav → cab sav → cabernet sauvignon
+  s = s.replace(/[\u201c\u201d"]/g, ' '); // strip curly and straight quotes
+  // Apply producer aliases — whole-word replacement before tokenising
+  for (const [alias, canonical] of Object.entries(PRODUCER_ALIASES)) {
+    s = s.replace(new RegExp(`\\b${alias}\\b`, 'gi'), canonical);
+  }
   const expansions = {
     "\\bchard\\b":"chardonnay","\\bsauv bl\\b":"sauvignon blanc",
-    "\\bcab sauv\\b":"cabernet sauvignon","\\bcab merlot\\b":"cabernet merlot",
+    "\\bcab sauv\\b":"cabernet sauvignon","\\bcab sav\\b":"cabernet sauvignon","\\bcab\\b":"cabernet","\\bcab merlot\\b":"cabernet merlot",
     "\\bpinot n\\b":"pinot noir","\\bpinot g\\b":"pinot gris",
-    "\\bsem\\b":"semillon","\\bgren\\b":"grenache","\\bsyrah\\b":"shiraz",
+    "\\bsem\\b":"semillon","\\bgren\\b":"grenache","\\bsyrah\\b":"shiraz","\\btempustwo\\b":"tempus two","\\bmclarenvale\\b":"mclaren vale","\\blonghorne\\b":"langhorne","\\bwynns\\b":"wynns coonawarra",
     "\\bmag\\b":"1500ml","\\bmagnum\\b":"1500ml","\\bhalf bot\\b":"375ml",
     "\\bhalf\\b":"375ml","\\bdbl mag\\b":"3000ml","\\bowc\\b":"","\\biws\\b":""
   };
@@ -4266,7 +4298,7 @@ function parseMatchTokens(input) {
   });
   // Keep tokens >= 3 chars, but also keep 2-char numeric tokens (e.g. Bin 98, Bin 28)
   // Normalise No.X patterns — "no.5" → "no5", "no.8" → "no8" for consistent matching
-  s = s.replace(/\bno\.\s*(\d+)/g, 'no$1');
+  s = s.replace(/\bno\.\s*(\d+)/g, ' $1 '); // no.10 → 10 (numeric token), no.5 → 5
   s = s.replace(/#(\d+)/g, '$1'); // strip # from wine numbers: #9 → 9, #15 → 15
   s = s.replace(/'/g, ''); // strip apostrophes: jacob's → jacobs
   // Normalise common producer abbreviations so input matches DB naming
@@ -4282,7 +4314,7 @@ function parseMatchTokens(input) {
   // Keep tokens >= 2 chars, BUT also keep single-digit numbers (e.g. 'Block 6', 'No 5')
   // Exclude 'ml', 'the', 'de', 'le', 'la', 'du' — too short and non-meaningful
   const stopWords = new Set(['ml','cl','the','de','le','la','les','du','da','di','el','lo','of','et','en','und','van','von','sur','des','san','del']);
-  s = s.replace(/\//g, ' '); // split on slash: cab/sav → cab sav, cab/shiraz → cab shiraz
+  // NOTE: slash split moved to before expansions — see above
   return s.split(/[\s,&]+/).map(t => t.trim()).filter(t => (t.length >= 2 || /^\d$/.test(t)) && !stopWords.has(t));
 }
 
@@ -4312,6 +4344,9 @@ const NO_SCORE_WORDS = new Set([
   'bin','no','number','lot','batch','style',
   'family','creek','chateau','domaine','cotes','chapelle','bordeaux','bourgogne','champagne',
   'constance','jourdan','vale','cab','sav','bin','sa','tandem','selection','cosecha','recolte','pertuis',
+  'ribera','duero','rioja','del','noir','blanc','rouge','blanc','rose','gris','sec',
+  'reserve','vintage','release','limited','series','collection','classic','premium','table','red',
+  'river','road','path','way','park','point','cross','gate','bridge','grove',
   'cellars','cellar','winemakers','winemaker','station','view','alter','members','craftsman','shipment',
 ]);
 
@@ -4350,10 +4385,37 @@ function scoreWine(nameTokens, vintageToken, wine, softVintage = false) {
     catch(e) { if (wineName.includes(t)) weightedHits += weight; }
   }
 
-  const wordScore    = weightedTotal > 0 ? Math.round((weightedHits / weightedTotal) * 80) : 60;
+  // Primary producer check: if there are multiple non-variety word tokens,
+  // the longest one (most distinctive) must appear in the wine name
+  // This prevents e.g. "The Wilson Vineyard" matching "Houghton Wilson" searches
+  const nonVarietyTokens = wordTokens.filter(t => !VARIETY_WORDS.has(t));
+  if (nonVarietyTokens.length >= 2) {
+    const primaryToken = nonVarietyTokens.slice().sort((a,b) => b.length - a.length)[0];
+    try { if (!new RegExp(`\\b${primaryToken}\\b`).test(wineName)) return 0; }
+    catch(e) { if (!wineName.includes(primaryToken)) return 0; }
+  }
+
+  // Cap score when only variety tokens remain — variety-only match is too broad
+  // e.g. 'shiraz' alone should not score 80% against any shiraz wine
+  const hasDistinctive = wordTokens.some(t => !VARIETY_WORDS.has(t));
+  const rawWordScore = weightedTotal > 0 ? Math.round((weightedHits / weightedTotal) * 80) : 35;
+  const wordScore = (!hasDistinctive && weightedTotal > 0) ? Math.min(rawWordScore, 40) : rawWordScore;
   const vintageBonus = vintageMatch ? 10 : (softVintage && vintageMismatch ? -5 : 0);
   const numBonus     = numericTokens.length * 5;
-  return Math.min(100, Math.max(0, wordScore + vintageBonus + numBonus));
+
+  // Variety mismatch penalty — if input specifies a variety and wine has a different one, penalise
+  // e.g. searching "Riesling" should not return "Shiraz" at full score
+  const inputVarieties = nameTokens.filter(t => VARIETY_WORDS.has(t));
+  let varietyPenalty = 0;
+  if (inputVarieties.length > 0) {
+    const anyVarietyMatch = inputVarieties.some(v => {
+      try { return new RegExp(`\\b${v}\\b`).test(wineName); }
+      catch(e) { return wineName.includes(v); }
+    });
+    if (!anyVarietyMatch) varietyPenalty = -15; // wrong variety
+  }
+
+  return Math.min(100, Math.max(0, wordScore + vintageBonus + numBonus + varietyPenalty));
 }
 
 function parseBatchAuctionDate(d) {
@@ -4377,12 +4439,35 @@ function scoreTier1Results(input, wines, softVintage = false) {
   const nameTokens   = allTokens.filter(t => !/^\d{4}$/.test(t));
   if (!nameTokens.length && !vintageToken) return [];
 
+  // Extract input size for mismatch detection
+  const inputSizeRaw = extractInputSize(input);
+
   const scored = wines
-    .map(w => ({ ...w, score: scoreWine(nameTokens, vintageToken, w, softVintage) }))
+    .map(w => {
+      const s = scoreWine(nameTokens, vintageToken, w, softVintage);
+      // Flag size mismatch: input specifies a size that differs from DB wine size
+      let _sizeMismatch = false;
+      if (inputSizeRaw && w.size) {
+        const dbSize = (w.size||'').toLowerCase().replace(/\s/g,'');
+        const inp = inputSizeRaw.replace(/\s/g,'');
+        // Normalise magnum variants
+        const norm = s => s.replace('1500ml','magnum').replace('750ml','standard');
+        _sizeMismatch = norm(dbSize) !== norm(inp) && inp !== '750ml'; // only flag non-standard sizes
+      }
+      return { ...w, score: s, _sizeMismatch };
+    })
     .filter(w => w.score > 0)
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
-      // Same score — prefer closest vintage to searched year
+      // Same score — prefer variety match first
+      const inputVarieties = nameTokens.filter(t => VARIETY_WORDS.has(t));
+      if (inputVarieties.length > 0) {
+        const aVarietyMatch = inputVarieties.some(v => (a.name||'').toLowerCase().includes(v));
+        const bVarietyMatch = inputVarieties.some(v => (b.name||'').toLowerCase().includes(v));
+        if (aVarietyMatch && !bVarietyMatch) return -1;
+        if (!aVarietyMatch && bVarietyMatch) return 1;
+      }
+      // Then prefer closest vintage to searched year
       const distA = vintageDistance(a.vintage, vintageToken);
       const distB = vintageDistance(b.vintage, vintageToken);
       if (distA !== distB) return distA - distB;
@@ -4392,7 +4477,8 @@ function scoreTier1Results(input, wines, softVintage = false) {
 
   // Flag the nearest vintage when exact match not found
   if (vintageToken && scored.length > 0) {
-    const hasExact = scored.some(w => (w.vintage||'').toString().trim() === vintageToken);
+    // Check if exact vintage exists in full scored pool (before any external threshold filtering)
+    const hasExact = scored.some(w => (w.vintage||'').toString().trim() === vintageToken && w.score > 0);
     if (!hasExact) {
       // Find the closest vintage among top name-matched results
       // Only flag among wines with the same top score (same name match quality)
@@ -4404,6 +4490,12 @@ function scoreTier1Results(input, wines, softVintage = false) {
       // Add a flag so the UI can show "nearest: YYYY"
       scored.forEach(w => { w._nearestVintage = null; });
       nearest._nearestVintage = nearest.vintage;
+      // Move the nearest vintage wine to the front of the list
+      const nearestIdx = scored.indexOf(nearest);
+      if(nearestIdx > 0) {
+        scored.splice(nearestIdx, 1);
+        scored.unshift(nearest);
+      }
     }
   }
 
@@ -4448,6 +4540,22 @@ async function batchAiDisambiguate(input, candidates) {
   const data = await res.json();
   const text = data.content?.[0]?.text||"{}";
   return JSON.parse(text.replace(/```json|```/g,"").trim());
+}
+
+// Extract quantity prefix from raw input e.g. "4x" → 4, "2 x" → 2
+function extractQty(raw) {
+  const m = (raw||'').match(/^\s*(\d+)\s*x\s*/i);
+  return m ? parseInt(m[1], 10) : 1;
+}
+
+// Extract size from raw input e.g. "750ml", "375ml", "1.5L", "magnum"
+function extractInputSize(raw) {
+  const s = (raw||'').toLowerCase();
+  if (/\b(1\.5l|1500\s*ml|magnum|mag)\b/i.test(s)) return '1500ml';
+  if (/\b375\s*ml\b/i.test(s)) return '375ml';
+  if (/\b3l|3000\s*ml|double\s*mag/i.test(s)) return '3000ml';
+  if (/\b750\s*ml\b/i.test(s)) return '750ml';
+  return null; // no explicit size — assume standard
 }
 
 async function batchAiInterpret(rawInput) {
@@ -4518,6 +4626,7 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
   const [processMsg, setProcessMsg]     = useState("");
   const [results, setResults]           = useState([]);
   const [sessionId, setSessionId]       = useState(null);
+  const [reSearchState, setReSearchState] = useState({});
   const token = session?.access_token;
 
   async function sbPost(path, body) {
@@ -4557,6 +4666,13 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
       'bin','no','number','lot','batch','style',
       'family','creek','chateau','domaine','cotes','chapelle','bordeaux','bourgogne','champagne',
       'constance','jourdan','vale','cab','sav','bin','sa','tandem','selection','cosecha','recolte','pertuis',
+      'ribera','duero','rioja','del','noir','blanc','rouge','rose','gris','sec',
+      'reserve','vintage','release','limited','series','collection','classic','premium',
+      'river','road','path','way','park','point','cross','gate','bridge','grove',
+      'vat','wood','matured','finest','tawny','port','mt','bendigo','heathcote','langhorne',
+      'hunter','mudgee','rutherglen','goulburn','grampians','pyrenees','macedon','geelong',
+      'adelaide','canberra','tasmania','south','north','west','east','central',
+      'parcel','lake','doctor','longhorne','honour','roll',
       'cellars','cellar','winemakers','winemaker','station','view','alter','members','craftsman','shipment',
     ]);
     const varietyWords = new Set([
@@ -4598,16 +4714,30 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
       const url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=200&or=(name.ilike.*${encodeURIComponent(word)}*)`;
       const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
       if(res.ok) addRows(await res.json());
+      // Also query with apostrophe restored for possessives: jacobs→jacob's, henschkes→henschke's
+      if(word.endsWith('s') && word.length > 3) {
+        const withApostrophe = word.slice(0,-1) + encodeURIComponent("'") + 's';
+        const url2 = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=200&or=(name.ilike.*${withApostrophe}*)`;
+        const res2 = await fetch(url2, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+        if(res2.ok) addRows(await res2.json());
+      }
     }
 
-    // Query C: producer + variety combined (catches Spinifex Riesling, Gibson Riesling etc)
+    // Query C: producer + variety AND query — finds e.g. "Travis Earth Semillon Viognier"
+    // Uses AND logic so both words must appear in the name
     if(producerWords.length > 0 && varietyKws.length > 0) {
       const w1 = encodeURIComponent(producerWords[0]);
       const w2 = encodeURIComponent(varietyKws[0]);
+      // AND query: both producer and variety must appear
       let url = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100`;
-      url += `&or=(name.ilike.*${w1}*)&or=(name.ilike.*${w2}*)`;
+      url += `&name=ilike.*${w1}*&name=ilike.*${w2}*`;
       const res = await fetch(url, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
       if(res.ok) addRows(await res.json());
+      // Also run OR query as fallback (catches single-word producers like Gibson)
+      let urlOr = `${SUPABASE_URL}/rest/v1/${TABLE}?select=id,name,vintage,size,reserve,low,high,ave,auction_house,last_auction&limit=100`;
+      urlOr += `&or=(name.ilike.*${w1}*,name.ilike.*${w2}*)`;
+      const resOr = await fetch(urlOr, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${token}`}});
+      if(resOr.ok) addRows(await resOr.json());
     }
 
     // Query D: VINTAGE-SPECIFIC query — most distinctive word + exact vintage
@@ -4636,7 +4766,7 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
   }
 
   async function matchLine(input, rawInput) {
-    const base = {rawInput,normalisedInput:input!==rawInput?input:null,matchStatus:"unresolved",confidenceScore:null,tierResolved:null,aiReasoning:null,candidates:[],bestMatch:null};
+    const base = {rawInput,normalisedInput:input!==rawInput?input:null,matchStatus:"unresolved",confidenceScore:null,tierResolved:null,aiReasoning:null,candidates:[],bestMatch:null,qty:extractQty(rawInput),inputSize:extractInputSize(rawInput)};
     const t1raw = await tier1Search(parseMatchTokens(input));
     // Always use soft vintage — exact vintage match gets +20 bonus, mismatch gets -10 penalty
     // This means correct vintage always ranks first, but wrong vintages still surface as candidates
@@ -4746,7 +4876,7 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
       const inserted = await sbPost("batch_rows", matched.map((r,i)=>({
         session_id:sess.id,raw_input:r.rawInput,normalised_input:r.normalisedInput||null,
         match_status:r.matchStatus,confidence_score:r.confidenceScore||null,
-        tier_resolved:r.tierResolved||null,ai_reasoning:r.aiReasoning||null,row_order:i,
+        tier_resolved:r.tierResolved||null,ai_reasoning:r.aiReasoning||null,row_order:i,qty:r.qty||1,
         candidates_json: r.candidates && r.candidates.length > 0 ? JSON.stringify(r.candidates) : null
       })));
       const withIds = matched.map((r,i)=>({...r,id:inserted[i]?.id||null}));
@@ -4794,6 +4924,36 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
       match_status:"confident", confirmed_at:null,
       matched_wine_name:null, matched_vintage:null, matched_size:null
     });
+  }
+
+  function openReSearch(rowId, rawInput) {
+    setReSearchState(p => ({...p, [rowId]: {open:true, query:rawInput||'', searching:false}}));
+  }
+  function closeReSearch(rowId) {
+    setReSearchState(p => {const n={...p}; delete n[rowId]; return n;});
+  }
+  function setReSearchQuery(rowId, query) {
+    setReSearchState(p => ({...p, [rowId]: {...(p[rowId]||{}), query}}));
+  }
+  async function runReSearch(rowId) {
+    const rs = reSearchState[rowId];
+    if(!rs?.query?.trim()) return;
+    setReSearchState(p => ({...p, [rowId]: {...p[rowId], searching:true}}));
+    try {
+      const result = await matchLine(rs.query.trim(), rs.query.trim());
+      setResults(p => p.map(r => r.id===rowId ? {
+        ...r, matchStatus:result.matchStatus, confidenceScore:result.confidenceScore,
+        candidates:result.candidates||[], bestMatch:result.bestMatch||null,
+        tierResolved:result.tierResolved,
+        normalisedInput: rs.query.trim()!==r.rawInput ? rs.query.trim() : null,
+      } : r));
+      if(rowId) await sbPatch(`batch_rows?id=eq.${rowId}`, {
+        match_status:result.matchStatus, confidence_score:result.confidenceScore||null,
+        normalised_input:rs.query.trim(),
+        candidates_json:result.candidates?.length ? JSON.stringify(result.candidates) : null,
+      });
+    } catch(e) { console.error('[ReSearch]', e); }
+    setReSearchState(p => ({...p, [rowId]: {...p[rowId], searching:false}}));
   }
 
   async function addConfirmedToList() {
@@ -4924,8 +5084,10 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
             {results.map((r,i)=>(
               <div key={i} className={`batch-row batch-row-${r.matchStatus}${getFlagForWine(r.bestMatch)&&r.matchStatus!=="confirmed"?" batch-row-flagged":""}`}>
                 <div className="batch-row-input">
+                  {r.qty > 1 && <span className="batch-qty-badge">{r.qty}×</span>}
                   <div className="batch-row-raw">"{r.rawInput}"</div>
                   {r.normalisedInput&&<div className="batch-row-norm">→ {r.normalisedInput}</div>}
+                  {r.inputSize&&r.inputSize!=='750ml'&&<div className="batch-input-size">{r.inputSize}</div>}
                 </div>
                 {(r.matchStatus==="confident"||r.matchStatus==="confirmed")&&r.bestMatch&&(
                   <div className="batch-row-result">
@@ -4941,6 +5103,7 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
                                 <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
                                   {c._nearestVintage&&<span className="batch-nearest-tag">nearest</span>}
                                   {getFlagForWine(c)&&(()=>{const _f=getFlagForWine(c);return(<span className="batch-flag-pill">⚑ flagged{_f?.note&&<span className="batch-flag-tooltip">{_f.note}</span>}</span>);})()}
+                                  {c._sizeMismatch&&<span className="batch-flag-pill" style={{borderColor:'rgba(55,138,221,.4)',background:'rgba(55,138,221,.1)',color:'#185FA5'}}>⚑ {c.size}</span>}
                                   <span className={`batch-cand-score${ci===0?" best":""}`}>{c.score}%</span>
                                 </div>
                               </div>
@@ -4958,7 +5121,28 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
                             </div>
                           ))}
                         </div>
-                        <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                        <div className="batch-row-actions">
+                          <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                          <button className="batch-btn-resrch" style={{marginLeft:"auto"}} onClick={()=>openReSearch(r.id,r.normalisedInput||r.rawInput)}>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>
+                            Search again
+                          </button>
+                        </div>
+                        {(()=>{const rs=reSearchState[r.id];return rs?.open?(
+                          <div className="batch-resrch-box">
+                            <div className="batch-resrch-lbl">
+                              {rs.searching?<span className="batch-resrch-spinner"/>:<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>}
+                              {rs.searching?"Searching…":"Edit and search"}
+                            </div>
+                            {!rs.searching&&<div className="batch-resrch-wrap">
+                              <input className="batch-resrch-input" value={rs.query} onChange={e=>setReSearchQuery(r.id,e.target.value)}
+                                onKeyDown={e=>{if(e.key==="Enter")runReSearch(r.id);if(e.key==="Escape")closeReSearch(r.id);}}
+                                autoFocus />
+                              <button className="batch-resrch-run" onClick={()=>runReSearch(r.id)}>Search</button>
+                              <button className="batch-resrch-cancel" onClick={()=>closeReSearch(r.id)}>✕</button>
+                            </div>}
+                          </div>
+                        ):null;})()}
                       </>
                     ) : (
                       <>
@@ -4988,8 +5172,27 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
                           <div className="batch-row-actions">
                             <button className="batch-btn-confirm" onClick={()=>confirmRow(r.id,r.bestMatch)}>Confirm</button>
                             <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                            <button className="batch-btn-resrch" style={{marginLeft:"auto"}} onClick={()=>openReSearch(r.id,r.normalisedInput||r.rawInput)}>
+                              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>
+                              Search again
+                            </button>
                           </div>
                         )}
+                        {(()=>{const rs=reSearchState[r.id];return rs?.open&&r.matchStatus==="confident"?(
+                          <div className="batch-resrch-box">
+                            <div className="batch-resrch-lbl">
+                              {rs.searching?<span className="batch-resrch-spinner"/>:<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>}
+                              {rs.searching?"Searching…":"Edit and search"}
+                            </div>
+                            {!rs.searching&&<div className="batch-resrch-wrap">
+                              <input className="batch-resrch-input" value={rs.query} onChange={e=>setReSearchQuery(r.id,e.target.value)}
+                                onKeyDown={e=>{if(e.key==="Enter")runReSearch(r.id);if(e.key==="Escape")closeReSearch(r.id);}}
+                                autoFocus />
+                              <button className="batch-resrch-run" onClick={()=>runReSearch(r.id)}>Search</button>
+                              <button className="batch-resrch-cancel" onClick={()=>closeReSearch(r.id)}>✕</button>
+                            </div>}
+                          </div>
+                        ):null;})()}
                         {r.matchStatus==="confirmed"&&(
                           <div className="batch-row-actions">
                             <button className="batch-btn-unconfirm" onClick={()=>unconfirmRow(r.id)}>↩ Undo</button>
@@ -5028,14 +5231,56 @@ function BatchMatchPage({ session, onClose, onAddToList, sizeFlags = [], resumeS
                         </div>
                       ))}
                     </div>
-                    <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                    <div className="batch-row-actions">
+                      <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                      <button className="batch-btn-resrch" style={{marginLeft:"auto"}} onClick={()=>openReSearch(r.id,r.normalisedInput||r.rawInput)}>
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>
+                        Search again
+                      </button>
+                    </div>
+                    {(()=>{const rs=reSearchState[r.id];return rs?.open?(
+                      <div className="batch-resrch-box">
+                        <div className="batch-resrch-lbl">
+                          {rs.searching?<span className="batch-resrch-spinner"/>:<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>}
+                          {rs.searching?"Searching…":"Edit and search"}
+                        </div>
+                        {!rs.searching&&<div className="batch-resrch-wrap">
+                          <input className="batch-resrch-input" value={rs.query} onChange={e=>setReSearchQuery(r.id,e.target.value)}
+                            onKeyDown={e=>{if(e.key==="Enter")runReSearch(r.id);if(e.key==="Escape")closeReSearch(r.id);}}
+                            autoFocus />
+                          <button className="batch-resrch-run" onClick={()=>runReSearch(r.id)}>Search</button>
+                          <button className="batch-resrch-cancel" onClick={()=>closeReSearch(r.id)}>✕</button>
+                        </div>}
+                      </div>
+                    ):null;})()}
                   </div>
                 )}
                 {r.matchStatus==="unresolved"&&(
                   <div className="batch-row-result">
                     <div className="batch-row-unresolved-text">No match found</div>
                     {r.aiReasoning&&<div className="batch-row-ai-note">{r.aiReasoning}</div>}
-                    <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                    {(()=>{const rs=reSearchState[r.id];return rs?.open?(
+                      <div className="batch-resrch-box">
+                        <div className="batch-resrch-lbl">
+                          {rs.searching?<span className="batch-resrch-spinner"/>:<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>}
+                          {rs.searching?"Searching…":"Edit and search"}
+                        </div>
+                        {!rs.searching&&<div className="batch-resrch-wrap">
+                          <input className="batch-resrch-input" value={rs.query} onChange={e=>setReSearchQuery(r.id,e.target.value)}
+                            onKeyDown={e=>{if(e.key==="Enter")runReSearch(r.id);if(e.key==="Escape")closeReSearch(r.id);}}
+                            autoFocus />
+                          <button className="batch-resrch-run" onClick={()=>runReSearch(r.id)}>Search</button>
+                          <button className="batch-resrch-cancel" onClick={()=>closeReSearch(r.id)}>✕</button>
+                        </div>}
+                      </div>
+                    ):null;})()}
+                    <div className="batch-row-actions" style={{marginTop:8}}>
+                      <button className="batch-btn-resrch" onClick={()=>openReSearch(r.id,r.normalisedInput||r.rawInput)}>
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10.5" y1="10.5" x2="13.5" y2="13.5"/></svg>
+                        Search again
+                      </button>
+                      <button className="batch-btn-skip" onClick={()=>skipRow(r.id)}>Skip</button>
+                    </div>
                   </div>
                 )}
                 {r.matchStatus==="skipped"&&(

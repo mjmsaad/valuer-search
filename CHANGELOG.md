@@ -1,6 +1,32 @@
 # Changelog — Wickman's Valuer Search
 
-All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.1.4**.
+All changes to the Valuer Search app are documented here. Newest first. Current version: **v3.1.5**.
+
+---
+
+## [3.1.5] — 29 April 2026 · Batch Match Engine Refinements
+
+### New
+- **producer-aliases.js** — standalone file in `src/` with 480+ entries covering Australian, French, Italian and American producers. Handles apostrophe variants, run-together names, misspellings and abbreviations. Imported into App.jsx and applied during Tier 1 normalisation
+- **Variety-aware candidate ranking** — when multiple candidates score equally, the one whose variety matches the input variety is sorted first. Prevents all Paxton wines scoring identically when only the producer name matched
+- **Quantity-aware output** — quantity prefix (`4×`, `2×`) is now extracted from raw input and preserved in confirmed rows rather than being silently stripped
+- **Size detection** — when input specifies a bottle size that differs from the DB wine's listed size, an amber `⚑ size mismatch` pill is shown on the candidate card so you know to double-check before confirming
+
+### Improved
+- **Automatic apostrophe query** — any token ending in `s` now automatically runs a second query with the possessive form (`bests` → also queries `best's`) and vice versa. No more per-producer hardcoding for each apostrophe case
+- **`no.X` → numeric token** — parcel and barrel numbers like `No.10`, `No.05` are now treated as hard numeric filters rather than ignored word tokens
+- **Slash split before expansions** — `Cab/Sav`, `Cab/Shiraz` etc now split on the slash before the expansion dictionary runs, so variety expansions (`cab sav` → `cabernet sauvignon`) fire correctly
+- **Variety mismatch penalty** — when input specifies a variety and a candidate has a completely different one, a -15 penalty is applied to the score
+- **Variety-only score cap** — matching only a variety word is capped at 40%, preventing `shiraz` alone from scoring 80% against every shiraz in the database
+- **Default score lowered** — baseline score when no distinctive tokens match reduced from 40 to 35, reducing false positives for short or generic inputs
+- **Nearest vintage sort** — distance-weighted vintage scoring replaces the flat -5 penalty; the genuinely closest available vintage to the input always sorts first with a flag
+- **noQuery words expanded** — `honour`, `roll`, `parcel`, `lake`, `doctor`, `longhorne` added to prevent generic or geographic terms being used as standalone queries
+
+### Fixed
+- **Leading column strip** — spreadsheet-format inputs with a leading year column (`2007  Longview...`) or NV/MV prefix are now stripped before tokenising
+- **Quote stripping** — inputs wrapped in curly or straight quotes had the quotes treated as token characters; now stripped cleanly before processing
+- **Session auth token refresh** — after a network drop, the JWT token could expire silently causing all Supabase calls to return 401. App now detects token expiry and prompts re-authentication rather than failing silently
+- **`mclarenvale` / `zontes` expansion order** — slash split fix corrected the expansion order so `mclarenvale` and `zontes`→`zonte's` now fire correctly
 
 ---
 
@@ -544,14 +570,15 @@ All changes to the Valuer Search app are documented here. Newest first. Current 
 
 | | |
 |---|---|
-| **New Features** | 102 |
-| **Improvements** | 50 |
-| **Bug Fixes** | 57 |
-| **Total Changes** | 209 |
-| **Versions** | 36 |
+| **New Features** | 106 |
+| **Improvements** | 58 |
+| **Bug Fixes** | 61 |
+| **Total Changes** | 225 |
+| **Versions** | 37 |
 
 | Version | Date | Highlight | New | Improved | Fixed |
 |---------|------|-----------|-----|----------|-------|
+| 3.1.5 | 29 April 2026 | Batch Match Engine Refinements | 4 | 8 | 4 |
 | 3.1.4 | 28 April 2026 | Batch Match — Automated List Matching | 8 | 6 | 4 |
 | 3.1.3 | 25 April 2026 | Light Mode Polish, Search UX & Flag Popover Fix | — | 3 | 3 |
 | 3.1.2 | 24 April 2026 | Quoted Phrase Search & Flag Row Highlight | 2 | — | 2 |
